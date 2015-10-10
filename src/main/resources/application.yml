@@ -1,0 +1,12 @@
+spring:
+  profiles.active: unit-test
+---
+spring:
+  profiles: default
+---
+spring:
+  profiles: unit-test
+  h2.console.enabled: true
+  hibernate.jpa.ddl-auto: create-drop
+
+logging.level.org.hibernate.SQL: DEBUG
