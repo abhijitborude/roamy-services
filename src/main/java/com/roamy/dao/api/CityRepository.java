@@ -1,4 +1,4 @@
-package com.roamy.dao;
+package com.roamy.dao.api;
 
 import com.roamy.domain.City;
 import com.roamy.domain.Status;

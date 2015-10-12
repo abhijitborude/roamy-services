@@ -1,6 +1,7 @@
-package com.roamy.dao;
+package com.roamy.dao.impl;
 
 import com.roamy.TestApplication;
+import com.roamy.dao.api.CityRepository;
 import com.roamy.domain.City;
 import com.roamy.domain.Status;
 import org.apache.commons.logging.Log;
@@ -30,7 +31,8 @@ public class CityRepositoryTest {
     private static final Long CITY_ID_MUMBAI = 1L;
     private static final Long CITY_ID_PUNE = 2L;
 
-    @Autowired CityRepository cityRepository;
+    @Autowired
+    CityRepository cityRepository;
 
     @Before
     public void setup() {
@@ -44,8 +46,6 @@ public class CityRepositoryTest {
 
         log.info("saving " + city);
         cityRepository.save(city);
-
-
     }
 
     @Test
