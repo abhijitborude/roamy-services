@@ -1,6 +1,7 @@
 package com.roamy.service.api;
 
 import com.roamy.domain.City;
+import com.roamy.dto.CityDto;
 
 import java.util.List;
 
@@ -13,5 +14,9 @@ public interface CityService {
 
     City getCityById(Long id);
 
-    City getCityByName(String name);
+    List<City> getCitiesByName(String name);
+
+    City createCity(CityDto dto);
+
+    City updateCity(String name);
 }
