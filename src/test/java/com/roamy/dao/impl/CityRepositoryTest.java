@@ -10,6 +10,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -26,7 +28,7 @@ import java.util.List;
 @IntegrationTest
 public class CityRepositoryTest {
 
-    private static final Log log = LogFactory.getLog(CityRepositoryTest.class);
+    private static final Logger log = LoggerFactory.getLogger(CityRepositoryTest.class);
 
     private static final Long CITY_ID_MUMBAI = 1L;
     private static final Long CITY_ID_PUNE = 2L;
@@ -34,24 +36,10 @@ public class CityRepositoryTest {
     @Autowired
     CityRepository cityRepository;
 
-    @Before
-    public void setup() {
-        City city = new City();
-        city.setName("Delhi");
-        city.setStatus(Status.Active);
-        city.setCreatedBy("test");
-        city.setCreatedOn(new Date());
-        city.setLastModifiedBy("test");
-        city.setLastModifiedOn(new Date());
-
-        log.info("saving " + city);
-        cityRepository.save(city);
-    }
-
     @Test
     public void findCityByIdTest() {
         City city = cityRepository.findOne(CITY_ID_MUMBAI);
-        log.info("findOne by " + CITY_ID_MUMBAI + ": " + city);
+        log.info("findOne by id {}: {}", CITY_ID_MUMBAI, city);
 
         Assert.assertNotNull("There should be a city with id: " + CITY_ID_MUMBAI, city);
         Assert.assertEquals("City name should be Mumbai", "Mumbai", city.getName());
@@ -60,7 +48,7 @@ public class CityRepositoryTest {
     @Test
     public void findAllCityTest() {
         Iterable<City> cities = cityRepository.findAll();
-        log.info("findAll: " + cities);
+        log.info("findAll: {}", cities);
 
         Assert.assertNotNull("There should be at least one city", cities);
     }
@@ -69,9 +57,9 @@ public class CityRepositoryTest {
     public void testFindByNameIgnoreCase() throws Exception {
         String cityName = "mumbai";
         List<City> cities = cityRepository.findByNameIgnoreCase(cityName);
-        log.info("findByNameIgnoreCase by " + cityName + ": " + cities);
-        Assert.assertNotNull("There should be at least one city with name: " + cityName, cities);
+        log.info("findByNameIgnoreCase by {}: {}", cityName, cities);
 
+        Assert.assertNotNull("There should be at least one city with name: " + cityName, cities);
         for (City city : cities) {
             Assert.assertTrue("City with name different from " + cityName + " found", city.getName().toLowerCase().equals(cityName.toLowerCase()));
         }
@@ -81,9 +69,9 @@ public class CityRepositoryTest {
     public void testFindByNameIgnoreCaseLike() throws Exception {
         String cityName = "mum";
         List<City> cities = cityRepository.findByNameIgnoreCaseLike("%" + cityName + "%");
-        log.info("findByNameIgnoreCaseLike " + "'%" + cityName + "%': " + cities);
-        Assert.assertNotNull("There should be at least one city with name like " + cityName, cities);
+        log.info("findByNameIgnoreCaseLike '%{}%': {}", cityName, cities);
 
+        Assert.assertNotNull("There should be at least one city with name like " + cityName, cities);
         for (City city : cities) {
             Assert.assertTrue("City with name not like " + cityName + " found", city.getName().toLowerCase().contains(cityName.toLowerCase()));
         }
@@ -92,9 +80,8 @@ public class CityRepositoryTest {
     @Test
     public void testFindByStatus() throws Exception {
         List<City> cities = cityRepository.findByStatus(Status.Inactive);
-        log.info("findByStatus Inactive: " + cities);
+        log.info("findByStatus Inactive: {}", cities);
 
         Assert.assertNotNull("There should be at least one Inactive city", cities);
-
     }
 }

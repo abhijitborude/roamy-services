@@ -10,4 +10,8 @@ import java.util.List;
 public interface CityService {
 
     List<City> getAllActiveCities();
+
+    City getCityById(Long id);
+
+    City getCityByName(String name);
 }

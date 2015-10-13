@@ -22,4 +22,16 @@ public class CityServiceImpl implements CityService {
     public List<City> getAllActiveCities() {
         return cityRepository.findByStatus(Status.Active);
     }
+
+    @Override
+    public City getCityById(Long id) {
+        return cityRepository.findOne(id);
+    }
+
+    @Override
+    public City getCityByName(String name) {
+        return null;
+    }
+
+
 }
