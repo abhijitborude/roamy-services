@@ -18,5 +18,5 @@ public interface CityService {
 
     City createCity(CityDto dto);
 
-    City updateCity(String name);
+    City updateCity(CityDto dto);
 }
