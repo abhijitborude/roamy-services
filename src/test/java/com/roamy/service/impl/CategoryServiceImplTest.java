@@ -1,0 +1,223 @@
+package com.roamy.service.impl;
+
+import com.roamy.TestApplication;
+import com.roamy.domain.Category;
+import com.roamy.dto.CategoryDto;
+import com.roamy.service.api.CategoryService;
+import com.roamy.util.RoamyValidationException;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.IntegrationTest;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
+
+import static org.junit.Assert.*;
+
+/**
+ * Created by Abhijit on 10/11/2015.
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = TestApplication.class)
+@IntegrationTest
+public class CategoryServiceImplTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(CategoryServiceImplTest.class);
+
+    private static final Long CATEGORY_ID_ADVENTURE = 1L;
+    private static final String CATEGORY_NAME_ADVENTURE = "Adventure";
+
+    @Autowired
+    CategoryService categoryService;
+
+    @Test
+    public void testGetAllActiveCategories() throws Exception {
+        List<Category> categories = categoryService.getAllActiveCategories();
+        logger.info("found active categories: {}", categories);
+
+        assertNotNull("There should be at least one active category", categories);
+        assertNotEquals("There should be at least one active category", 0, categories.size());
+    }
+
+    @Test
+    public void testGetCategoryById() throws Exception {
+        Category category = categoryService.getCategoryById(CATEGORY_ID_ADVENTURE);
+
+        assertNotNull("There should be a category with id: " + CATEGORY_ID_ADVENTURE, category);
+        assertEquals("Category name should be " + CATEGORY_NAME_ADVENTURE, CATEGORY_NAME_ADVENTURE, category.getName());
+    }
+
+    @Test
+    public void testGetCategoriesByName() throws Exception {
+        String categoryName = CATEGORY_NAME_ADVENTURE.toLowerCase();
+        List<Category> categories = categoryService.getCategoriesByName(categoryName);
+
+        assertNotNull("There should be at least one category with name: " + categoryName, categories);
+        for (Category category : categories) {
+            assertTrue("Category with name different from " + categoryName + " found", category.getName().toLowerCase().equals(categoryName.toLowerCase()));
+        }
+    }
+
+    @Test
+    public void testCreateCategory() throws Exception {
+        CategoryDto dto = new CategoryDto();
+        dto.setName("Test Category");
+        dto.setDescription("Test Category Description");
+        dto.setCreatedBy("test");
+
+        Category category = categoryService.createCategory(dto);
+        assertNotNull("Category could not be saved", category);
+        assertNotNull("id after save can not be NULL", category.getId());
+        assertEquals("name does not match", dto.getName(), category.getName());
+        assertEquals("description does not match", dto.getDescription(), category.getDescription());
+        assertEquals("createdBy does not match", dto.getCreatedBy(), category.getCreatedBy());
+    }
+
+    @Test
+    public void testCreateCategoryNoName() throws Exception {
+        CategoryDto dto = new CategoryDto();
+        dto.setCreatedBy("test");
+
+        try {
+            Category category = categoryService.createCategory(dto);
+            fail("Category without name should not be saved");
+        } catch (RoamyValidationException e) {
+
+        }
+    }
+
+    @Test
+    public void testCreateCategoryNoCreatedBy() throws Exception {
+        CategoryDto dto = new CategoryDto();
+        dto.setName("Test Category");
+
+        try {
+            Category category = categoryService.createCategory(dto);
+            fail("Category without createdBy should not be saved");
+        } catch (RoamyValidationException e) {
+
+        }
+    }
+
+    @Test
+    public void testCreateCategoryNull() throws Exception {
+        try {
+            Category category = categoryService.createCategory(null);
+            fail("Null category should not be saved");
+        } catch (RoamyValidationException e) {
+
+        }
+    }
+
+    @Test
+    public void testUpdateCategory() throws Exception {
+        // first create a category
+        CategoryDto dto = new CategoryDto();
+        dto.setName("Test Category");
+        dto.setDescription("Test Category Description");
+        dto.setCreatedBy("test");
+
+        Category category = categoryService.createCategory(dto);
+        assertNotNull("Category could not be saved", category);
+
+        // create a new dto with it's values
+        dto = new CategoryDto();
+        dto.setId(category.getId());
+        dto.setName(category.getName() + "-1");
+        dto.setDescription(category.getDescription() + "-1");
+        dto.setLastModifiedBy("test");
+
+        Category updateCategory = categoryService.updateCategory(dto);
+        assertNotNull("Category could not be updated", updateCategory);
+        assertEquals("name was not updated", category.getName() + "-1", updateCategory.getName());
+        assertEquals("name was not updated", category.getDescription() + "-1", updateCategory.getDescription());
+        assertNotEquals("lastModifiedOn not updated", category.getLastModifiedOn(), updateCategory.getLastModifiedOn());
+        assertEquals("createdBy should not change after the update", category.getCreatedBy(), updateCategory.getCreatedBy());
+        assertEquals("createdOn should not change after the update", category.getCreatedOn(), updateCategory.getCreatedOn());
+        assertEquals("status should not change after the update", category.getStatus(), updateCategory.getStatus());
+    }
+
+    @Test
+    public void testUpdateCategoryNullName() throws Exception {
+        // first create a category
+        CategoryDto dto = new CategoryDto();
+        dto.setName("Test Category");
+        dto.setCreatedBy("test");
+
+        Category category = categoryService.createCategory(dto);
+        assertNotNull("Category could not be saved", category);
+
+        // create a new dto with it's values
+        dto = new CategoryDto();
+        dto.setId(category.getId());
+        dto.setName(null);
+        dto.setLastModifiedBy("test");
+
+        try {
+            Category updateCategory = categoryService.updateCategory(dto);
+            fail("category should not be updated with NULL name");
+        } catch (RoamyValidationException e) {
+
+        }
+    }
+
+    @Test
+    public void testUpdateCategoryNullLastModifiedBy() throws Exception {
+        // first create a category
+        CategoryDto dto = new CategoryDto();
+        dto.setName("Test Category");
+        dto.setCreatedBy("test");
+
+        Category category = categoryService.createCategory(dto);
+        assertNotNull("Category could not be saved", category);
+
+        // create a new dto with it's values
+        dto = new CategoryDto();
+        dto.setId(category.getId());
+        dto.setName(category.getName() + "-1");
+
+        try {
+            Category updateCategory = categoryService.updateCategory(dto);
+            fail("category should not be updated with NULL lastModifiedBy");
+        } catch (RoamyValidationException e) {
+
+        }
+    }
+
+    @Test
+    public void testUpdateCategoryNullId() throws Exception {
+        // first create a category
+        CategoryDto dto = new CategoryDto();
+        dto.setName("Test Category");
+        dto.setCreatedBy("test");
+
+        Category category = categoryService.createCategory(dto);
+        assertNotNull("Category could not be saved", category);
+
+        // create a new dto with it's values
+        dto = new CategoryDto();
+        dto.setName(category.getName() + "-1");
+        dto.setLastModifiedBy("test");
+
+        try {
+            Category updateCategory = categoryService.updateCategory(dto);
+            fail("category should not be updated with NULL id");
+        } catch (RoamyValidationException e) {
+
+        }
+    }
+
+    @Test
+    public void testUpdateCategoryNull() throws Exception {
+        try {
+            Category updateCategory = categoryService.updateCategory(null);
+            fail("NULL category should not be updated");
+        } catch (RoamyValidationException e) {
+
+        }
+    }
+}

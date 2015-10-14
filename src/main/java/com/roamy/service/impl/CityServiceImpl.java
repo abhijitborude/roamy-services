@@ -64,7 +64,7 @@ public class CityServiceImpl implements CityService {
             throw new RoamyValidationException("name/createdBy not provided");
         }
 
-        // set defaults
+        // set defaults [status:Inactive, createdOn: now, lastModifiedOn: now, lastModifiedBy: createdBy]
         if (!StringUtils.hasText(dto.getStatus())) {
             dto.setStatus(Status.Inactive.name());
         }
@@ -78,6 +78,7 @@ public class CityServiceImpl implements CityService {
             dto.setLastModifiedBy(dto.getCreatedBy());
         }
 
+        // convert to domain object and save
         City city = DtoUtil.convertToCity(dto);
 
         city = cityRepository.save(city);
@@ -108,10 +109,10 @@ public class CityServiceImpl implements CityService {
 
         logger.info("found object to update: {}", city);
 
+        // update values
         if (StringUtils.hasText(dto.getName())) {
             city.setName(dto.getName());
         }
-
         if (StringUtils.hasText(dto.getStatus()) && Status.valueOf(dto.getStatus()) != null) {
             city.setStatus(Status.valueOf(dto.getStatus()));
         }

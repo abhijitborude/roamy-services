@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 @IntegrationTest
 public class CityServiceImplTest {
 
-    private static final Logger log = LoggerFactory.getLogger(CityServiceImplTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(CityServiceImplTest.class);
 
     private static final Long CITY_ID_MUMBAI = 1L;
     private static final Long CITY_ID_PUNE = 2L;
@@ -37,7 +37,7 @@ public class CityServiceImplTest {
     @Test
     public void testGetAllActiveCities() throws Exception {
         List<City> cities = cityService.getAllActiveCities();
-        log.info("found active cities: {}", cities);
+        logger.info("found active cities: {}", cities);
 
         assertNotNull("There should be at least one active city", cities);
         assertNotEquals("There should be at least one active city", 0, cities.size());
