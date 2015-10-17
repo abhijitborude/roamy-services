@@ -2,7 +2,7 @@ package com.roamy.service.impl;
 
 import com.roamy.TestApplication;
 import com.roamy.domain.City;
-import com.roamy.dto.CityDto;
+import com.roamy.domain.Status;
 import com.roamy.service.api.CityService;
 import com.roamy.util.RoamyValidationException;
 import org.junit.Test;
@@ -35,12 +35,28 @@ public class CityServiceImplTest {
     CityService cityService;
 
     @Test
+    public void testGetAllCities() throws Exception {
+        List<City> cities = cityService.getAllCities();
+        logger.info("found all cities: {}", cities);
+
+        assertNotNull("There should be at least one city", cities);
+        assertNotEquals("There should be at least one city", 0, cities.size());
+
+    }
+
+    @Test
     public void testGetAllActiveCities() throws Exception {
         List<City> cities = cityService.getAllActiveCities();
         logger.info("found active cities: {}", cities);
 
         assertNotNull("There should be at least one active city", cities);
         assertNotEquals("There should be at least one active city", 0, cities.size());
+
+        for (City city : cities) {
+            if (!Status.Active.equals(city.getStatus())) {
+                fail("Inactive city found");
+            }
+        }
     }
 
     @Test
@@ -64,24 +80,24 @@ public class CityServiceImplTest {
 
     @Test
     public void testCreateCity() throws Exception {
-        CityDto dto = new CityDto();
-        dto.setName("Test City");
-        dto.setCreatedBy("test");
+        City city = new City();
+        city.setName("Test City");
+        city.setCreatedBy("test");
 
-        City city = cityService.createCity(dto);
-        assertNotNull("City could not be saved", city);
-        assertNotNull("id after save can not be NULL", city.getId());
-        assertEquals("name does not match", dto.getName(), city.getName());
-        assertEquals("createdBy does not match", dto.getCreatedBy(), city.getCreatedBy());
+        City newCity = cityService.createCity(city);
+        assertNotNull("City could not be saved", newCity);
+        assertNotNull("id after save can not be NULL", newCity.getId());
+        assertEquals("name does not match", city.getName(), newCity.getName());
+        assertEquals("createdBy does not match", city.getCreatedBy(), newCity.getCreatedBy());
     }
 
     @Test
     public void testCreateCityNoName() throws Exception {
-        CityDto dto = new CityDto();
-        dto.setCreatedBy("test");
+        City city = new City();
+        city.setCreatedBy("test");
 
         try {
-            City city = cityService.createCity(dto);
+            City newCity = cityService.createCity(city);
             fail("City without name should not be saved");
         } catch (RoamyValidationException e) {
 
@@ -90,11 +106,11 @@ public class CityServiceImplTest {
 
     @Test
     public void testCreateCityNoCreatedBy() throws Exception {
-        CityDto dto = new CityDto();
-        dto.setName("Test City");
+        City city = new City();
+        city.setName("Test City");
 
         try {
-            City city = cityService.createCity(dto);
+            City newCity = cityService.createCity(city);
             fail("City without createdBy should not be saved");
         } catch (RoamyValidationException e) {
 
@@ -113,48 +129,48 @@ public class CityServiceImplTest {
 
     @Test
     public void testUpdateCity() throws Exception {
-        // first create a city
-        CityDto dto = new CityDto();
-        dto.setName("Test City");
-        dto.setCreatedBy("test");
+        // first create a newCity
+        City city = new City();
+        city.setName("Test City");
+        city.setCreatedBy("test");
 
-        City city = cityService.createCity(dto);
-        assertNotNull("City could not be saved", city);
+        City newCity = cityService.createCity(city);
+        assertNotNull("City could not be saved", newCity);
 
-        // create a new dto with it's values
-        dto = new CityDto();
-        dto.setId(city.getId());
-        dto.setName(city.getName() + "-1");
-        dto.setLastModifiedBy("test");
+        // create a new city with it's values
+        city = new City();
+        city.setId(newCity.getId());
+        city.setName(newCity.getName() + "-1");
+        city.setLastModifiedBy("test");
 
-        City updateCity = cityService.updateCity(dto);
-        assertNotNull("City could not be updated", updateCity);
-        assertEquals("name was not updated", city.getName() + "-1", updateCity.getName());
-        assertNotEquals("lastModifiedOn not updated", city.getLastModifiedOn(), updateCity.getLastModifiedOn());
-        assertEquals("createdBy should not change after the update", city.getCreatedBy(), updateCity.getCreatedBy());
-        assertEquals("createdOn should not change after the update", city.getCreatedOn(), updateCity.getCreatedOn());
-        assertEquals("status should not change after the update", city.getStatus(), updateCity.getStatus());
+        City updatedCity = cityService.updateCity(city);
+        assertNotNull("City could not be updated", updatedCity);
+        assertEquals("name was not updated", newCity.getName() + "-1", updatedCity.getName());
+        assertNotEquals("lastModifiedOn not updated", newCity.getLastModifiedOn(), updatedCity.getLastModifiedOn());
+        assertEquals("createdBy should not change after the update", newCity.getCreatedBy(), updatedCity.getCreatedBy());
+        assertEquals("createdOn should not change after the update", newCity.getCreatedOn(), updatedCity.getCreatedOn());
+        assertEquals("status should not change after the update", newCity.getStatus(), updatedCity.getStatus());
     }
 
     @Test
     public void testUpdateCityNullName() throws Exception {
-        // first create a city
-        CityDto dto = new CityDto();
-        dto.setName("Test City");
-        dto.setCreatedBy("test");
+        // first create a newCity
+        City city = new City();
+        city.setName("Test City");
+        city.setCreatedBy("test");
 
-        City city = cityService.createCity(dto);
-        assertNotNull("City could not be saved", city);
+        City newCity = cityService.createCity(city);
+        assertNotNull("City could not be saved", newCity);
 
-        // create a new dto with it's values
-        dto = new CityDto();
-        dto.setId(city.getId());
-        dto.setName(null);
-        dto.setLastModifiedBy("test");
+        // create a new city with it's values
+        city = new City();
+        city.setId(newCity.getId());
+        city.setName(null);
+        city.setLastModifiedBy("test");
 
         try {
-            City updateCity = cityService.updateCity(dto);
-            fail("city should not be updated with NULL name");
+            City updateCity = cityService.updateCity(city);
+            fail("newCity should not be updated with NULL name");
         } catch (RoamyValidationException e) {
 
         }
@@ -162,22 +178,22 @@ public class CityServiceImplTest {
 
     @Test
     public void testUpdateCityNullLastModifiedBy() throws Exception {
-        // first create a city
-        CityDto dto = new CityDto();
-        dto.setName("Test City");
-        dto.setCreatedBy("test");
+        // first create a newCity
+        City city = new City();
+        city.setName("Test City");
+        city.setCreatedBy("test");
 
-        City city = cityService.createCity(dto);
-        assertNotNull("City could not be saved", city);
+        City newCity = cityService.createCity(city);
+        assertNotNull("City could not be saved", newCity);
 
-        // create a new dto with it's values
-        dto = new CityDto();
-        dto.setId(city.getId());
-        dto.setName(city.getName() + "-1");
+        // create a new city with it's values
+        city = new City();
+        city.setId(newCity.getId());
+        city.setName(newCity.getName() + "-1");
 
         try {
-            City updateCity = cityService.updateCity(dto);
-            fail("city should not be updated with NULL lastModifiedBy");
+            City updateCity = cityService.updateCity(city);
+            fail("newCity should not be updated with NULL lastModifiedBy");
         } catch (RoamyValidationException e) {
 
         }
@@ -185,22 +201,22 @@ public class CityServiceImplTest {
 
     @Test
     public void testUpdateCityNullId() throws Exception {
-        // first create a city
-        CityDto dto = new CityDto();
-        dto.setName("Test City");
-        dto.setCreatedBy("test");
+        // first create a newCity
+        City city = new City();
+        city.setName("Test City");
+        city.setCreatedBy("test");
 
-        City city = cityService.createCity(dto);
-        assertNotNull("City could not be saved", city);
+        City newCity = cityService.createCity(city);
+        assertNotNull("City could not be saved", newCity);
 
-        // create a new dto with it's values
-        dto = new CityDto();
-        dto.setName(city.getName() + "-1");
-        dto.setLastModifiedBy("test");
+        // create a new city with it's values
+        city = new City();
+        city.setName(newCity.getName() + "-1");
+        city.setLastModifiedBy("test");
 
         try {
-            City updateCity = cityService.updateCity(dto);
-            fail("city should not be updated with NULL id");
+            City updateCity = cityService.updateCity(city);
+            fail("newCity should not be updated with NULL id");
         } catch (RoamyValidationException e) {
 
         }

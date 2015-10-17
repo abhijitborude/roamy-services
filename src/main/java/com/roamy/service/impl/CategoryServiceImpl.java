@@ -3,10 +3,7 @@ package com.roamy.service.impl;
 import com.roamy.dao.api.CategoryRepository;
 import com.roamy.domain.Category;
 import com.roamy.domain.Status;
-import com.roamy.dto.CategoryDto;
 import com.roamy.service.api.CategoryService;
-import com.roamy.service.api.CategoryService;
-import com.roamy.util.DtoUtil;
 import com.roamy.util.RoamyValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +28,13 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
 
     @Override
+    public List<Category> getAllCategories() {
+        List<Category> categories = categoryRepository.findAll();
+        logger.info("Number of categories found: {}", categories == null ? 0 : categories.size());
+        return categories;
+    }
+
+    @Override
     public List<Category> getAllActiveCategories() {
         List<Category> categories = categoryRepository.findByStatus(Status.Active);
         logger.info("Number of categories found: {}", categories == null ? 0 : categories.size());
@@ -52,35 +56,32 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category createCategory(CategoryDto dto) {
-        logger.info("creating new category: {}", dto);
+    public Category createCategory(Category category) {
+        logger.info("creating new category: {}", category);
 
         // validate
-        if (dto == null) {
-            logger.error("dto is NULL");
+        if (category == null) {
+            logger.error("category is NULL");
             throw new RoamyValidationException("Category data not provided");
         }
-        if (!StringUtils.hasText(dto.getName()) || !StringUtils.hasText(dto.getCreatedBy())) {
+        if (!StringUtils.hasText(category.getName()) || !StringUtils.hasText(category.getCreatedBy())) {
             logger.error("name/createdBy not provided");
             throw new RoamyValidationException("name/createdBy not provided");
         }
 
         // set defaults [status:Inactive, createdOn: now, lastModifiedOn: now, lastModifiedBy: createdBy]
-        if (!StringUtils.hasText(dto.getStatus())) {
-            dto.setStatus(Status.Inactive.name());
+        if (category.getStatus() == null) {
+            category.setStatus(Status.Inactive);
         }
-        if (dto.getCreatedOn() == null) {
-            dto.setCreatedOn(new Date());
+        if (category.getCreatedOn() == null) {
+            category.setCreatedOn(new Date());
         }
-        if (dto.getLastModifiedOn() == null) {
-            dto.setLastModifiedOn(new Date());
+        if (category.getLastModifiedOn() == null) {
+            category.setLastModifiedOn(new Date());
         }
-        if (!StringUtils.hasText(dto.getLastModifiedBy())) {
-            dto.setLastModifiedBy(dto.getCreatedBy());
+        if (!StringUtils.hasText(category.getLastModifiedBy())) {
+            category.setLastModifiedBy(category.getCreatedBy());
         }
-
-        // convert to domain object and save
-        Category category = DtoUtil.convertToCategory(dto);
 
         category = categoryRepository.save(category);
         logger.info("created {}", category);
@@ -89,44 +90,44 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category updateCategory(CategoryDto dto) {
-        logger.info("updating {}", dto);
+    public Category updateCategory(Category categoryToUpdate) {
+        logger.info("updating {}", categoryToUpdate);
 
         // validate
-        if (dto == null) {
-            logger.error("dto is NULL");
+        if (categoryToUpdate == null) {
+            logger.error("categoryToUpdate is NULL");
             throw new RoamyValidationException("Category data not provided");
         }
-        if (dto.getId() == null || !StringUtils.hasText(dto.getName()) || !StringUtils.hasText(dto.getLastModifiedBy())) {
+        if (categoryToUpdate.getId() == null || !StringUtils.hasText(categoryToUpdate.getName()) || !StringUtils.hasText(categoryToUpdate.getLastModifiedBy())) {
             logger.error("id/name/lastModifiedBy not provided");
             throw new RoamyValidationException("id/name/lastModifiedBy not provided");
         }
 
-        Category category = getCategoryById(dto.getId());
+        Category category = getCategoryById(categoryToUpdate.getId());
         if (category == null) {
-            logger.error("category with id {} not found", dto.getId());
+            logger.error("category with id {} not found", categoryToUpdate.getId());
             throw new RoamyValidationException("category with id {} not found");
         }
 
         logger.info("found object to update: {}", category);
 
         // update values
-        if (StringUtils.hasText(dto.getName())) {
-            category.setName(dto.getName());
+        if (StringUtils.hasText(categoryToUpdate.getName())) {
+            category.setName(categoryToUpdate.getName());
         }
-        if (StringUtils.hasText(dto.getDescription())) {
-            category.setDescription(dto.getDescription());
+        if (StringUtils.hasText(categoryToUpdate.getDescription())) {
+            category.setDescription(categoryToUpdate.getDescription());
         }
-        if (StringUtils.hasText(dto.getStatus()) && Status.valueOf(dto.getStatus()) != null) {
-            category.setStatus(Status.valueOf(dto.getStatus()));
+        if (categoryToUpdate.getStatus() != null) {
+            category.setStatus(categoryToUpdate.getStatus());
         }
 
-        dto.setLastModifiedBy(dto.getLastModifiedBy());
+        categoryToUpdate.setLastModifiedBy(categoryToUpdate.getLastModifiedBy());
 
-        if (dto.getLastModifiedOn() == null) {
+        if (categoryToUpdate.getLastModifiedOn() == null) {
             category.setLastModifiedOn(new Date());
         } else {
-            category.setLastModifiedOn(dto.getLastModifiedOn());
+            category.setLastModifiedOn(categoryToUpdate.getLastModifiedOn());
         }
 
         Category updatedCategory = categoryRepository.save(category);

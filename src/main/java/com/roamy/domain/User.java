@@ -2,9 +2,7 @@ package com.roamy.domain;
 
 import com.roamy.util.DbConstants;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -16,8 +14,13 @@ import java.util.Date;
 public class User extends AbstractEntity {
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "TYPE", length = DbConstants.SHORT_TEXT)
-    private String type;
+    private AccountType type;
+
+    @NotNull
+    @Column(name = "PHONE_NUMBER", length = DbConstants.SHORT_TEXT)
+    private String phoneNumber;
 
     @NotNull
     @Column(name = "EMAIL", length = DbConstants.SHORT_TEXT)
@@ -47,9 +50,6 @@ public class User extends AbstractEntity {
     @Column(name = "PIN", length = DbConstants.SHORT_TEXT)
     private String pinCode;
 
-    @Column(name = "PHONE_NUMBER", length = DbConstants.SHORT_TEXT)
-    private String phoneNumber;
-
     @Column(name = "V_CODE", length = DbConstants.SHORT_TEXT)
     private String verificationCode;
 
@@ -59,12 +59,20 @@ public class User extends AbstractEntity {
     @Column(name = "VERIFIED")
     private boolean isVerified;
 
-    public String getType() {
+    public AccountType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(AccountType type) {
         this.type = type;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {
@@ -137,14 +145,6 @@ public class User extends AbstractEntity {
 
     public void setPinCode(String pinCode) {
         this.pinCode = pinCode;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     public String getVerificationCode() {

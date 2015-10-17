@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "CATEGORY", schema = "ROAMY")
-public class Category extends AbstractEntity{
+public class Category extends AbstractEntity {
 
     @NotNull
     @Column(name = "NAME", length = DbConstants.SHORT_TEXT)

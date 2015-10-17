@@ -9,4 +9,4 @@ spring:
   h2.console.enabled: true
   hibernate.jpa.ddl-auto: create-drop
 
-logging.level.org.hibernate.SQL: INFO
+logging.level.org.hibernate.SQL: DEBUG

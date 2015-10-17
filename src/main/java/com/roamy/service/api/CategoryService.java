@@ -1,7 +1,6 @@
 package com.roamy.service.api;
 
 import com.roamy.domain.Category;
-import com.roamy.dto.CategoryDto;
 
 import java.util.List;
 
@@ -10,14 +9,16 @@ import java.util.List;
  */
 public interface CategoryService {
 
+    List<Category> getAllCategories();
+
     List<Category> getAllActiveCategories();
 
     Category getCategoryById(Long id);
 
     List<Category> getCategoriesByName(String name);
 
-    Category createCategory(CategoryDto dto);
+    Category createCategory(Category category);
 
-    Category updateCategory(CategoryDto dto);
+    Category updateCategory(Category category);
 
 }
