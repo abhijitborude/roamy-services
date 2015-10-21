@@ -12,10 +12,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "VENDOR", schema = "ROAMY")
-public class Vendor extends AbstractEntity {
-
-    @Column(name = "NAME", nullable = false, length = DbConstants.MEDIUM_TEXT)
-    private String name;
+public class Vendor extends CitableEntity {
 
     @Column(name = "NOTES", length = DbConstants.ULTRA_LONG_TEXT)
     private String notes;
@@ -38,14 +35,6 @@ public class Vendor extends AbstractEntity {
             inverseJoinColumns = {@JoinColumn(name = "CITY_ID")})
     @Fetch(FetchMode.SUBSELECT)
     private List<City> cities;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getNotes() {
         return notes;
@@ -99,6 +88,7 @@ public class Vendor extends AbstractEntity {
     public String toString() {
         return "Vendor{" +
                 "id='" + id + '\'' +
+                ", code='" + code + '\'' +
                 ", name='" + name + '\'' +
                 '}';
     }

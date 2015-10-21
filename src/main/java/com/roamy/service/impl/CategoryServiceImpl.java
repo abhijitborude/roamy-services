@@ -115,8 +115,8 @@ public class CategoryServiceImpl implements CategoryService {
         if (StringUtils.hasText(categoryToUpdate.getName())) {
             category.setName(categoryToUpdate.getName());
         }
-        if (StringUtils.hasText(categoryToUpdate.getDescription())) {
-            category.setDescription(categoryToUpdate.getDescription());
+        if (StringUtils.hasText(categoryToUpdate.getAdditionalDescription())) {
+            category.setAdditionalDescription(categoryToUpdate.getAdditionalDescription());
         }
         if (categoryToUpdate.getStatus() != null) {
             category.setStatus(categoryToUpdate.getStatus());

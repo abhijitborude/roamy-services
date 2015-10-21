@@ -81,14 +81,14 @@ public class CategoryServiceImplTest {
     public void testCreateCategory() throws Exception {
         Category category = new Category();
         category.setName("Test Category");
-        category.setDescription("Test Category Description");
+        category.setAdditionalDescription("Test Category Description");
         category.setCreatedBy("test");
 
         Category newCategory = categoryService.createCategory(category);
         assertNotNull("Category could not be saved", newCategory);
         assertNotNull("id after save can not be NULL", newCategory.getId());
         assertEquals("name does not match", category.getName(), newCategory.getName());
-        assertEquals("description does not match", category.getDescription(), newCategory.getDescription());
+        assertEquals("description does not match", category.getAdditionalDescription(), newCategory.getAdditionalDescription());
         assertEquals("createdBy does not match", category.getCreatedBy(), newCategory.getCreatedBy());
     }
 
@@ -133,7 +133,7 @@ public class CategoryServiceImplTest {
         // first create a newCategory
         Category category = new Category();
         category.setName("Test Category");
-        category.setDescription("Test Category Description");
+        category.setAdditionalDescription("Test Category Description");
         category.setCreatedBy("test");
 
         Category newCategory = categoryService.createCategory(category);
@@ -143,13 +143,13 @@ public class CategoryServiceImplTest {
         category = new Category();
         category.setId(newCategory.getId());
         category.setName(newCategory.getName() + "-1");
-        category.setDescription(newCategory.getDescription() + "-1");
+        category.setAdditionalDescription(newCategory.getAdditionalDescription() + "-1");
         category.setLastModifiedBy("test");
 
         Category updatedCategory = categoryService.updateCategory(category);
         assertNotNull("Category could not be updated", updatedCategory);
         assertEquals("name was not updated", newCategory.getName() + "-1", updatedCategory.getName());
-        assertEquals("name was not updated", newCategory.getDescription() + "-1", updatedCategory.getDescription());
+        assertEquals("name was not updated", newCategory.getAdditionalDescription() + "-1", updatedCategory.getAdditionalDescription());
         assertNotEquals("lastModifiedOn not updated", newCategory.getLastModifiedOn(), updatedCategory.getLastModifiedOn());
         assertEquals("createdBy should not change after the update", newCategory.getCreatedBy(), updatedCategory.getCreatedBy());
         assertEquals("createdOn should not change after the update", newCategory.getCreatedOn(), updatedCategory.getCreatedOn());

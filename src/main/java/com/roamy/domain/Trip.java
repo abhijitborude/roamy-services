@@ -12,19 +12,13 @@ import java.util.List;
  */
 @Entity
 @Table(name = "TRIP", schema = "ROAMY")
-public class Trip extends AbstractEntity {
-
-    @Column(name = "NAME", nullable = false, length = DbConstants.MEDIUM_TEXT)
-    private String name;
-
-    @Column(name = "CODE", nullable = false, length = DbConstants.MEDIUM_TEXT)
-    private String code;
+public class Trip extends CitableEntity {
 
     @Column(name = "NUMBER_OF_DAYS")
     private int numberOfDays;
 
-    @Column(name = "DESCRIPTION", length = DbConstants.LONG_TEXT)
-    private String description;
+    @Column(name = "ADDITIONAL_DESCRIPTION", length = DbConstants.LONG_TEXT)
+    private String additionalDescription;
 
     @Column(name = "DIFFICULTY_LEVEL")
     private int difficultyLevel;
@@ -61,22 +55,6 @@ public class Trip extends AbstractEntity {
     @Column(name = "MEETING_POINTS", length = DbConstants.LONG_TEXT)
     private String meetingPoints;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
     public int getNumberOfDays() {
         return numberOfDays;
     }
@@ -85,12 +63,12 @@ public class Trip extends AbstractEntity {
         this.numberOfDays = numberOfDays;
     }
 
-    public String getDescription() {
-        return description;
+    public String getAdditionalDescription() {
+        return additionalDescription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setAdditionalDescription(String additionalDescription) {
+        this.additionalDescription = additionalDescription;
     }
 
     public int getDifficultyLevel() {
@@ -169,6 +147,7 @@ public class Trip extends AbstractEntity {
     public String toString() {
         return "Trip{" +
                 "id='" + id + '\'' +
+                ", code='" + code + '\'' +
                 ", name='" + name + '\'' +
                 '}';
     }

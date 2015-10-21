@@ -4,7 +4,6 @@ import com.roamy.TestApplication;
 import com.roamy.domain.AccountType;
 import com.roamy.domain.Status;
 import com.roamy.domain.User;
-import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,10 +12,7 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.sql.Timestamp;
 import java.util.Date;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Abhijit on 10/14/2015.
