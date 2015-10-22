@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Abhijit on 10/8/2015.
  */
 @Repository
-public interface CityRepository extends JpaRepository<City, Long> {
+public interface CityRepository extends CitableRepository<City, Long> {
 
     List<City> findByStatus(Status status);
 

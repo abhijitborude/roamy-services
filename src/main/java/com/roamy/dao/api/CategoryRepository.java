@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by Abhijit on 10/13/2015.
  */
-public interface CategoryRepository extends JpaRepository<Category, Long> {
+public interface CategoryRepository extends CitableRepository<Category, Long> {
 
     List<Category> findByStatus(Status status);
 
