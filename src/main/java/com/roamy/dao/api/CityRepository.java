@@ -13,7 +13,4 @@ import java.util.List;
 @Repository
 public interface CityRepository extends CitableRepository<City, Long> {
 
-    List<City> findByNameIgnoreCase(String name);
-
-    List<City> findByNameIgnoreCaseLike(String name);
 }

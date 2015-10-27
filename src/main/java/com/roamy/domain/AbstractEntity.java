@@ -29,23 +29,23 @@ public abstract class AbstractEntity {
     @NotNull
     @CreatedDate
     @Column(name = "CREATED_ON", updatable = false)
-    protected Date createdOn;
+    protected Date createdOn = new Date();
 
     @NotNull
     @CreatedBy
     @Column(name = "CREATED_BY", updatable = false, length = DbConstants.MEDIUM_TEXT)
-    protected String createdBy;
+    protected String createdBy = "";
 
     @NotNull
     @Version
     @LastModifiedDate
     @Column(name = "LAST_MODIFIED_ON")
-    protected Date lastModifiedOn;
+    protected Date lastModifiedOn = new Date();
 
     @NotNull
     @LastModifiedBy
     @Column(name = "LAST_MODIFIED_BY", length = DbConstants.MEDIUM_TEXT)
-    protected String lastModifiedBy;
+    protected String lastModifiedBy = "";
 
     public Long getId() {
         return id;

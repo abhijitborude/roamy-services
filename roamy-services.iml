@@ -13,7 +13,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
-      <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -112,5 +111,7 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework:spring-test:4.1.7.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.objenesis:objenesis:2.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.scala-lang:scala-library:2.11.5" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.google.code.gson:gson:2.4" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.scala-lang:scala-reflect:2.11.5" level="project" />
   </component>
 </module>
