@@ -5,6 +5,8 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -23,18 +25,14 @@ public class Trip extends CitableEntity {
     @Column(name = "DIFFICULTY_LEVEL")
     private int difficultyLevel;
 
-    @Column(name = "PRICE_PER_ADULT")
-    private Double pricePerAdult;
+    @Column(name = "DEFAULT_PRICE_PER_ADULT")
+    private Double defaultPricePerAdult;
 
     @Column(name = "TAC")
     private Double tac;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "TRIP_CITY", schema = "ROAMY",
-            joinColumns = {@JoinColumn(name = "TRIP_ID")},
-            inverseJoinColumns = {@JoinColumn(name = "CITY_ID")})
-    @Fetch(FetchMode.SUBSELECT)
-    private List<City> targetCities;
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<TargetCity> targetCities = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "TRIP_CATEGORY", schema = "ROAMY",
@@ -79,12 +77,12 @@ public class Trip extends CitableEntity {
         this.difficultyLevel = difficultyLevel;
     }
 
-    public Double getPricePerAdult() {
-        return pricePerAdult;
+    public Double getDefaultPricePerAdult() {
+        return defaultPricePerAdult;
     }
 
-    public void setPricePerAdult(Double pricePerAdult) {
-        this.pricePerAdult = pricePerAdult;
+    public void setDefaultPricePerAdult(Double defaultPricePerAdult) {
+        this.defaultPricePerAdult = defaultPricePerAdult;
     }
 
     public Double getTac() {
@@ -95,11 +93,11 @@ public class Trip extends CitableEntity {
         this.tac = tac;
     }
 
-    public List<City> getTargetCities() {
+    public List<TargetCity> getTargetCities() {
         return targetCities;
     }
 
-    public void setTargetCities(List<City> targetCities) {
+    public void setTargetCities(List<TargetCity> targetCities) {
         this.targetCities = targetCities;
     }
 
