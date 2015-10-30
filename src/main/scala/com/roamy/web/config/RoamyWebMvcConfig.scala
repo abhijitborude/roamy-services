@@ -6,6 +6,7 @@ import java.util
 import com.fasterxml.classmate.TypeResolver
 import com.roamy.web.RestApiResponse
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter
 import org.springframework.context.annotation.{Bean, Configuration}
 import org.springframework.http.converter.HttpMessageConverter
@@ -23,6 +24,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 
 @Configuration
 @EnableSwagger2
+@ConditionalOnWebApplication
 class RoamyWebMvcConfig extends WebMvcAutoConfigurationAdapter {
 
   @Autowired var typeResolver: TypeResolver = _

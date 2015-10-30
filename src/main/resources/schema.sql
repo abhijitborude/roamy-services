@@ -5,6 +5,7 @@ drop table ROAMY.category if exists;
 drop table ROAMY.user if exists;
 drop table ROAMY.trip if exists;
 drop table ROAMY.trip_category if exists;
+drop table ROAMY.target_city if exists;
 drop table ROAMY.trip_city if exists;
 drop table ROAMY.trip_instance if exists;
 drop table ROAMY.vendor if exists;
