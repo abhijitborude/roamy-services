@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -jar target/roamy-services-1.0-SNAPSHOT.jar
+web: java -Dserver.port=$PORT -jar build/libs/roamy-services-1.0-SNAPSHOT.jar
