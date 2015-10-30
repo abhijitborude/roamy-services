@@ -32,7 +32,7 @@ public class Trip extends CitableEntity {
     private Double tac;
 
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<TargetCity> targetCities = new ArrayList<>();
+    private List<TargetCity> targetCities = new ArrayList<TargetCity>();
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "TRIP_CATEGORY", schema = "ROAMY",

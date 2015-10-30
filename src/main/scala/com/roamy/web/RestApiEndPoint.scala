@@ -8,7 +8,7 @@ import com.roamy.dao.api.CitableRepository
 import com.roamy.domain.{CitableEntity, City, AbstractEntity}
 import org.springframework.data.domain.{Pageable, Page, PageRequest}
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.http.HttpStatus
+import org.springframework.http.{HttpHeaders, ResponseEntity, HttpStatus}
 import org.springframework.web.bind.annotation._
 
 import scala.util.{Try, Failure, Success}
@@ -35,6 +35,27 @@ trait RestEndPoint[T <: AbstractEntity] {
     entityAsJson
   }
 
+  @RequestMapping(value = Array("alt/{code}"), method = Array(RequestMethod.GET))
+  def readOneAlt(@PathVariable code: String): ResponseEntity[T] = {
+    Try(this.findByIdentifier(code).filter(entitlementsFilter.isEntitledToView(_))) match {
+      case Success(Some(entity)) =>
+        ResponseEntity.ok(entity)
+      case Success(None) =>
+        new ResponseEntity[T](Map(("error", s"Entity with identifier $code was not found.")).foldLeft(new HttpHeaders())((a, b) => {
+          a.add(b._1, b._2)
+          a
+        }), HttpStatus.NOT_FOUND)
+      case Failure(e) =>
+        new ResponseEntity[T](Map(
+          ("error", s"An error occurred while processing this request. Please use the developerErrorMessage to resolve and fix the issue."),
+          ("developerErrorMessage", stackTraceAsString(e))
+        ).foldLeft(new HttpHeaders())((a, b) => {
+          a.add(b._1, b._2)
+          a
+        }), HttpStatus.INTERNAL_SERVER_ERROR)
+
+    }
+  }
 
   @RequestMapping(value = Array("/{code}"), method = Array(RequestMethod.GET))
   def readOne(@PathVariable code: String): RestApiResponse[T] = {

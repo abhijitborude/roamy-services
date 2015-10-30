@@ -1,9 +1,13 @@
 package com.roamy.web.config
 
+import java.util
+import java.util.Collections
+
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.roamy.web.RestApiResponse
-import org.springframework.http.HttpOutputMessage
+import org.springframework.http.{MediaType, HttpOutputMessage}
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
+import scala.collection.convert.wrapAsScala._
 
 /**
  * Created by amit on 10/24/15.
@@ -17,4 +21,5 @@ class RestApiResponseMessageConverter extends MappingJackson2HttpMessageConverte
       super.writeInternal(obj, outputMessage)
     }
   }
+
 }
