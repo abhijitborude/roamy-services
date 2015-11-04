@@ -27,7 +27,7 @@ public class CategoryRepositoryTest {
     private static final Logger logger = LoggerFactory.getLogger(CategoryRepositoryTest.class);
 
     private static final Long CATEGORY_ID_ADVENTURE = 1L;
-    private static final String CATEGORY_NAME_ADVENTURE = "Adventure";
+    private static final String CATEGORY_NAME_ADVENTURE = "Get out of the city";
 
     @Autowired
     CategoryRepository categoryRepository;
