@@ -3,7 +3,7 @@ package com.roamy.web.resource
 import com.google.gson.Gson
 import com.roamy.dao.api.{CitableRepository, CityRepository}
 import com.roamy.domain.City
-import com.roamy.web.CitableRestEndPoint
+import com.roamy.web.{SupportForCreatingOneResourceViaHttpPut, CitableRestEndPoint}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{RequestMapping, RestController}
 
@@ -14,7 +14,7 @@ import scala.util.Try
  */
 @RestController
 @RequestMapping(Array("/cities"))
-class CityResource extends CitableRestEndPoint[City] {
+class CityResource extends CitableRestEndPoint[City] with SupportForCreatingOneResourceViaHttpPut[City] {
 
 
   @Autowired

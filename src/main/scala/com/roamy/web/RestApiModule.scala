@@ -128,6 +128,68 @@ trait SupportForCreatingOneResourceViaHttpPost[T <: AbstractEntity] extends Supp
 
 }
 
+trait SupportForCreatingOneResourceViaHttpPut[T <: AbstractEntity] extends SupportForFilteringResourcesViaEntitlements[T] {
+
+  def deserializer(content: String): Option[T]
+
+  def repository: JpaRepository[T, _]
+
+  def findByIdentifier(id: String): Option[T]
+
+  @RequestMapping(value = Array("/{identifier}/"), method = Array(RequestMethod.PUT))
+  def createOne(@PathVariable("identifier") identifier: String, @RequestBody resourceJsonRep: String): RestApiResponse[T] = {
+    findByIdentifier(identifier).map(new SimpleRestApiResponse[T](
+      HttpStatus.NOT_MODIFIED, _
+    )).getOrElse(
+        deserializer(resourceJsonRep) match {
+          case Some(t: T) =>
+            Try(repository.save(t)) match {
+              case Success(createdEntity: T) =>
+                new SimpleRestApiResponse[T](HttpStatus.CREATED, createdEntity)
+              case Failure(e) =>
+                new EmptyRestApiResponse[T](HttpStatus.INTERNAL_SERVER_ERROR, Map(
+                  ("error", s"An error occurred while processing this request. Please use the developerErrorMessage to resolve and fix the issue."),
+                  ("developerErrorMessage", Utils.stackTraceAsString(e))
+                ))
+            }
+          case None =>
+            new EmptyRestApiResponse[T](HttpStatus.INTERNAL_SERVER_ERROR, Map(
+              ("error", s"Unable to deserialize from $resourceJsonRep"),
+              ("developerErrorMessage", s"The deserializer function returned None. Does the resource override the deserializer function in the correct way!!")
+            ))
+        })
+  }
+
+}
+
+trait SupportForDeletingOneResourceViaHttpDelete[T <: AbstractEntity] extends SupportForFilteringResourcesViaEntitlements[T] {
+
+  def deserializer(content: String): Option[T]
+
+  def repository: JpaRepository[T, _]
+
+  def findByIdentifier(id: String): Option[T]
+
+  @RequestMapping(value = Array("/{identifier}/"), method = Array(RequestMethod.DELETE))
+  def deleteOne(@PathVariable("identifier") identifier: String): RestApiResponse[T] = {
+    findByIdentifier(identifier).map((t: T) => {
+      if (entitlementsFilter.isEntitledToDelete(t)) {
+        Try(repository.delete(t)) match {
+          case Success(_) =>
+            new EmptyRestApiResponse[T](HttpStatus.NO_CONTENT)
+          case Failure(e) =>
+            new EmptyRestApiResponse[T](HttpStatus.INTERNAL_SERVER_ERROR, Map(
+              ("error", s"Unable to delete resource"),
+              ("developerErrorMessage", s"Error occurred while deleting resource. Error : ${Utils.stackTraceAsString(e)}")
+            ))
+        }
+      } else {
+        new EmptyRestApiResponse[T](HttpStatus.UNAUTHORIZED, Map(("error", s"User is unauthorized to delete resource with identifier $identifier")))
+      }
+    }).getOrElse(new EmptyRestApiResponse[T](HttpStatus.NOT_FOUND, Map(("error", s"Resource with identifier $identifier was not found"))))
+  }
+}
+
 trait SupportForResourceRetrievalOverHttpGet[T <: AbstractEntity]
   extends SupportForReturningOneResourceOverHttpGet[T]
   with SupportForPagingResourcesViaHttpGet[T]
@@ -135,6 +197,8 @@ trait SupportForResourceRetrievalOverHttpGet[T <: AbstractEntity]
 trait SupportForCrudOperationsOverHttp[T <: AbstractEntity]
   extends SupportForResourceRetrievalOverHttpGet[T]
   with SupportForCreatingOneResourceViaHttpPost[T]
+  with SupportForDeletingOneResourceViaHttpDelete[T]
+
 
 
 object Utils {
