@@ -21,11 +21,11 @@ class CityResource extends CitableRestEndPoint[City] {
   var cityRepository: CityRepository = _
 
 
-  def repository = {
+  override def repository = {
     this.cityRepository.asInstanceOf[CitableRepository[City, _]]
   }
 
-  override def deserializer(content: String): Option[City] = {
+  def deserializer(content: String): Option[City] = {
     Try(new Gson().fromJson(content, classOf[City])).map(Option(_)).getOrElse(None)
   }
 }

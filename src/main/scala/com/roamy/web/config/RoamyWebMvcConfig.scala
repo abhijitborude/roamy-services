@@ -4,15 +4,12 @@ import java.time.LocalDate
 import java.util
 
 import com.fasterxml.classmate.TypeResolver
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.roamy.web.RestApiResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
-import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter
 import org.springframework.context.annotation.{Bean, Configuration}
-import org.springframework.http.converter.HttpMessageConverter
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport
+
 import springfox.documentation.builders.{PathSelectors, RequestHandlerSelectors}
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
@@ -25,18 +22,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 @Configuration
 @EnableSwagger2
 @ConditionalOnWebApplication
-class RoamyWebMvcConfig extends WebMvcAutoConfigurationAdapter {
+class RoamyWebMvcConfig {
 
   @Autowired var typeResolver: TypeResolver = _
 
   @Bean
-  def customJackson2HttpMessageConverter: MappingJackson2HttpMessageConverter = {
-    new RestApiResponseMessageConverter()
-  }
-
-  override def configureMessageConverters(converters: util.List[HttpMessageConverter[_]]): Unit = {
-    converters.add(customJackson2HttpMessageConverter)
-    super.configureMessageConverters(converters)
+  def jacksonScalaModule: DefaultScalaModule = {
+    DefaultScalaModule
   }
 
   @Bean
