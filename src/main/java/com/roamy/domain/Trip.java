@@ -1,12 +1,12 @@
 package com.roamy.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.roamy.util.DbConstants;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -39,7 +39,7 @@ public class Trip extends CitableEntity {
             joinColumns = {@JoinColumn(name = "TRIP_ID")},
             inverseJoinColumns = {@JoinColumn(name = "CATEGORY_ID")})
     @Fetch(FetchMode.SUBSELECT)
-    private List<Category> category;
+    private List<Category> categories;
 
     @Column(name = "ITINERARY", length = DbConstants.LONG_TEXT)
     private String itinerary;
@@ -52,6 +52,10 @@ public class Trip extends CitableEntity {
 
     @Column(name = "MEETING_POINTS", length = DbConstants.LONG_TEXT)
     private String meetingPoints;
+
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<TripInstance> instances = new ArrayList<TripInstance>();
 
     public int getNumberOfDays() {
         return numberOfDays;
@@ -101,12 +105,12 @@ public class Trip extends CitableEntity {
         this.targetCities = targetCities;
     }
 
-    public List<Category> getCategory() {
-        return category;
+    public List<Category> getCategories() {
+        return categories;
     }
 
-    public void setCategory(List<Category> category) {
-        this.category = category;
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 
     public String getItinerary() {
@@ -139,6 +143,14 @@ public class Trip extends CitableEntity {
 
     public void setMeetingPoints(String meetingPoints) {
         this.meetingPoints = meetingPoints;
+    }
+
+    public List<TripInstance> getInstances() {
+        return instances;
+    }
+
+    public void setInstances(List<TripInstance> instances) {
+        this.instances = instances;
     }
 
     @Override

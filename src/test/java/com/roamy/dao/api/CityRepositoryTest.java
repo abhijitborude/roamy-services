@@ -1,7 +1,6 @@
-package com.roamy.dao.impl;
+package com.roamy.dao.api;
 
 import com.roamy.TestApplication;
-import com.roamy.dao.api.CityRepository;
 import com.roamy.domain.City;
 import com.roamy.domain.Status;
 import org.junit.Assert;

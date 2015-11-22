@@ -14,8 +14,8 @@ public class Category extends CitableEntity {
     public String toString() {
         return "Category{" +
                 "id='" + id + '\'' +
-                "code='" + code + '\'' +
-                "name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 }

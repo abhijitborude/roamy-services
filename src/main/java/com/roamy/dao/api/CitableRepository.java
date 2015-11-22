@@ -1,7 +1,6 @@
 package com.roamy.dao.api;
 
-import com.roamy.domain.Category;
-import com.roamy.domain.City;
+import com.roamy.domain.CitableEntity;
 import com.roamy.domain.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -13,7 +12,7 @@ import java.util.List;
  * Created by Abhijit on 10/22/2015.
  */
 @NoRepositoryBean
-public interface CitableRepository<T, ID extends Serializable> extends JpaRepository<T, ID> {
+public interface CitableRepository<T extends CitableEntity, ID extends Serializable> extends JpaRepository<T, ID> {
 
     T findByCode(String code);
 

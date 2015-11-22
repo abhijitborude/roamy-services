@@ -1,10 +1,9 @@
 package com.roamy.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.roamy.util.DbConstants;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -13,6 +12,15 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "RESERVATION", schema = "ROAMY")
 public class Reservation extends AbstractEntity {
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "TRIP_INSTANCE_ID")
+    @JsonIgnore
+    private TripInstance tripInstance;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     @NotNull
     @Column(name = "NUMBER_OF_TRAVELLERS")

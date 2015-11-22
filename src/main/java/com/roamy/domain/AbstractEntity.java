@@ -9,6 +9,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Abhijit on 7/1/2015.
@@ -46,6 +48,9 @@ public abstract class AbstractEntity {
     @LastModifiedBy
     @Column(name = "LAST_MODIFIED_BY", length = DbConstants.MEDIUM_TEXT)
     protected String lastModifiedBy = "";
+
+    @Transient
+    protected Map<String, String> links = new HashMap<String, String>();
 
     public Long getId() {
         return id;
@@ -93,5 +98,13 @@ public abstract class AbstractEntity {
 
     public void setLastModifiedBy(String lastModifiedBy) {
         this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public Map<String, String> getLinks() {
+        return links;
+    }
+
+    public void setLinks(Map<String, String> links) {
+        this.links = links;
     }
 }

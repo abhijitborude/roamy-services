@@ -1,5 +1,6 @@
 package com.roamy.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.roamy.util.DbConstants;
 
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotNull;
  * Created by Abhijit on 10/20/2015.
  */
 @MappedSuperclass
+@JsonIgnoreProperties({"id"})
 public abstract class CitableEntity extends AbstractEntity {
 
     @NotNull
@@ -39,11 +41,11 @@ public abstract class CitableEntity extends AbstractEntity {
         this.name = name;
     }
 
-    public String getAdditionalDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setAdditionalDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 }

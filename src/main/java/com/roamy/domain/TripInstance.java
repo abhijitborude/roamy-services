@@ -1,8 +1,8 @@
 package com.roamy.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -12,6 +12,11 @@ import java.util.Date;
 @Entity
 @Table(name = "TRIP_INSTANCE", schema = "ROAMY")
 public class TripInstance extends AbstractEntity {
+
+    @ManyToOne
+    @JoinColumn(name = "TRIP_ID")
+    @JsonIgnore
+    private Trip trip;
 
     @NotNull
     @Column(name = "DATE")
@@ -29,6 +34,14 @@ public class TripInstance extends AbstractEntity {
 
     @Column(name = "DISPLAY_END_DATE")
     private Date displayEndDate;
+
+    public Trip getTrip() {
+        return trip;
+    }
+
+    public void setTrip(Trip trip) {
+        this.trip = trip;
+    }
 
     public Date getDate() {
         return date;

@@ -1,5 +1,6 @@
 package com.roamy.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.roamy.util.DbConstants;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ public class TargetCity extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "TRIP_ID")
+    @JsonIgnore
     private Trip trip;
 
     @ManyToOne
