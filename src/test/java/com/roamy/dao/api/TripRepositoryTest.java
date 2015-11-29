@@ -11,8 +11,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Date;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by Abhijit on 11/15/2015.
  */

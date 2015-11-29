@@ -1,15 +1,11 @@
 package com.roamy.web.config
 
-import java.time.LocalDate
-import java.util
-
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.roamy.web.RestApiResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 import org.springframework.context.annotation.{Bean, Configuration}
-
 import springfox.documentation.builders.{PathSelectors, RequestHandlerSelectors}
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket

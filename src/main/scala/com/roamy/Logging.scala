@@ -1,6 +1,6 @@
 package com.roamy
 
-import org.slf4j.{LoggerFactory, Logger}
+import org.slf4j.{Logger, LoggerFactory}
 
 /**
  * Created by amit on 10/17/15.

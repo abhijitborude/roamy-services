@@ -1,25 +1,18 @@
 package com.roamy.web
 
 import java.io.{PrintWriter, StringWriter}
-import javax.websocket.server.PathParam
-import javax.xml.bind.util.JAXBSource
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.google.gson.{Gson, JsonObject}
-import com.roamy.{AllPassRestApiEntitlementsFilter, RestApiEntitlementFilter}
 import com.roamy.dao.api.CitableRepository
-import com.roamy.domain.{Category, CitableEntity, City, AbstractEntity}
-import com.wordnik.swagger.annotations.{ApiModel, ApiParam, ApiOperation}
-import org.springframework.data.domain.{Pageable, Page, PageRequest}
+import com.roamy.domain.{AbstractEntity, CitableEntity}
+import com.roamy.{AllPassRestApiEntitlementsFilter, RestApiEntitlementFilter}
+import org.springframework.data.domain.{Page, PageRequest}
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.http.{HttpHeaders, ResponseEntity, HttpStatus}
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation._
 
-import scala.util.{Try, Failure, Success}
 import scala.collection.convert.wrapAsScala._
-import scala.reflect.runtime.universe._
 import scala.reflect.runtime.{universe => ru}
-import scala.reflect._
+import scala.util.{Failure, Success, Try}
 /**
  * Created by amit on 10/18/15.
  */

@@ -1,16 +1,10 @@
 package com.roamy.web
 
-import java.util.{Calendar, Optional, UUID, Date}
+import java.util.{Calendar, Date, UUID}
 
-import com.fasterxml.jackson.annotation.{JsonIgnoreProperties, JsonProperty, JsonIgnore}
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.databind.{ObjectMapper, JsonNode}
-import com.google.gson.{JsonArray, Gson, JsonObject}
+import com.fasterxml.jackson.annotation.{JsonIgnoreProperties, JsonProperty}
 import com.roamy.domain.AbstractEntity
-import org.springframework.data.domain.Page
-import org.springframework.http.{ResponseEntity, HttpStatus}
-import scala.collection.convert.wrapAsScala._
+import org.springframework.http.HttpStatus
 
 
 /**

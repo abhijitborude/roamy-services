@@ -2,7 +2,7 @@ package com.roamy.web.resource;
 
 import com.roamy.dao.api.CitableRepository;
 import com.roamy.dao.api.CityRepository;
-import com.roamy.dao.api.TargetCityRepository;
+import com.roamy.dao.api.TripInstanceRepository;
 import com.roamy.domain.*;
 import com.roamy.dto.RestResponse;
 import com.roamy.util.RestUtils;
@@ -33,7 +33,7 @@ public class CityResource extends CitableResource<City, Long> {
     private CityRepository cityRepository;
 
     @Autowired
-    private TargetCityRepository targetCityRepository;
+    private TripInstanceRepository tripInstanceRepository;
 
     @Override
     protected CitableRepository<City, Long> getCitableRepository() {
@@ -64,14 +64,14 @@ public class CityResource extends CitableResource<City, Long> {
         try {
             // TODO: add validations
 
-            // 1. find all active trips for the city
-            List<TargetCity> targetCities = targetCityRepository.findByCityCodeAndTripStatus(code, Status.Active);
+            // 1. find all active trip instances for the city
+            List<TripInstance> instances = tripInstanceRepository.findByTargetCitiesCodeAndStatus(code, Status.Active);
 
-            // 2. find all categories of the trips
+            // 2. find all categories of the trip instances
             Set<Category> categories = new HashSet<Category>();
 
-            for (TargetCity targetCity : targetCities) {
-                Trip trip = targetCity.getTrip();
+            for (TripInstance instance : instances) {
+                Trip trip = instance.getTrip();
                 if (!CollectionUtils.isEmpty(trip.getCategories())) {
                     categories.addAll(trip.getCategories());
                 }
