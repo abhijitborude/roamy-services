@@ -30,13 +30,13 @@ public class TripRepositoryTest {
     }
 
     @Test
-    public void testFindByStatusAndInstancesStatusAndInstancesDateBetweenOrderByDefaultPricePerAdultAsc() throws Exception {
-        tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByDefaultPricePerAdultAsc(Status.Active, Status.Active, new Date(), new Date());
+    public void testFindByStatusAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc() throws Exception {
+        tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status.Active, Status.Active, new Date(), new Date());
     }
 
     @Test
-    public void testFindByStatusAndInstancesStatusAndInstancesDateBetweenOrderByDefaultPricePerAdultDesc() throws Exception {
-        tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByDefaultPricePerAdultDesc(Status.Active, Status.Active, new Date(), new Date());
+    public void testFindByStatusAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc() throws Exception {
+        tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status.Active, Status.Active, new Date(), new Date());
     }
 
     @Test

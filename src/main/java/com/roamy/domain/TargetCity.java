@@ -21,9 +21,6 @@ public class TargetCity extends AbstractEntity {
     @JoinColumn(name = "CITY_ID")
     private City city;
 
-    @Column(name = "PRICE_PER_ADULT")
-    private Double pricePerAdult;
-
     @Column(name = "INSTRUCTIONS", length = DbConstants.LONG_TEXT)
     private String instructions;
 
@@ -41,14 +38,6 @@ public class TargetCity extends AbstractEntity {
 
     public void setCity(City city) {
         this.city = city;
-    }
-
-    public Double getPricePerAdult() {
-        return pricePerAdult;
-    }
-
-    public void setPricePerAdult(Double pricePerAdult) {
-        this.pricePerAdult = pricePerAdult;
     }
 
     public String getInstructions() {

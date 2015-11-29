@@ -84,12 +84,13 @@ public class TripResource extends CitableResource<Trip, Long> {
     }
 
     @RequestMapping(value = "/listing", method = RequestMethod.GET)
-    public RestResponse getTripsWithActiveInstanceBetweenDates(@RequestParam(value = "startDate", required = false) String startDate,
+    public RestResponse getTripsWithActiveInstanceBetweenDates(@RequestParam(value = "categoryCode", required = false) String categoryCode,
+                                                               @RequestParam(value = "startDate", required = false) String startDate,
                                                                @RequestParam(value = "endDate", required = false) String endDate,
                                                                @RequestParam(value = "sortBy", required = false) String sortBy,
                                                                @RequestParam(value = "sortType", required = false) String sortType) {
 
-        LOGGER.info("Finding trip listing from {} to {} and sorted by {} ({})", startDate, endDate, sortBy, sortType);
+        LOGGER.info("Finding trip listing for category ({}) from {} to {} and sorted by {} ({})", categoryCode, startDate, endDate, sortBy, sortType);
 
         RestResponse response = null;
 
@@ -124,22 +125,42 @@ public class TripResource extends CitableResource<Trip, Long> {
             List<Trip> trips = new ArrayList<Trip>();
 
             // 1. find active trips with instances that are active and have date between start and end date
-            if (SORT_BY_DIFFICULTY.equalsIgnoreCase(sortBy)) {
-                if (SORT_TYPE_DESC.equals(sortType)) {
-                    trips = tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByDefaultPricePerAdultDesc(Status.Active, Status.Active, sDate, eDate);
-                } else {
-                    trips = tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByDefaultPricePerAdultAsc(Status.Active, Status.Active, sDate, eDate);
-                }
+            if (!StringUtils.hasText(categoryCode)) {
+                if (SORT_BY_DIFFICULTY.equalsIgnoreCase(sortBy)) {
+                    if (SORT_TYPE_DESC.equals(sortType)) {
+                        trips = tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status.Active, Status.Active, sDate, eDate);
+                    } else {
+                        trips = tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status.Active, Status.Active, sDate, eDate);
+                    }
 
-            } else if (SORT_BY_PRICE.equalsIgnoreCase(sortBy)) {
-                if (SORT_TYPE_DESC.equals(sortType)) {
-                    trips = tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelDesc(Status.Active, Status.Active, sDate, eDate);
-                } else {
-                    trips = tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelAsc(Status.Active, Status.Active, sDate, eDate);
-                }
+                } else if (SORT_BY_PRICE.equalsIgnoreCase(sortBy)) {
+                    if (SORT_TYPE_DESC.equals(sortType)) {
+                        trips = tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelDesc(Status.Active, Status.Active, sDate, eDate);
+                    } else {
+                        trips = tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelAsc(Status.Active, Status.Active, sDate, eDate);
+                    }
 
+                } else {
+                    trips = tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetween(Status.Active, Status.Active, sDate, eDate);
+                }
             } else {
-                trips = tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetween(Status.Active, Status.Active, sDate, eDate);
+                if (SORT_BY_DIFFICULTY.equalsIgnoreCase(sortBy)) {
+                    if (SORT_TYPE_DESC.equals(sortType)) {
+                        trips = tripRepository.findByStatusAndCategoriesCodeAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status.Active, categoryCode, Status.Active, sDate, eDate);
+                    } else {
+                        trips = tripRepository.findByStatusAndCategoriesCodeAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status.Active, categoryCode, Status.Active, sDate, eDate);
+                    }
+
+                } else if (SORT_BY_PRICE.equalsIgnoreCase(sortBy)) {
+                    if (SORT_TYPE_DESC.equals(sortType)) {
+                        trips = tripRepository.findByStatusAndCategoriesCodeAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelDesc(Status.Active, categoryCode, Status.Active, sDate, eDate);
+                    } else {
+                        trips = tripRepository.findByStatusAndCategoriesCodeAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelAsc(Status.Active, categoryCode, Status.Active, sDate, eDate);
+                    }
+
+                } else {
+                    trips = tripRepository.findByStatusAndCategoriesCodeAndInstancesStatusAndInstancesDateBetween(Status.Active, categoryCode, Status.Active, sDate, eDate);
+                }
             }
 
             LOGGER.info("number of trips in the listing: {}", trips == null ? 0 : trips.size());
