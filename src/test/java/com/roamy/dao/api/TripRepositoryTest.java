@@ -21,29 +21,4 @@ public class TripRepositoryTest {
 
     @Autowired
     private TripRepository tripRepository;
-
-    @Test
-    public void testFindByStatusAndInstancesStatusAndInstancesDateBetween() throws Exception {
-        tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetween(Status.Active, Status.Active, new Date(), new Date());
-    }
-
-    @Test
-    public void testFindByStatusAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc() throws Exception {
-        tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status.Active, Status.Active, new Date(), new Date());
-    }
-
-    @Test
-    public void testFindByStatusAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc() throws Exception {
-        tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status.Active, Status.Active, new Date(), new Date());
-    }
-
-    @Test
-    public void testFindByStatusAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelAsc() throws Exception {
-        tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelAsc(Status.Active, Status.Active, new Date(), new Date());
-    }
-
-    @Test
-    public void testFindByStatusAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelDesc() throws Exception {
-        tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelDesc(Status.Active, Status.Active, new Date(), new Date());
-    }
 }

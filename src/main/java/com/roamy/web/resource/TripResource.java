@@ -15,6 +15,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -84,7 +85,8 @@ public class TripResource extends CitableResource<Trip, Long> {
     }
 
     @RequestMapping(value = "/listing", method = RequestMethod.GET)
-    public RestResponse getTripsWithActiveInstanceBetweenDates(@RequestParam(value = "categoryCode", required = false) String categoryCode,
+    public RestResponse getTripsWithActiveInstanceBetweenDates(@RequestParam(value = "cityCode", required = false) String cityCode,
+                                                               @RequestParam(value = "categoryCode", required = false) String categoryCode,
                                                                @RequestParam(value = "startDate", required = false) String startDate,
                                                                @RequestParam(value = "endDate", required = false) String endDate,
                                                                @RequestParam(value = "sortBy", required = false) String sortBy,
@@ -120,46 +122,59 @@ public class TripResource extends CitableResource<Trip, Long> {
                 eDate = new DateTime(eDate).plusDays(30).toDate();
             }
 
+            // create city code list
+            List<String> cityCodes = new ArrayList<String>();
+            cityCodes.add("ALL");
+            if (StringUtils.hasText(cityCode)) {
+                cityCodes.add(cityCode);
+            }
+
+            // create category code list
+            List<String> categoryCodes = new ArrayList<String>();
+            if (StringUtils.hasText(categoryCode)) {
+                categoryCodes.add(categoryCode);
+            }
+
             // TODO: instead of if-else statements, use reflection to construct method name and invoke on the bean
 
             List<Trip> trips = new ArrayList<Trip>();
 
             // 1. find active trips with instances that are active and have date between start and end date
-            if (!StringUtils.hasText(categoryCode)) {
+            if (CollectionUtils.isEmpty(categoryCodes)) {
                 if (SORT_BY_DIFFICULTY.equalsIgnoreCase(sortBy)) {
                     if (SORT_TYPE_DESC.equals(sortType)) {
-                        trips = tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status.Active, Status.Active, sDate, eDate);
+                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status.Active, cityCodes, Status.Active, sDate, eDate);
                     } else {
-                        trips = tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status.Active, Status.Active, sDate, eDate);
+                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status.Active, cityCodes, Status.Active, sDate, eDate);
                     }
 
                 } else if (SORT_BY_PRICE.equalsIgnoreCase(sortBy)) {
                     if (SORT_TYPE_DESC.equals(sortType)) {
-                        trips = tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelDesc(Status.Active, Status.Active, sDate, eDate);
+                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelDesc(Status.Active, cityCodes, Status.Active, sDate, eDate);
                     } else {
-                        trips = tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelAsc(Status.Active, Status.Active, sDate, eDate);
+                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelAsc(Status.Active, cityCodes, Status.Active, sDate, eDate);
                     }
 
                 } else {
-                    trips = tripRepository.findByStatusAndInstancesStatusAndInstancesDateBetween(Status.Active, Status.Active, sDate, eDate);
+                    trips = tripRepository.findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetween(Status.Active, cityCodes, Status.Active, sDate, eDate);
                 }
             } else {
                 if (SORT_BY_DIFFICULTY.equalsIgnoreCase(sortBy)) {
                     if (SORT_TYPE_DESC.equals(sortType)) {
-                        trips = tripRepository.findByStatusAndCategoriesCodeAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status.Active, categoryCode, Status.Active, sDate, eDate);
+                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
                     } else {
-                        trips = tripRepository.findByStatusAndCategoriesCodeAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status.Active, categoryCode, Status.Active, sDate, eDate);
+                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
                     }
 
                 } else if (SORT_BY_PRICE.equalsIgnoreCase(sortBy)) {
                     if (SORT_TYPE_DESC.equals(sortType)) {
-                        trips = tripRepository.findByStatusAndCategoriesCodeAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelDesc(Status.Active, categoryCode, Status.Active, sDate, eDate);
+                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelDesc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
                     } else {
-                        trips = tripRepository.findByStatusAndCategoriesCodeAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelAsc(Status.Active, categoryCode, Status.Active, sDate, eDate);
+                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelAsc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
                     }
 
                 } else {
-                    trips = tripRepository.findByStatusAndCategoriesCodeAndInstancesStatusAndInstancesDateBetween(Status.Active, categoryCode, Status.Active, sDate, eDate);
+                    trips = tripRepository.findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetween(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
                 }
             }
 

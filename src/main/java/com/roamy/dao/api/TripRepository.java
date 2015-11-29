@@ -14,25 +14,25 @@ import java.util.List;
 public interface TripRepository extends CitableRepository<Trip, Long> {
 
     // filter by status, start and end dates
-    List<Trip> findByStatusAndInstancesStatusAndInstancesDateBetween(Status status, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetween(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status status, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status status, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelAsc(Status status, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelAsc(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelDesc(Status status, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelDesc(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
 
     // filter by status, start and end dates, category code
-    List<Trip> findByStatusAndCategoriesCodeAndInstancesStatusAndInstancesDateBetween(Status status, String categoryCode, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetween(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndCategoriesCodeAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status status, String categoryCode, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndCategoriesCodeAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status status, String categoryCode, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndCategoriesCodeAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelAsc(Status status, String categoryCode, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelAsc(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndCategoriesCodeAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelDesc(Status status, String categoryCode, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelDesc(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
 
 }
