@@ -3,9 +3,11 @@ package com.roamy.web.resource;
 import com.roamy.dao.api.CitableRepository;
 import com.roamy.dao.api.TripInstanceRepository;
 import com.roamy.dao.api.TripRepository;
+import com.roamy.dao.api.TripReviewRepository;
 import com.roamy.domain.Status;
 import com.roamy.domain.Trip;
 import com.roamy.domain.TripInstance;
+import com.roamy.domain.TripReview;
 import com.roamy.dto.RestResponse;
 import com.roamy.util.RestUtils;
 import org.eclipse.jetty.http.HttpStatus;
@@ -44,6 +46,9 @@ public class TripResource extends CitableResource<Trip, Long> {
     @Autowired
     private TripInstanceRepository tripInstanceRepository;
 
+    @Autowired
+    private TripReviewRepository tripReviewRepository;
+
     @Override
     protected CitableRepository<Trip, Long> getCitableRepository() {
         return tripRepository;
@@ -65,7 +70,7 @@ public class TripResource extends CitableResource<Trip, Long> {
     }
 
     @RequestMapping(value = "/{code}/activeinstances", method = RequestMethod.GET)
-    public RestResponse findByTripCodeAndStatus(@PathVariable("code") String code) {
+    public RestResponse findActiveInstanes(@PathVariable("code") String code) {
 
         RestResponse response = null;
 
@@ -81,7 +86,6 @@ public class TripResource extends CitableResource<Trip, Long> {
         }
 
         return response;
-
     }
 
     @RequestMapping(value = "/listing", method = RequestMethod.GET)
@@ -185,6 +189,25 @@ public class TripResource extends CitableResource<Trip, Long> {
 
         } catch (Throwable t) {
             LOGGER.error("error in getting active trips listing: ", t);
+            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
+        }
+
+        return response;
+    }
+
+    @RequestMapping(value = "/{code}/reviews", method = RequestMethod.GET)
+    public RestResponse findByTripCodeAndStatus(@PathVariable("code") String code) {
+
+        RestResponse response = null;
+
+        try {
+            List<TripReview> reviews = tripReviewRepository.findByTripCode(code);
+            LOGGER.info("Number of reviews found: {}", reviews == null ? 0 : reviews.size());
+
+            response = new RestResponse(reviews, HttpStatus.OK_200, null, null);
+
+        } catch (Throwable t) {
+            LOGGER.error("error while finding reviews: ", t);
             response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
         }
 

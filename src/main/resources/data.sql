@@ -157,3 +157,8 @@ insert into ROAMY.trip_instance_city
 (1,         2),
 (2,         1),
 (2,         2);
+
+insert into ROAMY.trip_review
+(id,     trip_id,    reservation_id,    user_id,    title,                      description,                                                                        rating,     status,     created_by,     created_on,         last_modified_by,   last_modified_on) values
+(1,     1,           null,              1,          'Amazing trip!',            'This was an amazing trip. All the arrangements were great. Food was awesome too.',   5,          'Active',   'test',         current_timestamp,  'test',             current_timestamp),
+(2,     1,           null,              1,          'Nice trip!',               'This was a nice trip. All the arrangements were fine. Food was good too.',           4,          'Active',   'test',         current_timestamp,  'test',             current_timestamp);
