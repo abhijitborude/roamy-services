@@ -1,5 +1,8 @@
 package com.roamy.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.roamy.config.CustomDateSerializer;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -19,6 +22,7 @@ public class Payment extends AbstractEntity {
 
     @NotNull
     @Column(name = "DATE")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date date;
 
     public Double getAmount() {

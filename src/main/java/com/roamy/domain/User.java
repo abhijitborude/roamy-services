@@ -1,5 +1,7 @@
 package com.roamy.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.roamy.config.CustomDateSerializer;
 import com.roamy.util.DbConstants;
 
 import javax.persistence.*;
@@ -54,6 +56,7 @@ public class User extends AbstractEntity {
     private String verificationCode;
 
     @Column(name = "V_EXPIRY")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date verificationCodeExpiry;
 
     @Column(name = "VERIFIED")

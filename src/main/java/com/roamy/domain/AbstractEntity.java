@@ -1,5 +1,7 @@
 package com.roamy.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.roamy.config.CustomDateSerializer;
 import com.roamy.util.DbConstants;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -31,6 +33,7 @@ public abstract class AbstractEntity {
     @NotNull
     @CreatedDate
     @Column(name = "CREATED_ON", updatable = false)
+    @JsonSerialize(using = CustomDateSerializer.class)
     protected Date createdOn = new Date();
 
     @NotNull
@@ -42,6 +45,7 @@ public abstract class AbstractEntity {
     @Version
     @LastModifiedDate
     @Column(name = "LAST_MODIFIED_ON")
+    @JsonSerialize(using = CustomDateSerializer.class)
     protected Date lastModifiedOn = new Date();
 
     @NotNull

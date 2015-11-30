@@ -1,6 +1,8 @@
 package com.roamy.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.roamy.config.CustomDateSerializer;
 import com.roamy.util.DbConstants;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -65,12 +67,15 @@ public class TripInstance extends CitableEntity {
 
     @NotNull
     @Column(name = "DATE")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date date;
 
     @Column(name = "DISPLAY_START_DATE")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date displayStartDate;
 
     @Column(name = "DISPLAY_END_DATE")
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date displayEndDate;
 
     public Trip getTrip() {
