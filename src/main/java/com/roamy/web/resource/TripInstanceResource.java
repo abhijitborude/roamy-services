@@ -32,7 +32,12 @@ public class TripInstanceResource extends IdentityResource<TripInstance, Long> {
     }
 
     @Override
-    protected void enrich(TripInstance entity) {
+    protected void enrichForGet(TripInstance entity) {
+
+    }
+
+    @Override
+    protected void enrichForSave(TripInstance entity) {
 
     }
 

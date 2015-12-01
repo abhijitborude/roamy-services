@@ -28,7 +28,12 @@ public class CategoryResource extends CitableResource<Category, Long> {
     }
 
     @Override
-    protected void enrich(Category entity) {
+    protected void enrichForGet(Category entity) {
+
+    }
+
+    @Override
+    protected void enrichForSave(Category entity) {
 
     }
 

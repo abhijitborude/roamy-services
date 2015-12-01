@@ -38,7 +38,7 @@ public abstract class CitableResource<T extends CitableEntity, ID extends Serial
             LOGGER.info("entity by code({}): {}", code, entity);
 
             // Enrich the entity e.g. set additional properties
-            enrich(entity);
+            enrichForGet(entity);
 
             // Add hyperlinks to the related entities e.g. TripReview link in Trip resource
             addLinks(entity);

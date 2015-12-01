@@ -60,7 +60,12 @@ public class TripResource extends CitableResource<Trip, Long> {
     }
 
     @Override
-    protected void enrich(Trip entity) {
+    protected void enrichForGet(Trip entity) {
+
+    }
+
+    @Override
+    protected void enrichForSave(Trip entity) {
 
     }
 
@@ -89,12 +94,12 @@ public class TripResource extends CitableResource<Trip, Long> {
     }
 
     @RequestMapping(value = "/listing", method = RequestMethod.GET)
-    public RestResponse getTripsWithActiveInstanceBetweenDates(@RequestParam(value = "cityCode", required = false) String cityCode,
-                                                               @RequestParam(value = "categoryCode", required = false) String categoryCode,
-                                                               @RequestParam(value = "startDate", required = false) String startDate,
-                                                               @RequestParam(value = "endDate", required = false) String endDate,
-                                                               @RequestParam(value = "sortBy", required = false) String sortBy,
-                                                               @RequestParam(value = "sortType", required = false) String sortType) {
+    public RestResponse getTripsForCityAndCategoryWithActiveInstancesBetweenDates(@RequestParam(value = "cityCode", required = false) String cityCode,
+                                                                                  @RequestParam(value = "categoryCode", required = false) String categoryCode,
+                                                                                  @RequestParam(value = "startDate", required = false) String startDate,
+                                                                                  @RequestParam(value = "endDate", required = false) String endDate,
+                                                                                  @RequestParam(value = "sortBy", required = false) String sortBy,
+                                                                                  @RequestParam(value = "sortType", required = false) String sortType) {
 
         LOGGER.info("Finding trip listing for category ({}) from {} to {} and sorted by {} ({})", categoryCode, startDate, endDate, sortBy, sortType);
 

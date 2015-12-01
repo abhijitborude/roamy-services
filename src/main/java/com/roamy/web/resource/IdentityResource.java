@@ -30,7 +30,7 @@ public abstract class IdentityResource<T extends AbstractEntity, ID extends Seri
             LOGGER.info("entity by id({}): {}", id, entity);
 
             // Enrich the entity e.g. set additional properties
-            enrich(entity);
+            enrichForGet(entity);
 
             // Add hyperlinks to the related entities e.g. TripReview link in Trip resource
             addLinks(entity);

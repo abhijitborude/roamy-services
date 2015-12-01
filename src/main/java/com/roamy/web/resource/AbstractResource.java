@@ -27,7 +27,9 @@ public abstract class AbstractResource<T, ID extends Serializable> {
 
     protected abstract void validate(T entity);
 
-    protected abstract void enrich(T entity);
+    protected abstract void enrichForGet(T entity);
+
+    protected abstract void enrichForSave(T entity);
 
     protected abstract void addLinks(T entity);
 

@@ -46,7 +46,12 @@ public class CityResource extends CitableResource<City, Long> {
     }
 
     @Override
-    protected void enrich(City entity) {
+    protected void enrichForGet(City entity) {
+
+    }
+
+    @Override
+    protected void enrichForSave(City entity) {
 
     }
 
