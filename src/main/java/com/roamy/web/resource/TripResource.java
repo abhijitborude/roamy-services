@@ -65,7 +65,12 @@ public class TripResource extends CitableResource<Trip, Long> {
     }
 
     @Override
-    protected void enrichForSave(Trip entity) {
+    protected void enrichForCreate(Trip entity) {
+
+    }
+
+    @Override
+    protected void afterEntityCreated(Trip entity) {
 
     }
 

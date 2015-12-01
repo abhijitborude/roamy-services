@@ -33,7 +33,12 @@ public class VendorResource extends CitableResource<Vendor, Long> {
     }
 
     @Override
-    protected void enrichForSave(Vendor entity) {
+    protected void enrichForCreate(Vendor entity) {
+
+    }
+
+    @Override
+    protected void afterEntityCreated(Vendor entity) {
 
     }
 

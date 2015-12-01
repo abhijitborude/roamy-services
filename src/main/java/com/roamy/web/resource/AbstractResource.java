@@ -29,7 +29,9 @@ public abstract class AbstractResource<T, ID extends Serializable> {
 
     protected abstract void enrichForGet(T entity);
 
-    protected abstract void enrichForSave(T entity);
+    protected abstract void enrichForCreate(T entity);
+
+    protected abstract void afterEntityCreated(T entity);
 
     protected abstract void addLinks(T entity);
 
@@ -60,9 +62,12 @@ public abstract class AbstractResource<T, ID extends Serializable> {
 
         try {
             validate(entity);
+            enrichForCreate(entity);
 
             T savedEntity = getJpaRepository().save(entity);
             LOGGER.info("Entity Saved: {}", savedEntity);
+
+            afterEntityCreated(entity);
 
             response = new RestResponse(savedEntity, HttpStatus.OK_200);
 

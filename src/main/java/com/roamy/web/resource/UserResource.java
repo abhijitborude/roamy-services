@@ -37,11 +37,16 @@ public class UserResource extends AbstractResource<User, Long> {
     }
 
     @Override
-    protected void enrichForSave(User entity) {
+    protected void enrichForCreate(User entity) {
         String randomNumericString = RoamyUtils.generateRandomNumericString(6);
         entity.setVerificationCode(randomNumericString);
         entity.setVerificationCodeExpiry(new DateTime(new Date()).plusHours(2).toDate());
         entity.setIsVerified(false);
+    }
+
+    @Override
+    protected void afterEntityCreated(User entity) {
+        // send sms with verification code
     }
 
     @Override
