@@ -53,6 +53,17 @@ public class Trip extends CitableEntity {
     @Column(name = "MEETING_POINTS", length = DbConstants.LONG_TEXT)
     private String meetingPoints;
 
+    @Column(name = "THINGS_TO_CARRY", length = DbConstants.LONG_TEXT)
+    private String thingsToCarry;
+
+    @ElementCollection
+    @CollectionTable(
+            schema = "ROAMY",
+            name="TRIP_IMAGE",
+            joinColumns=@JoinColumn(name="TRIP_ID")
+    )
+    private List<TripImage> images;
+
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<TripInstance> instances = new ArrayList<TripInstance>();
@@ -143,6 +154,22 @@ public class Trip extends CitableEntity {
 
     public void setMeetingPoints(String meetingPoints) {
         this.meetingPoints = meetingPoints;
+    }
+
+    public String getThingsToCarry() {
+        return thingsToCarry;
+    }
+
+    public void setThingsToCarry(String thingsToCarry) {
+        this.thingsToCarry = thingsToCarry;
+    }
+
+    public List<TripImage> getImages() {
+        return images;
+    }
+
+    public void setImages(List<TripImage> images) {
+        this.images = images;
     }
 
     public List<TripInstance> getInstances() {

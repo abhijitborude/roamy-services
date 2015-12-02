@@ -34,6 +34,7 @@ insert into ROAMY.trip
     inclusions,
     exclusions,
     meeting_points,
+    things_to_carry,
     status,
     created_by,
     created_on,
@@ -54,6 +55,7 @@ insert into ROAMY.trip
     'Dadar to Dadar transportation fare for private vehicle (Non-A/c), Surface Supply ScubaDiving, Snorkeling Charges, Dolphin Safari, Boating charges, Permissions and entry fees, Guide Charges, Food (Veg & Non Veg Thali as mentioned wherever limited and unlimited)', --inclusions
     '', --exclusions
     '21:30Hrs@ National Park,Borivali <br/> 22:30 Hrs : Pritam Hotel , Dadar <br/> 20:00Hrs: Shivajinagar, Pune', --meeting_points
+    'Shoes<br/>Backpack<br/>First Aid<br/>Torch',   --things_to_carry
     'Active', --status
     'test', --created_by
     current_timestamp, --created_on,
@@ -71,6 +73,11 @@ insert into ROAMY.trip_city
 (1,         1),
 (1,         2);
 
+insert into ROAMY.trip_image
+(trip_id,   caption,                url ) values
+(1,         'Nice Image',           'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg'),
+(1,         null,                     'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg');
+
 insert into ROAMY.trip_instance
 (
     id,
@@ -87,6 +94,7 @@ insert into ROAMY.trip_instance
     inclusions,
     exclusions,
     meeting_points,
+    things_to_carry,
     traveller_capacity,
     additional_capacity,
     date,
@@ -113,6 +121,7 @@ insert into ROAMY.trip_instance
     'Dadar to Dadar transportation fare for private vehicle (Non-A/c)<br/>Surface Supply ScubaDiving, Snorkeling Charges, Dolphin Safari, Boating charges, Permissions and entry fees, Guide Charges', --inclusions
     'Food', --exclusions
     '21:30Hrs@ National Park,Borivali <br/> 22:30 Hrs : Pritam Hotel , Dadar <br/> 20:00Hrs: Shivajinagar, Pune', --meeting_points
+    'Shoes<br/>Backpack<br/>First Aid<br/>Torch',   --things_to_carry
     50, --traveller_capacity
     10, --additional_capacity
     dateadd('DAY', 10, current_timestamp),  --date
@@ -139,6 +148,7 @@ insert into ROAMY.trip_instance
         'Dadar to Dadar transportation fare for private vehicle (Non-A/c)<br/>Surface Supply ScubaDiving, Snorkeling Charges, Dolphin Safari, Boating charges, Permissions and entry fees, Guide Charges<br/>Food', --inclusions
     '', --exclusions
     '21:30Hrs@ National Park,Borivali <br/> 22:30 Hrs : Pritam Hotel , Dadar <br/> 20:00Hrs: Shivajinagar, Pune', --meeting_points
+    'Shoes<br/>Backpack<br/>First Aid<br/>Torch',   --things_to_carry
     50, --traveller_capacity
     10, --additional_capacity
     dateadd('DAY', 10, current_timestamp),  --date

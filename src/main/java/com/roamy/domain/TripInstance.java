@@ -58,6 +58,9 @@ public class TripInstance extends CitableEntity {
     @Column(name = "MEETING_POINTS", length = DbConstants.LONG_TEXT)
     private String meetingPoints;
 
+    @Column(name = "THINGS_TO_CARRY", length = DbConstants.LONG_TEXT)
+    private String thingsToCarry;
+
     @NotNull
     @Column(name = "TRAVELLER_CAPACITY")
     private int travellerCapacity;
@@ -164,6 +167,14 @@ public class TripInstance extends CitableEntity {
 
     public void setMeetingPoints(String meetingPoints) {
         this.meetingPoints = meetingPoints;
+    }
+
+    public String getThingsToCarry() {
+        return thingsToCarry;
+    }
+
+    public void setThingsToCarry(String thingsToCarry) {
+        this.thingsToCarry = thingsToCarry;
     }
 
     public int getTravellerCapacity() {
