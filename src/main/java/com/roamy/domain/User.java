@@ -1,6 +1,9 @@
 package com.roamy.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.roamy.config.CustomDateDeserializer;
 import com.roamy.config.CustomDateSerializer;
 import com.roamy.util.DbConstants;
 
@@ -13,6 +16,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "USER", schema = "ROAMY")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User extends AbstractEntity {
 
     @NotNull
@@ -38,6 +42,8 @@ public class User extends AbstractEntity {
     private String lastName;
 
     @Column(name = "BIRTH_DATE")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     private Date birthDate;
 
     @Column(name = "ADDRESS", length = DbConstants.SHORT_TEXT)

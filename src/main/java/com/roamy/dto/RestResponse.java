@@ -1,5 +1,8 @@
 package com.roamy.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.roamy.config.CustomDateSerializer;
+
 import java.util.*;
 
 /**
@@ -11,16 +14,18 @@ public class RestResponse {
     private int status;
 
     private Map<String, String> messages;
-    private Map<String, String> links;
+    private Map<String, String> _links;
 
+    @JsonSerialize(using = CustomDateSerializer.class)
     private final Date _responseCurrentAt = Calendar.getInstance().getTime();
+
     private final UUID _correlationId = UUID.randomUUID();
 
     public RestResponse(Object data, int status) {
         this.data = data;
         this.status = status;
         messages = new HashMap<String, String>();
-        links = new HashMap<String, String>();
+        _links = new HashMap<String, String>();
     }
 
     public RestResponse(Object data, int status, Map<String, String> messages, Map<String, String> links) {
@@ -32,9 +37,9 @@ public class RestResponse {
             this.messages = new HashMap<String, String>();
         }
         if (links != null) {
-            this.links = links;
+            this._links = links;
         } else {
-            this.links = new HashMap<String, String>();
+            this._links = new HashMap<String, String>();
         }
     }
 
@@ -62,12 +67,12 @@ public class RestResponse {
         this.messages = messages;
     }
 
-    public Map<String, String> getLinks() {
-        return links;
+    public Map<String, String> get_links() {
+        return _links;
     }
 
-    public void setLinks(Map<String, String> links) {
-        this.links = links;
+    public void set_links(Map<String, String> links) {
+        this._links = links;
     }
 
     public Date get_responseCurrentAt() {

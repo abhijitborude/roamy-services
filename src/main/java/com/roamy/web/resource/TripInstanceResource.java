@@ -27,7 +27,7 @@ public class TripInstanceResource extends IdentityResource<TripInstance, Long> {
     }
 
     @Override
-    protected void validate(TripInstance entity) {
+    protected void validateForCreate(TripInstance entity) {
 
     }
 

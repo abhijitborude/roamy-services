@@ -55,7 +55,7 @@ public class TripResource extends CitableResource<Trip, Long> {
     }
 
     @Override
-    protected void validate(Trip entity) {
+    protected void validateForCreate(Trip entity) {
 
     }
 

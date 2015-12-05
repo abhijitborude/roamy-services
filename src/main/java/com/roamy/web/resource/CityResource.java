@@ -41,7 +41,7 @@ public class CityResource extends CitableResource<City, Long> {
     }
 
     @Override
-    protected void validate(City entity) {
+    protected void validateForCreate(City entity) {
 
     }
 
@@ -62,7 +62,7 @@ public class CityResource extends CitableResource<City, Long> {
 
     @Override
     protected void addLinks(City entity) {
-        entity.getLinks().put("categories", "/" + entity.getCode() + "/categories");
+        entity.get_links().put("categories", "/" + entity.getCode() + "/categories");
 
     }
 

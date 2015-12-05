@@ -23,7 +23,7 @@ public class CategoryResource extends CitableResource<Category, Long> {
     }
 
     @Override
-    protected void validate(Category entity) {
+    protected void validateForCreate(Category entity) {
 
     }
 

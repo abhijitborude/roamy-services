@@ -31,7 +31,7 @@ public class RestUtils {
 
     public static Map<String, String> getErrorMessages(Throwable t) {
         Map<String, String> messages = new HashMap<String, String>();
-        messages.put("error", "An error occurred while processing this request. Please use the developerErrorMessage to resolve and fix the issue.");
+        messages.put("error", t.getMessage());
         messages.put("developerErrorMessage", RestUtils.getStackTraceAsString(t));
         return messages;
     }

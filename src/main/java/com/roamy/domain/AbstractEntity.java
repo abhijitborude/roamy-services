@@ -54,7 +54,7 @@ public abstract class AbstractEntity {
     protected String lastModifiedBy = "";
 
     @Transient
-    protected Map<String, String> links = new HashMap<String, String>();
+    protected Map<String, String> _links = new HashMap<String, String>();
 
     public Long getId() {
         return id;
@@ -104,11 +104,11 @@ public abstract class AbstractEntity {
         this.lastModifiedBy = lastModifiedBy;
     }
 
-    public Map<String, String> getLinks() {
-        return links;
+    public Map<String, String> get_links() {
+        return _links;
     }
 
-    public void setLinks(Map<String, String> links) {
-        this.links = links;
+    public void set_links(Map<String, String> links) {
+        this._links = links;
     }
 }
