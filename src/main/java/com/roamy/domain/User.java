@@ -64,6 +64,7 @@ public class User extends AbstractEntity {
     private String verificationCode;
 
     @Column(name = "VERIFICATION_EXPIRY")
+    @JsonSerialize(using = CustomDateSerializer.class)
     //@JsonIgnore
     private Date verificationCodeExpiry;
 
