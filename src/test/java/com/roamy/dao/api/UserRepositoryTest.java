@@ -27,11 +27,6 @@ public class UserRepositoryTest {
 
     @Before
     public void setup() {
-        User user = getUser("100", "a@a.com", "fname1", "lname1", "pass1");
-        userRepository.save(user);
-
-        user = getUser("200", "b@b.com", "fname2", "lname2", "pass2");
-        userRepository.save(user);
 
     }
 
@@ -53,7 +48,8 @@ public class UserRepositoryTest {
 
     @Test
     public void testFindByPhoneNumber() throws Exception {
-
+        User user = getUser("100", "a@a.com", "fname1", "lname1", "pass1");
+        userRepository.save(user);
     }
 
     @Test
