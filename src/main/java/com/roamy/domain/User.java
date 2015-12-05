@@ -59,16 +59,19 @@ public class User extends AbstractEntity {
     @Column(name = "PIN", length = DbConstants.SHORT_TEXT)
     private String pinCode;
 
-    @Column(name = "V_CODE", length = DbConstants.SHORT_TEXT)
-    @JsonIgnore
+    @Column(name = "VERIFICATION_CODE", length = DbConstants.SHORT_TEXT)
+    //@JsonIgnore
     private String verificationCode;
 
-    @Column(name = "V_EXPIRY")
-    @JsonIgnore
+    @Column(name = "VERIFICATION_EXPIRY")
+    //@JsonIgnore
     private Date verificationCodeExpiry;
 
     @Column(name = "VERIFIED")
     private boolean isVerified;
+
+    @Column(name = "REFERRAL_CODE", length = DbConstants.SHORT_TEXT)
+    private String referralCode;
 
     public AccountType getType() {
         return type;
@@ -182,10 +185,19 @@ public class User extends AbstractEntity {
         this.isVerified = isVerified;
     }
 
+    public String getReferralCode() {
+        return referralCode;
+    }
+
+    public void setReferralCode(String referralCode) {
+        this.referralCode = referralCode;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "type='" + type + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }
