@@ -1,5 +1,6 @@
 package com.roamy.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -59,10 +60,11 @@ public class User extends AbstractEntity {
     private String pinCode;
 
     @Column(name = "V_CODE", length = DbConstants.SHORT_TEXT)
+    @JsonIgnore
     private String verificationCode;
 
     @Column(name = "V_EXPIRY")
-    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonIgnore
     private Date verificationCodeExpiry;
 
     @Column(name = "VERIFIED")
