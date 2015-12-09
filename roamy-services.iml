@@ -133,5 +133,9 @@
     <orderEntry type="library" exported="" name="Gradle: org.scala-lang:scala-reflect:2.11.7" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.6.3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.apache.commons:commons-lang3:3.4" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: javax.xml.bind:jaxb-api:2.2.12" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.6.3" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.6.3" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.codehaus.woodstox:stax2-api:3.1.4" level="project" />
   </component>
 </module>

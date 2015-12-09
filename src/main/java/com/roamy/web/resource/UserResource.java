@@ -5,11 +5,11 @@ import com.roamy.domain.Status;
 import com.roamy.domain.User;
 import com.roamy.dto.RestResponse;
 import com.roamy.dto.UserActionDto;
+import com.roamy.service.api.SmsNotificationService;
 import com.roamy.util.RestUtils;
 import com.roamy.util.RoamyUtils;
 import com.roamy.util.RoamyValidationException;
 import org.eclipse.jetty.http.HttpStatus;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +30,9 @@ public class UserResource extends IdentityResource<User, Long> {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private SmsNotificationService smsNotificationService;
 
     @Override
     protected JpaRepository<User, Long> getJpaRepository() {
@@ -84,6 +87,7 @@ public class UserResource extends IdentityResource<User, Long> {
     @Override
     protected void afterEntityCreated(User entity) {
         // send sms with verification code
+        smsNotificationService.sendVerificationSms(entity.getPhoneNumber(), entity.getVerificationCode());
     }
 
     @Override
@@ -112,12 +116,13 @@ public class UserResource extends IdentityResource<User, Long> {
             if ("reset".equalsIgnoreCase(userActionDto.getAction()) ||
                     ("activate".equalsIgnoreCase(userActionDto.getAction()) && user.getVerificationCode() == null)) {
 
-                // 1. generate new activation code
+                // 1. generate new verification code
                 String verificationCode = RoamyUtils.generateVerificationCode();
 
-                // 2. send new activation code
+                // 2. send new verification code
+                smsNotificationService.sendVerificationSms(user.getPhoneNumber(), verificationCode);
 
-                // 3. update user object with new activation code and status
+                // 3. update user object with new verification code and status
                 user.setVerificationCode(verificationCode);
                 user.setVerificationCodeExpiry(RoamyUtils.getVerificationCodeExpiryDate());
                 user.setIsVerified(false);
@@ -129,8 +134,10 @@ public class UserResource extends IdentityResource<User, Long> {
 
                 if (!user.isVerified()) {
 
-                    // 2. check if the activation code matches
-                    if (user.getVerificationCode().equals(userActionDto.getActivationCode())) {
+                    // 2. check if the verification code matches
+                    if (user.getVerificationCode().equals(userActionDto.getVerificationCode())) {
+
+                        LOGGER.info("Verification code matches!");
 
                         // 3. update status of the user
                         user.setIsVerified(true);
@@ -141,6 +148,7 @@ public class UserResource extends IdentityResource<User, Long> {
                         user.setLastModifiedOn(new Date());
 
                     } else {
+                        LOGGER.error("Verification code does not match");
                         throw new RoamyValidationException("Activation code is wrong");
                     }
                 }
@@ -153,7 +161,7 @@ public class UserResource extends IdentityResource<User, Long> {
             LOGGER.info("action({}) on userId({}) completed", userActionDto.getAction(), id);
 
             // return response
-            response = new RestResponse(null, HttpStatus.OK_200, null, null);
+            response = new RestResponse(user, HttpStatus.OK_200, null, null);
         } catch (Throwable t) {
             LOGGER.error("error in actionUser: ", t);
             response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);

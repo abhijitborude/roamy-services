@@ -8,7 +8,7 @@ public class UserActionDto {
     // action should be reset, activate
     private String action;
 
-    private String activationCode;
+    private String verificationCode;
 
     public String getAction() {
         return action;
@@ -18,19 +18,19 @@ public class UserActionDto {
         this.action = action;
     }
 
-    public String getActivationCode() {
-        return activationCode;
+    public String getVerificationCode() {
+        return verificationCode;
     }
 
-    public void setActivationCode(String activationCode) {
-        this.activationCode = activationCode;
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
     }
 
     @Override
     public String toString() {
         return "UserActionDto{" +
                 "action='" + action + '\'' +
-                ", activationCode='" + activationCode + '\'' +
+                ", verificationCode='" + verificationCode + '\'' +
                 '}';
     }
 }
