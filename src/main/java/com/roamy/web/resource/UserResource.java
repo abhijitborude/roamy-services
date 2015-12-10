@@ -39,6 +39,63 @@ public class UserResource extends IdentityResource<User, Long> {
         return userRepository;
     }
 
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    public RestResponse createOne(@RequestBody User entity) {
+        LOGGER.info("Saving: {}", entity);
+
+        RestResponse response = null;
+
+        try {
+            validateForCreate(entity);
+
+            User savedEntity = null;
+
+                    // check if user with same phoneNuumber exists
+            User user = userRepository.findByPhoneNumber(entity.getPhoneNumber());
+
+            if (user != null) {
+                LOGGER.info("User with phoneNumber({}) already exists: {}", entity.getPhoneNumber(), user);
+
+                // user already exists. Simply update the values and reset codes
+                user.setEmail(entity.getEmail());
+
+                // set verification code
+                user.setVerificationCode(RoamyUtils.generateVerificationCode());
+                user.setVerificationCodeExpiry(RoamyUtils.getVerificationCodeExpiryDate());
+                user.setIsVerified(false);
+
+                // set referral code
+                user.setReferralCode(RoamyUtils.generateReferralCode());
+
+                user.setLastModifiedBy("test");
+                user.setLastModifiedOn(new Date());
+
+                user.setStatus(Status.Inactive);
+
+                savedEntity = userRepository.save(user);
+                LOGGER.info("Existing entity updated: {}", savedEntity);
+
+                afterEntityCreated(entity);
+
+            } else {
+                enrichForCreate(entity);
+
+                savedEntity = userRepository.save(entity);
+                LOGGER.info("Entity Saved: {}", savedEntity);
+
+                afterEntityCreated(entity);
+            }
+
+            response = new RestResponse(savedEntity, HttpStatus.OK_200);
+
+        } catch (Throwable t) {
+            LOGGER.error("error in save: ", t);
+            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
+        }
+
+        return response;
+    }
+
     @Override
     protected void validateForCreate(User entity) {
         if (!StringUtils.hasText(entity.getPhoneNumber())) {
@@ -46,16 +103,6 @@ public class UserResource extends IdentityResource<User, Long> {
         }
         if (!StringUtils.hasText(entity.getEmail())) {
             throw new RoamyValidationException("Email not provided");
-        }
-
-        User byPhoneNumber = userRepository.findByPhoneNumber(entity.getPhoneNumber());
-        if (byPhoneNumber != null) {
-            throw new RoamyValidationException("User with Phone Number " + entity.getPhoneNumber() + " already exists");
-        }
-
-        User byEmail = userRepository.findByEmail(entity.getEmail());
-        if (byEmail != null) {
-            throw new RoamyValidationException("User with Email " + entity.getEmail() + " already exists");
         }
     }
 
@@ -111,10 +158,8 @@ public class UserResource extends IdentityResource<User, Long> {
                 throw new RoamyValidationException("No user found with id: " + id);
             }
 
-            // reset the verification code and status if action is "reset" or
-            // if for some reason verificationCode is null while activating (which shouldn't happen)
-            if ("reset".equalsIgnoreCase(userActionDto.getAction()) ||
-                    ("activate".equalsIgnoreCase(userActionDto.getAction()) && user.getVerificationCode() == null)) {
+            // reset the verification code and status if action is "reset"
+            if ("reset".equalsIgnoreCase(userActionDto.getAction())) {
 
                 // 1. generate new verification code
                 String verificationCode = RoamyUtils.generateVerificationCode();
@@ -151,6 +196,8 @@ public class UserResource extends IdentityResource<User, Long> {
                         LOGGER.error("Verification code does not match");
                         throw new RoamyValidationException("Activation code is wrong");
                     }
+                } else {
+                    LOGGER.info("User is already verified");
                 }
             } else {
                 throw new RoamyValidationException("Invalid action: " + userActionDto.getAction());
