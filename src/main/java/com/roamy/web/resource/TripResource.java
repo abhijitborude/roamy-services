@@ -1,9 +1,6 @@
 package com.roamy.web.resource;
 
-import com.roamy.dao.api.CitableRepository;
-import com.roamy.dao.api.TripInstanceRepository;
-import com.roamy.dao.api.TripRepository;
-import com.roamy.dao.api.TripReviewRepository;
+import com.roamy.dao.api.*;
 import com.roamy.domain.Status;
 import com.roamy.domain.Trip;
 import com.roamy.domain.TripInstance;

@@ -28,7 +28,7 @@ public abstract class AbstractEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS", length = DbConstants.SHORT_TEXT)
-    protected Status status;
+    protected Status status = Status.Active;;
 
     @NotNull
     @CreatedDate

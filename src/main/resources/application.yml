@@ -7,6 +7,6 @@ spring:
 spring:
   profiles: unit-test
   h2.console.enabled: true
-  jpa.hibernate.ddl-auto:
+  jpa.hibernate.ddl-auto: none
 
 logging.level.org.hibernate.SQL: DEBUG

@@ -78,6 +78,10 @@ insert into ROAMY.trip_image
 (1,         'Nice Image',           'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg'),
 (1,         null,                     'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg');
 
+insert into ROAMY.favorite_trip
+(id,    user_id,   trip_id,     status,     created_by, created_on,         last_modified_by,   last_modified_on) values
+(1,     1,         1,           'Active',   'test',     current_timestamp,  'test',             current_timestamp);
+
 insert into ROAMY.trip_instance
 (
     id,

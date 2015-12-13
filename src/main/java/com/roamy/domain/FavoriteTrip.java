@@ -20,6 +20,16 @@ public class FavoriteTrip extends AbstractEntity {
     @JoinColumn(name = "TRIP_ID")
     private Trip trip;
 
+    public FavoriteTrip() {
+        super();
+    }
+
+    public FavoriteTrip(User user, Trip trip) {
+        super();
+        this.user = user;
+        this.trip = trip;
+    }
+
     public User getUser() {
         return user;
     }
@@ -34,5 +44,13 @@ public class FavoriteTrip extends AbstractEntity {
 
     public void setTrip(Trip trip) {
         this.trip = trip;
+    }
+
+    @Override
+    public String toString() {
+        return "FavoriteTrip{" +
+                "user=" + user +
+                ", trip=" + trip +
+                '}';
     }
 }

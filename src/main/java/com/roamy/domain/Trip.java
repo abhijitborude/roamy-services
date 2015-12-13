@@ -68,6 +68,9 @@ public class Trip extends CitableEntity {
     @JsonIgnore
     private List<TripInstance> instances = new ArrayList<TripInstance>();
 
+    @Transient
+    private boolean favorite = false;
+
     public int getNumberOfDays() {
         return numberOfDays;
     }
@@ -178,6 +181,14 @@ public class Trip extends CitableEntity {
 
     public void setInstances(List<TripInstance> instances) {
         this.instances = instances;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 
     @Override

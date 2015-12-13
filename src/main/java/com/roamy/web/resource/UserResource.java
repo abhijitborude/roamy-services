@@ -1,7 +1,11 @@
 package com.roamy.web.resource;
 
+import com.roamy.dao.api.FavoriteTripRepository;
+import com.roamy.dao.api.TripRepository;
 import com.roamy.dao.api.UserRepository;
+import com.roamy.domain.FavoriteTrip;
 import com.roamy.domain.Status;
+import com.roamy.domain.Trip;
 import com.roamy.domain.User;
 import com.roamy.dto.RestResponse;
 import com.roamy.dto.UserActionDto;
@@ -14,10 +18,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Abhijit on 11/15/2015.
@@ -33,6 +40,12 @@ public class UserResource extends IdentityResource<User, Long> {
 
     @Autowired
     private SmsNotificationService smsNotificationService;
+
+    @Autowired
+    private TripRepository tripRepository;
+
+    @Autowired
+    private FavoriteTripRepository favoriteTripRepository;
 
     @Override
     protected JpaRepository<User, Long> getJpaRepository() {
@@ -140,6 +153,124 @@ public class UserResource extends IdentityResource<User, Long> {
     @Override
     protected void addLinks(User entity) {
 
+    }
+
+    @RequestMapping(value = "/{id}/favoriteTrips", method = RequestMethod.GET)
+    public RestResponse getFavoriteTrips(@PathVariable Long id) {
+        RestResponse response = null;
+
+        try {
+            // find object
+            User user = userRepository.findOne(id);
+            if (user == null) {
+                throw new RoamyValidationException("Invalid user id: " + id);
+            }
+            LOGGER.info("Finding favorite trips for {}", user);
+
+            List<FavoriteTrip> favoriteTrips = favoriteTripRepository.findByUserPhoneNumber(user.getPhoneNumber());
+            LOGGER.info("{} favorite trips found for {}", favoriteTrips == null ? 0 : favoriteTrips.size(), user);
+
+            List<Trip> trips = new ArrayList<Trip>();
+            if (!CollectionUtils.isEmpty(favoriteTrips)) {
+                for (FavoriteTrip favoriteTrip : favoriteTrips) {
+                    trips.add(favoriteTrip.getTrip());
+                }
+            }
+
+            // return response
+            response = new RestResponse(trips, HttpStatus.OK_200, null, null);
+
+        } catch (Throwable t) {
+            LOGGER.error("error in getFavoriteTrips: ", t);
+            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
+        }
+
+        return response;
+    }
+
+    @RequestMapping(value = "/{id}/favoriteTripCodes", method = RequestMethod.GET)
+    public RestResponse getFavoriteTripCodes(@PathVariable Long id) {
+        RestResponse response = null;
+
+        try {
+            // find object
+            User user = userRepository.findOne(id);
+            if (user == null) {
+                throw new RoamyValidationException("Invalid user id: " + id);
+            }
+            LOGGER.info("Finding favorite trip codes for {}", user);
+
+            List<FavoriteTrip> favoriteTrips = favoriteTripRepository.findByUserPhoneNumber(user.getPhoneNumber());
+            LOGGER.info("{} favorite trips found for {}", favoriteTrips == null ? 0 : favoriteTrips.size(), user);
+
+            List<String> tripCodes = new ArrayList<String>();
+            if (!CollectionUtils.isEmpty(favoriteTrips)) {
+                for (FavoriteTrip favoriteTrip : favoriteTrips) {
+                    tripCodes.add(favoriteTrip.getTrip().getCode());
+                }
+            }
+
+            // return response
+            response = new RestResponse(tripCodes, HttpStatus.OK_200, null, null);
+
+        } catch (Throwable t) {
+            LOGGER.error("error in getFavoriteTripCodes: ", t);
+            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
+        }
+
+        return response;
+    }
+
+    @RequestMapping(value = "/{id}/favoriteTrip", method = RequestMethod.POST)
+    public RestResponse addFavoriteTrip(@PathVariable Long id, @RequestBody String tripCode) {
+
+        LOGGER.info("Adding favorite tripCode {} for userId {}", tripCode, id);
+
+        RestResponse response = null;
+
+        try {
+            // find user
+            User user = userRepository.findOne(id);
+            if (user == null) {
+                throw new RoamyValidationException("Invalid user id: " + id);
+            }
+
+            List<FavoriteTrip> favoriteTrips = favoriteTripRepository.findByUserPhoneNumber(user.getPhoneNumber());
+
+            boolean favoriteExsists = false;
+            if (!CollectionUtils.isEmpty(favoriteTrips)) {
+                for (FavoriteTrip favoriteTrip : favoriteTrips) {
+                    if (favoriteTrip.getTrip().getCode().equalsIgnoreCase(tripCode)) {
+                        favoriteExsists = true;
+                    }
+                }
+            }
+
+            if (!favoriteExsists) {
+                // find trip
+                Trip trip = tripRepository.findByCode(tripCode);
+                if (trip == null) {
+                    throw new RoamyValidationException("Invalid tripCode: " + tripCode);
+                }
+
+                LOGGER.info("Adding favorite {} for {}", trip, user);
+
+                FavoriteTrip favoriteTrip = new FavoriteTrip(user, trip);
+                favoriteTripRepository.save(favoriteTrip);
+                LOGGER.info("saved {}", favoriteTrip);
+            } else {
+                LOGGER.info("favorite trip already exists");
+            }
+
+            // return response
+            response = new RestResponse(null, HttpStatus.OK_200, null, null);
+
+        } catch (Throwable t) {
+            LOGGER.error("error in addFavoriteTrip: ", t);
+            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
+        }
+
+        return response;
     }
 
     @RequestMapping(value = "/{id}/action", method = RequestMethod.POST)
