@@ -8,11 +8,12 @@ insert into ROAMY.city(id,  code,   name,       status,     created_by, created_
 
 -- Category Data
 insert into ROAMY.category
-(id,  code,                     name,                       description,                        status,     created_by, created_on,         last_modified_by,   last_modified_on) values
-(1,   'GET_OUT_OF_THE_CITY',    'Get out of the city',      'Get out of the city Description',  'Active',   'test',     current_timestamp,  'test',             current_timestamp),
-(2,   'TREK_IT_EASY',           'Trek it easy',             'Trek it easy Description',         'Active',   'test',     current_timestamp,  'test',             current_timestamp),
-(3,   'FEEL_THE_THRILL',        'Feel the thrill',          'Feel the thrill Description',      'Active',   'test',     current_timestamp,  'test',             current_timestamp),
-(4,   'INACTIVE',               'Inactive',                 'Inactive Description',             'Inactive', 'test',     current_timestamp,  'test',             current_timestamp);
+(id,  code,                     name,                       description,                            image_caption,              image_url,                                                                              status,     created_by, created_on,         last_modified_by,   last_modified_on) values
+(1,   'GET_OUT_OF_THE_CITY',    'Get out of the city',      'Get out of the city Description',      'Get out of the city',      'http://res.cloudinary.com/abhijitab/image/upload/v1449990238/category1_q9uyh3.png',    'Active',   'test',     current_timestamp,  'test',             current_timestamp),
+(2,   'TREK_IT_EASY',           'Trek it easy',             'Trek it easy Description',             'Trek it easy',             'http://res.cloudinary.com/abhijitab/image/upload/v1449990245/category2_dclwtj.png',    'Active',   'test',     current_timestamp,  'test',             current_timestamp),
+(3,   'FEEL_THE_THRILL',        'Feel the thrill',          'Feel the thrill Description',          'Feel the thrill',          'http://res.cloudinary.com/abhijitab/image/upload/v1449990238/category1_q9uyh3.png',    'Active',   'test',     current_timestamp,  'test',             current_timestamp),
+(4,   'INACTIVE',               'Inactive',                 'Inactive Description',                 '',                         '',                                                                                     'Inactive', 'test',     current_timestamp,  'test',             current_timestamp);
+
 
 -- User
 insert into ROAMY.user
@@ -76,7 +77,7 @@ insert into ROAMY.trip_city
 insert into ROAMY.trip_image
 (trip_id,   caption,                url ) values
 (1,         'Nice Image',           'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg'),
-(1,         null,                     'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg');
+(1,         null,                   'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg');
 
 insert into ROAMY.favorite_trip
 (id,    user_id,   trip_id,     status,     created_by, created_on,         last_modified_by,   last_modified_on) values

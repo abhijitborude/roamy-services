@@ -37,6 +37,8 @@ create table ROAMY.category (
     code varchar(64) not null,
     name varchar(64) not null,
     description varchar(256),
+    image_caption varchar(256),
+    image_url varchar(1024) not null,
     status varchar(64) not null,
     created_by varchar(256) not null,
     created_on timestamp not null,
