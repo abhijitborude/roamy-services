@@ -7,6 +7,7 @@ import com.roamy.domain.FavoriteTrip;
 import com.roamy.domain.Status;
 import com.roamy.domain.Trip;
 import com.roamy.domain.User;
+import com.roamy.dto.FavoriteTripAction;
 import com.roamy.dto.RestResponse;
 import com.roamy.dto.UserActionDto;
 import com.roamy.service.api.SmsNotificationService;
@@ -221,10 +222,10 @@ public class UserResource extends IdentityResource<User, Long> {
         return response;
     }
 
-    @RequestMapping(value = "/{id}/favoriteTrip", method = RequestMethod.POST)
-    public RestResponse addFavoriteTrip(@PathVariable Long id, @RequestBody String tripCode) {
+    @RequestMapping(value = "/{id}/favoriteTrips", method = RequestMethod.POST)
+    public RestResponse manageFavoriteTrip(@PathVariable Long id, @RequestBody FavoriteTripAction action) {
 
-        LOGGER.info("Adding favorite tripCode {} for userId {}", tripCode, id);
+        LOGGER.info("Performing {} for userId {}", action, id);
 
         RestResponse response = null;
 
@@ -235,31 +236,54 @@ public class UserResource extends IdentityResource<User, Long> {
                 throw new RoamyValidationException("Invalid user id: " + id);
             }
 
-            List<FavoriteTrip> favoriteTrips = favoriteTripRepository.findByUserPhoneNumber(user.getPhoneNumber());
-
-            boolean favoriteExsists = false;
-            if (!CollectionUtils.isEmpty(favoriteTrips)) {
-                for (FavoriteTrip favoriteTrip : favoriteTrips) {
-                    if (favoriteTrip.getTrip().getCode().equalsIgnoreCase(tripCode)) {
-                        favoriteExsists = true;
-                    }
-                }
+            // validate action
+            if (action == null) {
+                throw new RoamyValidationException("Invalid action");
+            } else if (action.getTripCode() == null) {
+                throw new RoamyValidationException("trip code not specified");
             }
 
-            if (!favoriteExsists) {
-                // find trip
-                Trip trip = tripRepository.findByCode(tripCode);
-                if (trip == null) {
-                    throw new RoamyValidationException("Invalid tripCode: " + tripCode);
+            if (FavoriteTripAction.ADD_ACTION.equals(action.getAction())) {
+                List<FavoriteTrip> favoriteTrips = favoriteTripRepository.findByUserPhoneNumber(user.getPhoneNumber());
+
+                boolean favoriteExsists = false;
+                if (!CollectionUtils.isEmpty(favoriteTrips)) {
+                    for (FavoriteTrip favoriteTrip : favoriteTrips) {
+                        if (favoriteTrip.getTrip().getCode().equalsIgnoreCase(action.getTripCode())) {
+                            favoriteExsists = true;
+                        }
+                    }
                 }
 
-                LOGGER.info("Adding favorite {} for {}", trip, user);
+                if (!favoriteExsists) {
+                    // find trip
+                    Trip trip = tripRepository.findByCode(action.getTripCode());
+                    if (trip == null) {
+                        throw new RoamyValidationException("Invalid tripCode: " + action.getTripCode());
+                    }
 
-                FavoriteTrip favoriteTrip = new FavoriteTrip(user, trip);
-                favoriteTripRepository.save(favoriteTrip);
-                LOGGER.info("saved {}", favoriteTrip);
+                    LOGGER.info("Adding favorite {} for {}", trip, user);
+
+                    // save as favorite trip
+                    FavoriteTrip favoriteTrip = new FavoriteTrip(user, trip);
+                    favoriteTripRepository.save(favoriteTrip);
+                    LOGGER.info("saved {}", favoriteTrip);
+
+                } else {
+                    LOGGER.info("favorite trip already exists");
+                }
+
+            } else if (FavoriteTripAction.REMOVE_ACTION.equals(action.getAction())) {
+                FavoriteTrip favoriteTrip = favoriteTripRepository.findByUserIdAndTripCode(id, action.getTripCode());
+
+                if (favoriteTrip != null) {
+                    favoriteTripRepository.delete(favoriteTrip);
+                    LOGGER.info("{} deleted", favoriteTrip);
+                } else {
+                    LOGGER.info("Trip({}) is not in the favorites list for userId({})", action.getTripCode(), id);
+                }
             } else {
-                LOGGER.info("favorite trip already exists");
+                throw new RoamyValidationException("Invalid action");
             }
 
             // return response

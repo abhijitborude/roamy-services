@@ -11,4 +11,6 @@ import java.util.List;
 public interface FavoriteTripRepository extends JpaRepository<FavoriteTrip, Long> {
 
     List<FavoriteTrip> findByUserPhoneNumber(String phoneNumber);
+
+    FavoriteTrip findByUserIdAndTripCode(Long userId, String tripCode);
 }
