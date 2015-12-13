@@ -42,6 +42,12 @@ public class User extends AbstractEntity {
     @Column(name = "LNAME", length = DbConstants.SHORT_TEXT)
     private String lastName;
 
+    @Transient
+    private Double walletBalance;
+
+    @Column(name = "PROFILE_IMAGE_URL", length = DbConstants.LONG_TEXT)
+    private String profileImageUrl;
+
     @Column(name = "BIRTH_DATE")
     @JsonSerialize(using = CustomDateSerializer.class)
     @JsonDeserialize(using = CustomDateDeserializer.class)
@@ -120,6 +126,22 @@ public class User extends AbstractEntity {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Double getWalletBalance() {
+        return walletBalance;
+    }
+
+    public void setWalletBalance(Double walletBalance) {
+        this.walletBalance = walletBalance;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 
     public Date getBirthDate() {

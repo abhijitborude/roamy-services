@@ -57,6 +57,7 @@ create table ROAMY.user (
     pass varchar(64),
     fname varchar(64),
     lname varchar(64),
+    profile_image_url varchar(1024) not null,
     birth_date timestamp,
     address varchar(64),
     city varchar(64),

@@ -17,8 +17,8 @@ insert into ROAMY.category
 
 -- User
 insert into ROAMY.user
-(id,    type,       phone_number,   email,              pass,       fname,      lname,      birth_date,     address,            city,       country,    pin,        status,     verification_code,     verification_expiry,     referral_code,  verified,   created_by,     created_on,         last_modified_by,   last_modified_on) values
-(1,     'Email',    '9820098200',   'abcd@abcd.com',    'abcd',     'fname',    'lname',    null,           '100 street rd.',   'Mumbai',   'India',    '100000',   'Active',   null,                   null,                   'abcd',         1,          'test',         current_timestamp,  'test',             current_timestamp);
+(id,    type,       phone_number,   email,              pass,       fname,      lname,      profile_image_url,      birth_date,     address,            city,       country,    pin,        status,     verification_code,     verification_expiry,     referral_code,  verified,   created_by,     created_on,         last_modified_by,   last_modified_on) values
+(1,     'Email',    '9820098200',   'abcd@abcd.com',    'abcd',     'fname',    'lname',    '',                     null,           '100 street rd.',   'Mumbai',   'India',    '100000',   'Active',   null,                   null,                   'abcd',         1,          'test',         current_timestamp,  'test',             current_timestamp);
 
 insert into ROAMY.trip
 (
