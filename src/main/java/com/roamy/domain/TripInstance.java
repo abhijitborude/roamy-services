@@ -17,7 +17,14 @@ import java.util.List;
  */
 @Entity
 @Table(name = "TRIP_INSTANCE", schema = "ROAMY")
-public class TripInstance extends CitableEntity {
+public class TripInstance extends AbstractEntity {
+
+    @NotNull
+    @Column(name = "NAME", length = DbConstants.SHORT_TEXT)
+    protected String name;
+
+    @Column(name = "DESCRIPTION", length = DbConstants.MEDIUM_TEXT)
+    protected String description;
 
     @ManyToOne
     @JoinColumn(name = "TRIP_ID")
@@ -221,7 +228,6 @@ public class TripInstance extends CitableEntity {
     public String toString() {
         return "TripInstance{" +
                 "id=" + id +
-                ", code='" + code + '\'' +
                 ", name='" + name + '\'' +
                 ", date=" + date +
                 ", displayStartDate=" + displayStartDate +

@@ -1,12 +1,10 @@
 package com.roamy.web.resource;
 
 import com.roamy.dao.api.FavoriteTripRepository;
+import com.roamy.dao.api.ReservationRepository;
 import com.roamy.dao.api.TripRepository;
 import com.roamy.dao.api.UserRepository;
-import com.roamy.domain.FavoriteTrip;
-import com.roamy.domain.Status;
-import com.roamy.domain.Trip;
-import com.roamy.domain.User;
+import com.roamy.domain.*;
 import com.roamy.dto.FavoriteTripAction;
 import com.roamy.dto.RestResponse;
 import com.roamy.dto.UserActionDto;
@@ -47,6 +45,9 @@ public class UserResource extends IdentityResource<User, Long> {
 
     @Autowired
     private FavoriteTripRepository favoriteTripRepository;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     @Override
     protected JpaRepository<User, Long> getJpaRepository() {
@@ -154,6 +155,81 @@ public class UserResource extends IdentityResource<User, Long> {
     @Override
     protected void addLinks(User entity) {
 
+    }
+
+    @RequestMapping(value = "/{id}/action", method = RequestMethod.POST)
+    public RestResponse actionUser(@PathVariable Long id, @RequestBody UserActionDto userActionDto) {
+
+        LOGGER.info("taking action on userId({}): {}", id, userActionDto);
+
+        RestResponse response = null;
+
+        try {
+
+            User user = userRepository.findOne(id);
+
+            if (user == null) {
+                LOGGER.error("No user found with id: {}", id);
+                throw new RoamyValidationException("No user found with id: " + id);
+            }
+
+            // reset the verification code and status if action is "reset"
+            if ("reset".equalsIgnoreCase(userActionDto.getAction())) {
+
+                // 1. generate new verification code
+                String verificationCode = RoamyUtils.generateVerificationCode();
+
+                // 2. send new verification code
+                smsNotificationService.sendVerificationSms(user.getPhoneNumber(), verificationCode);
+
+                // 3. update user object with new verification code and status
+                user.setVerificationCode(verificationCode);
+                user.setVerificationCodeExpiry(RoamyUtils.getVerificationCodeExpiryDate());
+                user.setIsVerified(false);
+                user.setStatus(Status.Inactive);
+                user.setLastModifiedBy("test");
+                user.setLastModifiedOn(new Date());
+
+            } else if ("activate".equalsIgnoreCase(userActionDto.getAction())) {
+
+                if (!user.isVerified()) {
+
+                    // 2. check if the verification code matches
+                    if (user.getVerificationCode().equals(userActionDto.getVerificationCode())) {
+
+                        LOGGER.info("Verification code matches!");
+
+                        // 3. update status of the user
+                        user.setIsVerified(true);
+                        user.setVerificationCode(null);
+                        user.setVerificationCodeExpiry(null);
+                        user.setStatus(Status.Active);
+                        user.setLastModifiedBy("test");
+                        user.setLastModifiedOn(new Date());
+
+                    } else {
+                        LOGGER.error("Verification code does not match");
+                        throw new RoamyValidationException("Activation code is wrong");
+                    }
+                } else {
+                    LOGGER.info("User is already verified");
+                }
+            } else {
+                throw new RoamyValidationException("Invalid action: " + userActionDto.getAction());
+            }
+
+            userRepository.save(user);
+
+            LOGGER.info("action({}) on userId({}) completed", userActionDto.getAction(), id);
+
+            // return response
+            response = new RestResponse(user, HttpStatus.OK_200, null, null);
+        } catch (Throwable t) {
+            LOGGER.error("error in actionUser: ", t);
+            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
+        }
+
+        return response;
     }
 
     @RequestMapping(value = "/{id}/favoriteTrips", method = RequestMethod.GET)
@@ -297,78 +373,36 @@ public class UserResource extends IdentityResource<User, Long> {
         return response;
     }
 
-    @RequestMapping(value = "/{id}/action", method = RequestMethod.POST)
-    public RestResponse actionUser(@PathVariable Long id, @RequestBody UserActionDto userActionDto) {
-
-        LOGGER.info("taking action on userId({}): {}", id, userActionDto);
-
+    @RequestMapping(value = "/{id}/reservations", method = RequestMethod.GET)
+    public RestResponse getReservations(@PathVariable Long id,
+                                        @RequestParam(value = "active", required = false, defaultValue = "true") String active) {
         RestResponse response = null;
 
         try {
-
+            // find object
             User user = userRepository.findOne(id);
-
             if (user == null) {
-                LOGGER.error("No user found with id: {}", id);
-                throw new RoamyValidationException("No user found with id: " + id);
+                throw new RoamyValidationException("Invalid user id: " + id);
             }
+            LOGGER.info("Finding reservations for {} with active={}", user, active);
 
-            // reset the verification code and status if action is "reset"
-            if ("reset".equalsIgnoreCase(userActionDto.getAction())) {
-
-                // 1. generate new verification code
-                String verificationCode = RoamyUtils.generateVerificationCode();
-
-                // 2. send new verification code
-                smsNotificationService.sendVerificationSms(user.getPhoneNumber(), verificationCode);
-
-                // 3. update user object with new verification code and status
-                user.setVerificationCode(verificationCode);
-                user.setVerificationCodeExpiry(RoamyUtils.getVerificationCodeExpiryDate());
-                user.setIsVerified(false);
-                user.setStatus(Status.Inactive);
-                user.setLastModifiedBy("test");
-                user.setLastModifiedOn(new Date());
-
-            } else if ("activate".equalsIgnoreCase(userActionDto.getAction())) {
-
-                if (!user.isVerified()) {
-
-                    // 2. check if the verification code matches
-                    if (user.getVerificationCode().equals(userActionDto.getVerificationCode())) {
-
-                        LOGGER.info("Verification code matches!");
-
-                        // 3. update status of the user
-                        user.setIsVerified(true);
-                        user.setVerificationCode(null);
-                        user.setVerificationCodeExpiry(null);
-                        user.setStatus(Status.Active);
-                        user.setLastModifiedBy("test");
-                        user.setLastModifiedOn(new Date());
-
-                    } else {
-                        LOGGER.error("Verification code does not match");
-                        throw new RoamyValidationException("Activation code is wrong");
-                    }
-                } else {
-                    LOGGER.info("User is already verified");
-                }
+            List<Reservation> reservations = null;
+            if ("true".equalsIgnoreCase(active)) {
+                reservations = reservationRepository.findByUserIdAndStatusAndTripInstanceDateGreaterThanEqualOrderByTripInstanceDateAsc(id, Status.Active, new Date());
             } else {
-                throw new RoamyValidationException("Invalid action: " + userActionDto.getAction());
+                reservations = reservationRepository.findTop50ByUserIdAndTripInstanceDateLessThanOrderByTripInstanceDateDesc(id, new Date());
             }
-
-            userRepository.save(user);
-
-            LOGGER.info("action({}) on userId({}) completed", userActionDto.getAction(), id);
 
             // return response
-            response = new RestResponse(user, HttpStatus.OK_200, null, null);
+            response = new RestResponse(reservations, HttpStatus.OK_200, null, null);
+
         } catch (Throwable t) {
-            LOGGER.error("error in actionUser: ", t);
+            LOGGER.error("error in getReservations: ", t);
             response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
         }
 
         return response;
     }
+
+
 }

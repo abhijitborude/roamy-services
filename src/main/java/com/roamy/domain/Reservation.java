@@ -34,6 +34,22 @@ public class Reservation extends AbstractEntity {
     @Column(name = "EMAIL", length = DbConstants.MEDIUM_TEXT)
     private String email;
 
+    public TripInstance getTripInstance() {
+        return tripInstance;
+    }
+
+    public void setTripInstance(TripInstance tripInstance) {
+        this.tripInstance = tripInstance;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public int getNumberOfTravellers() {
         return numberOfTravellers;
     }
@@ -61,8 +77,9 @@ public class Reservation extends AbstractEntity {
     @Override
     public String toString() {
         return "Reservation{" +
-                "id=" + id +
-                "numberOfTravellers=" + numberOfTravellers +
+                "tripInstance=" + tripInstance +
+                ", user=" + user +
+                ", numberOfTravellers=" + numberOfTravellers +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 '}';

@@ -86,7 +86,6 @@ insert into ROAMY.favorite_trip
 insert into ROAMY.trip_instance
 (
     id,
-    code,
     name,
     trip_id,
     description,
@@ -113,7 +112,6 @@ insert into ROAMY.trip_instance
 ) values
 (
     1,
-    'SCUBA_DIVING_&_DIVING_SAFARI_1', --code
     'Scuba Diving & Snorkeling Safari 1', --name
     1,  --trip_id
     'Snorkeling is the practice of swimming on or through a body of water while equipped with a diving mask, a shaped tube called a snorkel, and usually swim-fins.', --description
@@ -140,7 +138,6 @@ insert into ROAMY.trip_instance
 ),
 (
     2,
-    'SCUBA_DIVING_&_DIVING_SAFARI_2', --code
     'Scuba Diving & Snorkeling Safari 2', --name
     1,  --trip_id
     'Snorkeling is the practice of swimming on or through a body of water while equipped with a diving mask, a shaped tube called a snorkel, and usually swim-fins.', --description
