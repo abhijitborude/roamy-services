@@ -1,7 +1,5 @@
 package com.roamy.domain;
 
-import org.springframework.stereotype.Service;
-
 import javax.persistence.Entity;
 
 /**

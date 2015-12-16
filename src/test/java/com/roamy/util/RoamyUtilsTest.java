@@ -4,8 +4,6 @@ import com.roamy.integration.sms.dto.Sms;
 import com.roamy.integration.sms.dto.SmsError;
 import org.junit.Test;
 
-import java.util.List;
-
 /**
  * Created by Abhijit on 12/7/2015.
  */

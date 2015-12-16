@@ -8,10 +8,7 @@ import com.roamy.util.RoamyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 /**
  * Created by Abhijit on 12/8/2015.
