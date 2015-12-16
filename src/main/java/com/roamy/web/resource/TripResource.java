@@ -18,9 +18,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Abhijit on 11/15/2015.
@@ -189,10 +187,12 @@ public class TripResource extends CitableResource<Trip, Long> {
                 }
             }
 
-            LOGGER.info("number of trips in the listing: {}", trips == null ? 0 : trips.size());
+            // hack- remove duplicates by using a Set
+            Set<Trip> tripSet = new HashSet<Trip>(trips);
+            LOGGER.info("number of trips in the listing: {}", tripSet == null ? 0 : tripSet.size());
 
             // return response
-            response = new RestResponse(trips, HttpStatus.OK_200, null, null);
+            response = new RestResponse(tripSet, HttpStatus.OK_200, null, null);
 
         } catch (Throwable t) {
             LOGGER.error("error in getting active trips listing: ", t);
