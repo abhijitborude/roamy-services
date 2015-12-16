@@ -1,5 +1,9 @@
 package com.roamy.service.impl;
 
+import com.roamy.dao.api.SmsNotificationRepository;
+import com.roamy.domain.SmsNotification;
+import com.roamy.domain.Status;
+import com.roamy.integration.sms.dto.SmsResult;
 import com.roamy.integration.sms.service.api.SmsService;
 import com.roamy.service.api.SmsNotificationService;
 import org.slf4j.Logger;
@@ -20,10 +24,34 @@ public class SmsNotificationServiceImpl implements SmsNotificationService {
     @Autowired
     private SmsService smsService;
 
+    @Autowired
+    private SmsNotificationRepository smsNotificationRepository;
+
     @Override
     public void sendVerificationSms(String phoneNumber, String verificationCode) {
         LOGGER.info("Sending verification code {} to phoneNumber: {}", verificationCode, phoneNumber);
 
-        smsService.sendSms(phoneNumber, VERIFICATION_MSG + verificationCode);
+        String message = VERIFICATION_MSG + verificationCode;
+
+        // create smsNotification object with pending status
+        SmsNotification notification = new SmsNotification(phoneNumber, message, Status.Pending);
+        notification.setCreatedBy("test");
+        notification.setLastModifiedBy("test");
+
+        notification = smsNotificationRepository.save(notification);
+        smsNotificationRepository.flush();
+
+        // send SMS
+        SmsResult smsResult = smsService.sendSms(phoneNumber, message);
+
+        if (smsResult.isSuccess()) {
+            notification.setStatus(Status.Success);
+        } else {
+            notification.setStatus(Status.Failed);
+            notification.setErrorCode(smsResult.getErrorCode());
+            notification.setErrorDescription(smsResult.getErrorDescription());
+        }
+
+        smsNotificationRepository.save(notification);
     }
 }
