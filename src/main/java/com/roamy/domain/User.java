@@ -79,6 +79,10 @@ public class User extends AbstractEntity {
     @Column(name = "REFERRAL_CODE", length = DbConstants.SHORT_TEXT)
     private String referralCode;
 
+    @Column(name = "DEVICE_ID", length = DbConstants.SHORT_TEXT)
+    //@JsonIgnore
+    private String deviceId;
+
     public AccountType getType() {
         return type;
     }
@@ -213,6 +217,14 @@ public class User extends AbstractEntity {
 
     public void setReferralCode(String referralCode) {
         this.referralCode = referralCode;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
     @Override

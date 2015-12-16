@@ -68,6 +68,7 @@ create table ROAMY.user (
     verification_expiry timestamp,
     verified boolean,
     referral_code varchar(64),
+    device_id varchar(64),
     created_by varchar(256) not null,
     created_on timestamp not null,
     last_modified_by varchar(256) not null,
