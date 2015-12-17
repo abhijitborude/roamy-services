@@ -15,7 +15,6 @@ public class Reservation extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "TRIP_INSTANCE_ID")
-    @JsonIgnore
     private TripInstance tripInstance;
 
     @ManyToOne(fetch = FetchType.EAGER)
