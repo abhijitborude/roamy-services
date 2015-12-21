@@ -232,6 +232,32 @@ public class UserResource extends IdentityResource<User, Long> {
         return response;
     }
 
+    @RequestMapping(value = "/{id}/walletBalance", method = RequestMethod.GET)
+    public RestResponse getWalletBalance(@PathVariable Long id) {
+
+        LOGGER.info("Finding wallet balance for user id: {}", id);
+
+        RestResponse response = null;
+
+        try {
+            // find object
+            User user = userRepository.findOne(id);
+            if (user == null) {
+                throw new RoamyValidationException("Invalid user id: " + id);
+            }
+            LOGGER.info("Finding favorite trips for {}", user);
+
+            // return response
+            response = new RestResponse(user.getWalletBalance(), HttpStatus.OK_200, null, null);
+
+        } catch (Throwable t) {
+            LOGGER.error("error in getWalletBalance: ", t);
+            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
+        }
+
+        return response;
+    }
+
     @RequestMapping(value = "/{id}/favoriteTrips", method = RequestMethod.GET)
     public RestResponse getFavoriteTrips(@PathVariable Long id) {
         RestResponse response = null;

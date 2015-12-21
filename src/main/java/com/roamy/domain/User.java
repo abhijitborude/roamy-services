@@ -41,7 +41,7 @@ public class User extends AbstractEntity {
     @Column(name = "LNAME", length = DbConstants.SHORT_TEXT)
     private String lastName;
 
-    @Transient
+    @Column(name = "WALLET_BALANCE")
     private Double walletBalance;
 
     @Column(name = "PROFILE_IMAGE_URL", length = DbConstants.LONG_TEXT)
