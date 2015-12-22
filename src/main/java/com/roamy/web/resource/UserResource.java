@@ -1,9 +1,6 @@
 package com.roamy.web.resource;
 
-import com.roamy.dao.api.FavoriteTripRepository;
-import com.roamy.dao.api.ReservationRepository;
-import com.roamy.dao.api.TripRepository;
-import com.roamy.dao.api.UserRepository;
+import com.roamy.dao.api.*;
 import com.roamy.domain.*;
 import com.roamy.dto.FavoriteTripAction;
 import com.roamy.dto.RestResponse;
@@ -36,6 +33,9 @@ public class UserResource extends IdentityResource<User, Long> {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AlertNotificationRepository alertNotificationRepository;
 
     @Autowired
     private SmsNotificationService smsNotificationService;
@@ -257,6 +257,32 @@ public class UserResource extends IdentityResource<User, Long> {
 
         return response;
     }
+    @RequestMapping(value = "/{id}/notifications", method = RequestMethod.GET)
+    public RestResponse getNotifications(@PathVariable Long id) {
+        RestResponse response = null;
+
+        try {
+            // find object
+            User user = userRepository.findOne(id);
+            if (user == null) {
+                throw new RoamyValidationException("Invalid user id: " + id);
+            }
+            LOGGER.info("Finding notifications for {}", user);
+
+            List<AlertNotification> notifications = alertNotificationRepository.findByUserIdAndStatusAndExpiryDateGreaterThan(id, Status.Active, new Date());
+            LOGGER.info("{} notifications found for {}", notifications == null ? 0 : notifications.size(), user);
+
+            // return response
+            response = new RestResponse(notifications, HttpStatus.OK_200, null, null);
+
+        } catch (Throwable t) {
+            LOGGER.error("error in getNotifications: ", t);
+            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
+        }
+
+        return response;
+    }
+
 
     @RequestMapping(value = "/{id}/favoriteTrips", method = RequestMethod.GET)
     public RestResponse getFavoriteTrips(@PathVariable Long id) {
