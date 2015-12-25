@@ -179,3 +179,8 @@ insert into ROAMY.alert_notification
 (id,    user_id,    title,                      message,                                                                                                        instructions,                                   read_status,    expiry_date,                                status,     created_by,     created_on,         last_modified_by,   last_modified_on) values
 (1,     1,          'New Year Special!',        'Book now and earn 20% off on all trips. Offer valid only until January 10th. Hurry up!',                       'Use Promo Code WELCOME2016 while booking',     0,              dateadd('DAY', 10, current_timestamp),      'Active',   'test',         current_timestamp,  'test',             current_timestamp),
 (2,     1,          'Book 3 and get 1 free!',   'Get a discount on group bookings. Book 3 trips and get 4th trip free. Make plans with your friends now!!',     'Use Promo Code 3PE1FREE while booking',        1,              dateadd('DAY', 10, current_timestamp),      'Active',   'test',         current_timestamp,  'test',             current_timestamp);
+
+insert into ROAMY.reservation
+(id,    trip_instance_id,   user_id,    email,              number_of_travellers,   phone_number,   status,     created_by,     created_on,         last_modified_by,   last_modified_on) values
+(1,     1,                  1,          'abc@abc.com',      4,                      '12345',        'Active',   'test',         current_timestamp,  'test',             current_timestamp),
+(2,     2,                  1,          'abc@abc.com',      2,                      '12345',        'Active',   'test',         current_timestamp,  'test',             current_timestamp);
