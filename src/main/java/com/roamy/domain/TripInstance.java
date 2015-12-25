@@ -88,6 +88,22 @@ public class TripInstance extends AbstractEntity {
     @JsonSerialize(using = CustomDateSerializer.class)
     private Date displayEndDate;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Trip getTrip() {
         return trip;
     }
