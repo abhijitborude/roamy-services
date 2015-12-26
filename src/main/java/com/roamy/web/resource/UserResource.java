@@ -269,7 +269,7 @@ public class UserResource extends IdentityResource<User, Long> {
             }
             LOGGER.info("Finding notifications for {}", user);
 
-            List<AlertNotification> notifications = alertNotificationRepository.findByUserIdAndStatusAndExpiryDateGreaterThan(id, Status.Active, new Date());
+            List<Alert> notifications = alertNotificationRepository.findByUserIdAndStatusAndExpiryDateGreaterThan(id, Status.Active, new Date());
             LOGGER.info("{} notifications found for {}", notifications == null ? 0 : notifications.size(), user);
 
             // return response
