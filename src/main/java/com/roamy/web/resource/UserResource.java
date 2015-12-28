@@ -17,6 +17,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -154,6 +155,16 @@ public class UserResource extends IdentityResource<User, Long> {
 
     @Override
     protected void addLinks(User entity) {
+
+    }
+
+    @RequestMapping(value = "/{id}/uploadImage", method = RequestMethod.POST)
+    public RestResponse uploadImage(@PathVariable Long id, @RequestBody MultipartFile file) {
+
+        LOGGER.info("file: {}", file.getName());
+
+        // return response
+        return new RestResponse(null, HttpStatus.OK_200, null, null);
 
     }
 
