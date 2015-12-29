@@ -44,6 +44,9 @@ public class User extends AbstractEntity {
     @Column(name = "WALLET_BALANCE")
     private Double walletBalance;
 
+    @Column(name = "PROFILE_IMAGE_ID", length = DbConstants.MEDIUM_TEXT)
+    private String profileImageId;
+
     @Column(name = "PROFILE_IMAGE_URL", length = DbConstants.LONG_TEXT)
     private String profileImageUrl;
 
@@ -137,6 +140,14 @@ public class User extends AbstractEntity {
 
     public void setWalletBalance(Double walletBalance) {
         this.walletBalance = walletBalance;
+    }
+
+    public String getProfileImageId() {
+        return profileImageId;
+    }
+
+    public void setProfileImageId(String profileImageId) {
+        this.profileImageId = profileImageId;
     }
 
     public String getProfileImageUrl() {

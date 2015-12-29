@@ -5,6 +5,8 @@ import com.roamy.domain.*;
 import com.roamy.dto.FavoriteTripAction;
 import com.roamy.dto.RestResponse;
 import com.roamy.dto.UserActionDto;
+import com.roamy.integration.imagelib.dto.ImageLibraryIdentifier;
+import com.roamy.integration.imagelib.service.api.ImageLibraryService;
 import com.roamy.service.api.SmsNotificationService;
 import com.roamy.util.RestUtils;
 import com.roamy.util.RoamyUtils;
@@ -19,6 +21,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +37,9 @@ public class UserResource extends IdentityResource<User, Long> {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ImageLibraryService imageLibraryService;
 
     @Autowired
     private AlertNotificationRepository alertNotificationRepository;
@@ -158,10 +164,41 @@ public class UserResource extends IdentityResource<User, Long> {
 
     }
 
-    @RequestMapping(value = "/{id}/uploadImage", method = RequestMethod.POST)
-    public RestResponse uploadImage(@PathVariable Long id, @RequestBody MultipartFile file) {
+    @RequestMapping(value = "/{id}/profileImage", method = RequestMethod.POST)
+    public RestResponse uploadImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
 
-        LOGGER.info("file: {}", file.getName());
+        LOGGER.info("uploading profile image for user with id: {}", id);
+
+        if (!file.isEmpty()) {
+
+            // find the user
+            User user = userRepository.findOne(id);
+            if (user == null) {
+                LOGGER.error("No user found with id: {}", id);
+                throw new RoamyValidationException("No user found with id: " + id);
+            }
+
+            // upload the image
+            ImageLibraryIdentifier libraryIdentifier = null;
+            try {
+                libraryIdentifier = imageLibraryService.uploadImage(file.getBytes());
+            } catch (IOException e) {
+                throw new RoamyValidationException("There was a problem while uploading the image");
+            }
+
+            if (libraryIdentifier == null || libraryIdentifier.getUrl() == null) {
+                throw new RoamyValidationException("There was a problem while uploading the image");
+            }
+
+            // save the uploaded image id url
+            user.setProfileImageId(libraryIdentifier.getId());
+            user.setProfileImageUrl(libraryIdentifier.getUrl());
+            userRepository.save(user);
+
+            LOGGER.info("Profile image uploaded for user with id: {}", id);
+        } else {
+            throw new RoamyValidationException("No profile image provided");
+        }
 
         // return response
         return new RestResponse(null, HttpStatus.OK_200, null, null);

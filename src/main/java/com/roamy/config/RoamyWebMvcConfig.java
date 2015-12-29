@@ -1,7 +1,5 @@
 package com.roamy.config;
 
-import com.fasterxml.classmate.TypeResolver;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,9 +17,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @ConditionalOnWebApplication
 public class RoamyWebMvcConfig {
-
-    @Autowired
-    private TypeResolver typeResolver;
 
     @Bean
     public Docket roamyApi() {

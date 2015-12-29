@@ -19,8 +19,8 @@ public class TestImageUpload {
         HttpClient httpclient = new DefaultHttpClient();
         httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 
-        HttpPost httppost = new HttpPost("http://localhost:8080/users/1/uploadImage");
-        File file = new File("/Users/Ruchi/IdeaProjects/roamy-services/build/reports/tests/css/style.css");
+        HttpPost httppost = new HttpPost("http://localhost:8080/users/1/profileImage");
+        File file = new File("C:\\Users\\Abhijit\\Pictures\\Screenshots\\Screenshot.png");
 
         MultipartEntity mpEntity = new MultipartEntity();
         ContentBody cbFile = new FileBody(file, "multipart/form-data");

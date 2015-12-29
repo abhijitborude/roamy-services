@@ -10,3 +10,7 @@ spring:
   jpa.hibernate.ddl-auto: none
 
 logging.level.org.hibernate.SQL: DEBUG
+
+multipart:
+  maxFileSize: 5000KB
+  maxRequestSize: 5000KB

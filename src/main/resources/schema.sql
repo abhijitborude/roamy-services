@@ -60,6 +60,7 @@ create table ROAMY.user (
     fname varchar(64),
     lname varchar(64),
     wallet_balance double,
+    profile_image_id varchar(256),
     profile_image_url varchar(1024),
     birth_date timestamp,
     address varchar(64),

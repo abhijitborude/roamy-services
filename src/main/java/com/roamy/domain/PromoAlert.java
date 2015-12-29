@@ -5,7 +5,6 @@ import com.roamy.util.DbConstants;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
 
 /**
  * Created by Abhijit on 12/25/15.
