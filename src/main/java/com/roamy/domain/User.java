@@ -16,7 +16,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "USER", schema = "ROAMY")
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.ALWAYS)
 public class User extends AbstractEntity {
 
     @NotNull
