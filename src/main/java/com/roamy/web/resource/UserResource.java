@@ -169,40 +169,53 @@ public class UserResource extends IdentityResource<User, Long> {
 
         LOGGER.info("uploading profile image for user with id: {}", id);
 
-        if (!file.isEmpty()) {
+        RestResponse response = null;
 
-            // find the user
-            User user = userRepository.findOne(id);
-            if (user == null) {
-                LOGGER.error("No user found with id: {}", id);
-                throw new RoamyValidationException("No user found with id: " + id);
+        try {
+
+            String url = null;
+
+            if (!file.isEmpty()) {
+
+                // find the user
+                User user = userRepository.findOne(id);
+                if (user == null) {
+                    LOGGER.error("No user found with id: {}", id);
+                    throw new RoamyValidationException("No user found with id: " + id);
+                }
+
+                // upload the image
+                ImageLibraryIdentifier libraryIdentifier = null;
+                try {
+                    libraryIdentifier = imageLibraryService.uploadImage(file.getBytes());
+                } catch (IOException e) {
+                    throw new RoamyValidationException("There was a problem while uploading the image");
+                }
+
+                if (libraryIdentifier == null || libraryIdentifier.getUrl() == null) {
+                    throw new RoamyValidationException("There was a problem while uploading the image");
+                }
+
+                // save the uploaded image id url
+                user.setProfileImageId(libraryIdentifier.getId());
+                user.setProfileImageUrl(libraryIdentifier.getUrl());
+                userRepository.save(user);
+
+                url = libraryIdentifier.getUrl();
+
+                LOGGER.info("Profile image uploaded for user with id: {}", id);
+            } else {
+                throw new RoamyValidationException("No profile image provided");
             }
 
-            // upload the image
-            ImageLibraryIdentifier libraryIdentifier = null;
-            try {
-                libraryIdentifier = imageLibraryService.uploadImage(file.getBytes());
-            } catch (IOException e) {
-                throw new RoamyValidationException("There was a problem while uploading the image");
-            }
+            response = new RestResponse(url, HttpStatus.OK_200, null, null);
 
-            if (libraryIdentifier == null || libraryIdentifier.getUrl() == null) {
-                throw new RoamyValidationException("There was a problem while uploading the image");
-            }
-
-            // save the uploaded image id url
-            user.setProfileImageId(libraryIdentifier.getId());
-            user.setProfileImageUrl(libraryIdentifier.getUrl());
-            userRepository.save(user);
-
-            LOGGER.info("Profile image uploaded for user with id: {}", id);
-        } else {
-            throw new RoamyValidationException("No profile image provided");
+        } catch (Throwable t) {
+            LOGGER.error("error in uploadImage: ", t);
+            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
         }
 
-        // return response
-        return new RestResponse(null, HttpStatus.OK_200, null, null);
-
+        return response;
     }
 
     @RequestMapping(value = "/{id}/action", method = RequestMethod.POST)
