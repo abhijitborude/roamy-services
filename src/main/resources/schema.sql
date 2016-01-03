@@ -56,7 +56,6 @@ create table ROAMY.user (
     type varchar(64) not null,
     phone_number varchar(64) not null,
     email varchar(64) not null,
-    pass varchar(64),
     fname varchar(64),
     lname varchar(64),
     wallet_balance double,

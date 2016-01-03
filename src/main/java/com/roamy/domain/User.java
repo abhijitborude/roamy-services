@@ -32,9 +32,6 @@ public class User extends AbstractEntity {
     @Column(name = "EMAIL", length = DbConstants.SHORT_TEXT)
     private String email;
 
-    @Column(name = "PASS", length = DbConstants.SHORT_TEXT)
-    private String password;
-
     @Column(name = "FNAME", length = DbConstants.SHORT_TEXT)
     private String firstName;
 
@@ -108,14 +105,6 @@ public class User extends AbstractEntity {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getFirstName() {

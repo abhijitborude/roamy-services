@@ -39,6 +39,9 @@ public class UserResource extends IdentityResource<User, Long> {
     private UserRepository userRepository;
 
     @Autowired
+    private CityRepository cityRepository;
+
+    @Autowired
     private ImageLibraryService imageLibraryService;
 
     @Autowired
@@ -72,7 +75,7 @@ public class UserResource extends IdentityResource<User, Long> {
 
             User savedEntity = null;
 
-                    // check if user with same phoneNuumber exists
+            // check if user with same phoneNuumber exists
             User user = userRepository.findByPhoneNumber(entity.getPhoneNumber());
 
             if (user != null) {
@@ -80,6 +83,14 @@ public class UserResource extends IdentityResource<User, Long> {
 
                 // user already exists. Simply update the values and reset codes
                 user.setEmail(entity.getEmail());
+                user.setFirstName(entity.getFirstName());
+                user.setLastName(entity.getLastName());
+                user.setBirthDate(entity.getBirthDate());
+                user.setAddress(entity.getAddress());
+                user.setCity(entity.getCity());
+                user.setPinCode(entity.getPinCode());
+                user.setCountry(entity.getCountry());
+                user.setDeviceId(entity.getDeviceId());
 
                 // set verification code
                 user.setVerificationCode(RoamyUtils.generateVerificationCode());
@@ -125,6 +136,12 @@ public class UserResource extends IdentityResource<User, Long> {
         }
         if (!StringUtils.hasText(entity.getEmail())) {
             throw new RoamyValidationException("Email not provided");
+        }
+        if (StringUtils.hasText(entity.getCity())) {
+            List<City> cities = cityRepository.findByName(entity.getCity());
+            if (CollectionUtils.isEmpty(cities) || cities.size() > 1) {
+                throw new RoamyValidationException("City not correct: " + entity.getCity());
+            }
         }
     }
 
