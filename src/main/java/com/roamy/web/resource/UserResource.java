@@ -5,6 +5,7 @@ import com.roamy.domain.*;
 import com.roamy.dto.FavoriteTripAction;
 import com.roamy.dto.RestResponse;
 import com.roamy.dto.UserActionDto;
+import com.roamy.dto.UserUpdateDto;
 import com.roamy.integration.imagelib.dto.ImageLibraryIdentifier;
 import com.roamy.integration.imagelib.service.api.ImageLibraryService;
 import com.roamy.service.api.SmsNotificationService;
@@ -75,7 +76,7 @@ public class UserResource extends IdentityResource<User, Long> {
 
             User savedEntity = null;
 
-            // check if user with same phoneNuumber exists
+            // check if user with same phoneNumber exists
             User user = userRepository.findByPhoneNumber(entity.getPhoneNumber());
 
             if (user != null) {
@@ -123,6 +124,61 @@ public class UserResource extends IdentityResource<User, Long> {
 
         } catch (Throwable t) {
             LOGGER.error("error in save: ", t);
+            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
+        }
+
+        return response;
+    }
+
+    @RequestMapping(value = "/{id}/", method = RequestMethod.PUT)
+    public RestResponse updateUser(@PathVariable Long id, @RequestBody UserUpdateDto dto) {
+        LOGGER.info("updating: {}", dto);
+
+        RestResponse response = null;
+
+        try {
+            if (!StringUtils.hasText(dto.getPhoneNumber())) {
+                throw new RoamyValidationException("Phone number not provided");
+            }
+            if (!StringUtils.hasText(dto.getEmail())) {
+                throw new RoamyValidationException("Email not provided");
+            }
+            if (StringUtils.hasText(dto.getCity())) {
+                List<City> cities = cityRepository.findByName(dto.getCity());
+                if (CollectionUtils.isEmpty(cities) || cities.size() > 1) {
+                    throw new RoamyValidationException("City not correct: " + dto.getCity());
+                }
+            }
+
+            // find the user
+            User user = userRepository.findOne(id);
+            if (user == null) {
+                LOGGER.error("No user found with id: {}", id);
+                throw new RoamyValidationException("No user found with id: " + id);
+            }
+
+            LOGGER.info("Found {}", user);
+
+            // user already exists. Simply update the values and reset codes
+            user.setEmail(dto.getEmail());
+            user.setFirstName(dto.getFirstName());
+            user.setLastName(dto.getLastName());
+            user.setBirthDate(dto.getBirthDate());
+            user.setAddress(dto.getAddress());
+            user.setCity(dto.getCity());
+            user.setPinCode(dto.getPinCode());
+            user.setCountry(dto.getCountry());
+
+            user.setLastModifiedBy("test");
+            user.setLastModifiedOn(new Date());
+
+            User savedEntity = userRepository.save(user);
+            LOGGER.info("entity updated: {}", savedEntity);
+
+            response = new RestResponse(savedEntity, HttpStatus.OK_200);
+
+        } catch (Throwable t) {
+            LOGGER.error("error in update: ", t);
             response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
         }
 
