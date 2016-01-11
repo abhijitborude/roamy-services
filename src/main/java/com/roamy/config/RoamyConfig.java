@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * Created by Abhijit on 12/15/2015.
  */
 @Configuration
-public class RoamyMvcConfig {
+public class RoamyConfig {
 
     @Bean
     public Cloudinary cloudinary() {
@@ -20,5 +20,10 @@ public class RoamyMvcConfig {
         ));
 
         return cloudinary;
+    }
+
+    @Bean
+    public ConfigProperties configProperties() {
+        return new ConfigProperties();
     }
 }

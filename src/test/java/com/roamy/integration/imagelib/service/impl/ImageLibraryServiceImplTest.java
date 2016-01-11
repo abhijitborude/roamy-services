@@ -1,9 +1,7 @@
 package com.roamy.integration.imagelib.service.impl;
 
 import com.roamy.TestApplication;
-import com.roamy.integration.imagelib.dto.ImageLibraryIdentifier;
 import com.roamy.integration.imagelib.service.api.ImageLibraryService;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -12,11 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.io.File;
-import java.nio.file.Files;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Abhijit on 12/28/2015.

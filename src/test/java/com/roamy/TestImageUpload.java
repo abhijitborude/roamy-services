@@ -1,6 +1,5 @@
 package com.roamy;
 
-import java.io.File;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -12,6 +11,8 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.util.EntityUtils;
+
+import java.io.File;
 
 
 public class TestImageUpload {

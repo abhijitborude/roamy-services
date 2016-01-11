@@ -1,16 +1,10 @@
 package com.roamy.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.roamy.config.CustomDateDeserializer;
 import com.roamy.config.CustomDateSerializer;
-import com.roamy.domain.AbstractEntity;
-import com.roamy.domain.AccountType;
-import com.roamy.util.DbConstants;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**

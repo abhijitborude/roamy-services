@@ -18,7 +18,7 @@ insert into ROAMY.category
 -- User
 insert into ROAMY.user
 (id,    type,       phone_number,   email,              fname,      lname,      wallet_balance,         profile_image_id,       profile_image_url,                                                                                      birth_date,     address,            city,       country,    pin,        status,     verification_code,     verification_expiry,     referral_code,  device_id,    verified,   created_by,     created_on,         last_modified_by,   last_modified_on) values
-(1,     'Email',    '12345',        'abcd@abcd.com',    'fname',    'lname',    10.00,                  'category1_q9uyh3',     'http://res.cloudinary.com/abhijitab/image/upload/v1449990238/category1_q9uyh3.png',                    null,           '100 street rd.',   'Mumbai',   'India',    '100000',   'Active',   null,                   null,                   'abcd',         null,         1,          'test',         current_timestamp,  'test',             current_timestamp);
+(1,     'Email',    '12345',        'abcd@abcd.com',    'fname',    'lname',    1000.00,                  'category1_q9uyh3',     'http://res.cloudinary.com/abhijitab/image/upload/v1449990238/category1_q9uyh3.png',                    null,           '100 street rd.',   'Mumbai',   'India',    '100000',   'Active',   null,                   null,                   'abcd',         null,         1,          'test',         current_timestamp,  'test',             current_timestamp);
 
 insert into ROAMY.trip
 (
@@ -182,6 +182,11 @@ insert into ROAMY.alert
 (3,     'INFO',     1,          'Your trip is arriving',    'You trip is scheduled for tomorrow',                                                                           null,              1,              dateadd('DAY', 10, current_timestamp),      'Active',   'test',         current_timestamp,  'test',             current_timestamp);
 
 insert into ROAMY.reservation
-(id,    trip_instance_id,   user_id,    email,              number_of_travellers,   phone_number,   status,     created_by,     created_on,         last_modified_by,   last_modified_on) values
-(1,     1,                  1,          'abc@abc.com',      4,                      '12345',        'Active',   'test',         current_timestamp,  'test',             current_timestamp),
-(2,     2,                  1,          'abc@abc.com',      2,                      '12345',        'Active',   'test',         current_timestamp,  'test',             current_timestamp);
+(id,    trip_instance_id,   user_id,    email,              number_of_travellers,   amount,     phone_number,   status,     created_by,     created_on,         last_modified_by,   last_modified_on) values
+(1,     1,                  1,          'abc@abc.com',      4,                      30000,      '12345',        'Active',   'test',         current_timestamp,  'test',             current_timestamp),
+(2,     2,                  1,          'abc@abc.com',      2,                      20000,      '12345',        'Active',   'test',         current_timestamp,  'test',             current_timestamp);
+
+
+insert into ROAMY.reservation_payment
+(id,    reservation_id,   type,             amount,     transaction_id,         status,         created_by,     created_on,         last_modified_by,   last_modified_on) values
+(1,     1,                'Razorpay',       7500,       'skjfhksjfhkjfhs',      'Success',      'test',         current_timestamp,  'test',             current_timestamp);
