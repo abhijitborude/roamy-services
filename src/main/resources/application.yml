@@ -14,3 +14,7 @@ logging.level.org.hibernate.SQL: DEBUG
 multipart:
   maxFileSize: 5000KB
   maxRequestSize: 5000KB
+
+razorpay:
+  key-id: rzp_test_aoq1vFZS49sAlN
+  key-secret: y1hIwOiePI3N3Ruaj7dsu53z

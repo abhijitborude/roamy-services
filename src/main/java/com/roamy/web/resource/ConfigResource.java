@@ -1,8 +1,6 @@
 package com.roamy.web.resource;
 
 import com.roamy.config.ConfigProperties;
-import com.roamy.dto.RestResponse;
-import org.eclipse.jetty.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

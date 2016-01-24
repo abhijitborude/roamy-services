@@ -1,13 +1,10 @@
 package com.roamy.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.roamy.config.CustomDateSerializer;
 import com.roamy.util.DbConstants;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 /**
  * Created by Abhijit on 1/10/2016.

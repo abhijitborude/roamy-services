@@ -9,18 +9,17 @@ import com.roamy.domain.*;
 import com.roamy.dto.ReservationDto;
 import com.roamy.dto.ReservationPaymentDto;
 import com.roamy.dto.RestResponse;
+import com.roamy.integration.paymentGateway.dto.PaymentDto;
+import com.roamy.integration.paymentGateway.service.api.PaymentGatewayService;
 import com.roamy.util.RestUtils;
 import com.roamy.util.RoamyValidationException;
 import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Abhijit on 12/13/2015.
@@ -42,6 +41,10 @@ public class ReservationResource {
 
     @Autowired
     private ReservationPaymentRepository reservationPaymentRepository;
+
+    @Autowired
+    @Qualifier("razorpayGatewayService")
+    private PaymentGatewayService razorpayGatewayService;
 
     @Autowired
     private ConfigProperties configProperties;
@@ -187,16 +190,20 @@ public class ReservationResource {
             payment.setCreatedBy("test");
             payment.setLastModifiedBy("test");
 
+            // capture payment
+            PaymentDto paymentDto = razorpayGatewayService.capturePayment(reservationPaymentDto.getTransactionId(), reservationPaymentDto.getAmount());
+            if ("captured".equals(paymentDto.getStatus())) {
+                payment.setStatus(Status.Success);
+                reservation.setStatus(Status.Active);
+            } else {
+                payment.setStatus(Status.Failed);
+                reservation.setStatus(Status.Pending);
+            }
+
             reservationPaymentRepository.save(payment);
-            reservationPaymentRepository.flush();
 
             reservation.getPayments().add(payment);
-            reservation.setStatus(Status.Active);
             reservationRepository.save(reservation);
-            reservationRepository.flush();
-
-            // capture payment
-
 
             response = new RestResponse(reservation, HttpStatus.OK_200);
         } catch (Throwable t) {
