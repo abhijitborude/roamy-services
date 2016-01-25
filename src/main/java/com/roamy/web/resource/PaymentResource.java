@@ -52,29 +52,4 @@ public class PaymentResource {
 
         return response;
     }
-
-    @RequestMapping(value = "/{transactionId}", method = RequestMethod.GET)
-    public RestResponse capturePayment(@PathParam("transactionId") String transactionId) {
-
-        LOGGER.info("fetching payment details for transactionId: {}", transactionId);
-
-        RestResponse response = null;
-
-        try {
-            if (!StringUtils.hasText(transactionId)) {
-                throw new RoamyValidationException("Invalid transactionId: " + transactionId);
-            }
-
-            PaymentDto paymentDto = paymentGatewayService.getPaymentDetails(transactionId);
-            LOGGER.info("payment details found: {}", paymentDto);
-
-            response = new RestResponse(paymentDto, HttpStatus.OK_200, null, null);
-
-        } catch (Throwable t) {
-            LOGGER.error("error in getPaymentDetails: ", t);
-            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
-        }
-
-        return response;
-    }
 }
