@@ -23,11 +23,12 @@ insert into ROAMY.user
 insert into ROAMY.trip
 (
     id,
+    type,
     code,
     name,
     description,
     additional_description ,
-    difficulty_level,
+    thrill_meter,
     number_of_days,
     price_per_adult,
     tac,
@@ -44,11 +45,12 @@ insert into ROAMY.trip
 ) values
 (
     1, --id
+    'PACKAGE',
     'SCUBA_DIVING_&_DIVING_SAFARI', --code
     'Scuba Diving & Snorkeling Safari', --name
     'Snorkeling is the practice of swimming on or through a body of water while equipped with a diving mask, a shaped tube called a snorkel, and usually swim-fins.', --description
     'Use of this equipment allows the snorkeler to observe underwater attractions for extended periods of time with relatively little effort.Snorkeling is a popular recreational activity. The primary appeal is the opportunity to observe underwater life in a natural setting without the complicated equipment inline', --additional_description
-    3, --difficulty_level
+    3, --thrill_meter
     4, --number_of_days
     7500, --default_price_per_adult
     15.00, --tac
@@ -79,6 +81,11 @@ insert into ROAMY.trip_image
 (1,         'Nice Image',           'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg'),
 (1,         null,                   'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg');
 
+insert into ROAMY.trip_option
+(id,    trip_id,    name,                               description,    price,  capacity,   status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
+(1,     1,          'Adult',                            '',             7500,   25,         'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(2,     1,          'Children (10 years or below)',     '',             5000,   25,         'Active',   'test',             current_timestamp,  'test',             current_timestamp);
+
 insert into ROAMY.favorite_trip
 (id,    user_id,   trip_id,     status,     created_by, created_on,         last_modified_by,   last_modified_on) values
 (1,     1,         1,           'Active',   'test',     current_timestamp,  'test',             current_timestamp);
@@ -86,11 +93,12 @@ insert into ROAMY.favorite_trip
 insert into ROAMY.trip_instance
 (
     id,
+    type,
     name,
     trip_id,
     description,
     additional_description ,
-    difficulty_level,
+    thrill_meter,
     number_of_days,
     price_per_adult,
     tac,
@@ -100,7 +108,6 @@ insert into ROAMY.trip_instance
     meeting_points,
     things_to_carry,
     traveller_capacity,
-    additional_capacity,
     date,
     display_start_date,
     display_end_date,
@@ -112,11 +119,12 @@ insert into ROAMY.trip_instance
 ) values
 (
     1,
+    'PACKAGE', --type
     'Scuba Diving & Snorkeling Safari 1', --name
     1,  --trip_id
     'Snorkeling is the practice of swimming on or through a body of water while equipped with a diving mask, a shaped tube called a snorkel, and usually swim-fins.', --description
     'Use of this equipment allows the snorkeler to observe underwater attractions for extended periods of time with relatively little effort.Snorkeling is a popular recreational activity. The primary appeal is the opportunity to observe underwater life in a natural setting without the complicated equipment inline', --additional_description
-    3, --difficulty_level
+    3, --thrill_meter
     4, --number_of_days
     7500, --price_per_adult
     15.00, --tac
@@ -126,10 +134,9 @@ insert into ROAMY.trip_instance
     '21:30Hrs@ National Park,Borivali <br/> 22:30 Hrs : Pritam Hotel , Dadar <br/> 20:00Hrs: Shivajinagar, Pune', --meeting_points
     'Shoes<br/>Backpack<br/>First Aid<br/>Torch',   --things_to_carry
     50, --traveller_capacity
-    10, --additional_capacity
-    dateadd('DAY', 10, current_timestamp),  --date
+    dateadd('DAY', 5, current_timestamp),  --date
     current_timestamp,  --display_start_date
-    dateadd('DAY', 10, current_timestamp),  --display_end_date
+    dateadd('DAY', 5, current_timestamp),  --display_end_date
     'Active', --status
     'test', --created_by
     current_timestamp, --created_on,
@@ -138,11 +145,12 @@ insert into ROAMY.trip_instance
 ),
 (
     2,
+    'PACKAGE', --type,
     'Scuba Diving & Snorkeling Safari 2', --name
     1,  --trip_id
     'Snorkeling is the practice of swimming on or through a body of water while equipped with a diving mask, a shaped tube called a snorkel, and usually swim-fins.', --description
     'Use of this equipment allows the snorkeler to observe underwater attractions for extended periods of time with relatively little effort.Snorkeling is a popular recreational activity. The primary appeal is the opportunity to observe underwater life in a natural setting without the complicated equipment inline', --additional_description
-    3, --difficulty_level
+    3, --thrill_meter
     4, --number_of_days
     10000, --price_per_adult
     15.00, --tac
@@ -152,9 +160,8 @@ insert into ROAMY.trip_instance
     '21:30Hrs@ National Park,Borivali <br/> 22:30 Hrs : Pritam Hotel , Dadar <br/> 20:00Hrs: Shivajinagar, Pune', --meeting_points
     'Shoes<br/>Backpack<br/>First Aid<br/>Torch',   --things_to_carry
     50, --traveller_capacity
-    10, --additional_capacity
     dateadd('DAY', 10, current_timestamp),  --date
-    current_timestamp,  --display_start_date
+    dateadd('DAY', 5, current_timestamp),  --display_start_date
     dateadd('DAY', 10, current_timestamp),  --display_end_date
     'Active', --status
     'test', --created_by
@@ -170,6 +177,14 @@ insert into ROAMY.trip_instance_city
 (2,         1),
 (2,         2);
 
+insert into ROAMY.trip_instance_option
+(id,    trip_instance_id,    name,                              description,    price,  capacity,   status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
+(1,     1,                  'Adult',                            '',             7500,   25,         'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(2,     1,                  'Children (10 years or below)',     '',             5000,   25,         'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(3,     2,                  'Adult',                            '',             7500,   25,         'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(4,     2,                  'Children (10 years or below)',     '',             5000,   25,         'Active',   'test',             current_timestamp,  'test',             current_timestamp);
+
+
 insert into ROAMY.trip_review
 (id,     trip_id,    reservation_id,    user_id,    title,                      description,                                                                        rating,     status,     created_by,     created_on,         last_modified_by,   last_modified_on) values
 (1,     1,           null,              1,          'Amazing trip!',            'This was an amazing trip. All the arrangements were great. Food was awesome too.',   5,          'Active',   'test',         current_timestamp,  'test',             current_timestamp),
@@ -182,9 +197,9 @@ insert into ROAMY.alert
 (3,     'INFO',     1,          'Your trip is arriving',    'You trip is scheduled for tomorrow',                                                                           null,              1,              dateadd('DAY', 10, current_timestamp),      'Active',   'test',         current_timestamp,  'test',             current_timestamp);
 
 insert into ROAMY.reservation
-(id,    trip_instance_id,   user_id,    email,              number_of_travellers,   amount,     phone_number,   status,     created_by,     created_on,         last_modified_by,   last_modified_on) values
-(1,     1,                  1,          'abc@abc.com',      4,                      30000,      '12345',        'Active',   'test',         current_timestamp,  'test',             current_timestamp),
-(2,     2,                  1,          'abc@abc.com',      2,                      20000,      '12345',        'Active',   'test',         current_timestamp,  'test',             current_timestamp);
+(id,    type,           user_id,    email,              number_of_roamies,      amount,     start_date,         end_date,       phone_number,   status,     created_by,     created_on,         last_modified_by,   last_modified_on) values
+(1,     'PACKAGE',      1,          'abc@abc.com',      4,                      30000,      current_timestamp,  null,           '12345',        'Active',   'test',         current_timestamp,  'test',             current_timestamp),
+(2,     'PACKAGE',      1,          'abc@abc.com',      2,                      20000,      current_timestamp,  null,           '12345',        'Active',   'test',         current_timestamp,  'test',             current_timestamp);
 
 
 insert into ROAMY.reservation_payment

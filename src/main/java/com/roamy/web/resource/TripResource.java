@@ -162,9 +162,9 @@ public class TripResource extends CitableResource<Trip, Long> {
 
                 } else if (SORT_BY_PRICE.equalsIgnoreCase(sortBy)) {
                     if (SORT_TYPE_DESC.equals(sortType)) {
-                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelDesc(Status.Active, cityCodes, Status.Active, sDate, eDate);
+                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterDesc(Status.Active, cityCodes, Status.Active, sDate, eDate);
                     } else {
-                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelAsc(Status.Active, cityCodes, Status.Active, sDate, eDate);
+                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterAsc(Status.Active, cityCodes, Status.Active, sDate, eDate);
                     }
 
                 } else {
@@ -180,9 +180,9 @@ public class TripResource extends CitableResource<Trip, Long> {
 
                 } else if (SORT_BY_PRICE.equalsIgnoreCase(sortBy)) {
                     if (SORT_TYPE_DESC.equals(sortType)) {
-                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelDesc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
+                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterDesc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
                     } else {
-                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelAsc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
+                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterAsc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
                     }
 
                 } else {

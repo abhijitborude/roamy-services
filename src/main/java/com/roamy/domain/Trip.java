@@ -12,49 +12,39 @@ import java.util.List;
  */
 @Entity
 @Table(name = "TRIP", schema = "ROAMY")
-public class Trip extends CitableEntity {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "TYPE", discriminatorType = DiscriminatorType.STRING)
+public abstract class Trip extends CitableEntity {
 
-    @Column(name = "NUMBER_OF_DAYS")
-    private int numberOfDays;
+    public abstract String getType();
 
     @Column(name = "ADDITIONAL_DESCRIPTION", length = DbConstants.LONG_TEXT)
-    private String additionalDescription;
+    protected String additionalDescription;
 
-    @Column(name = "DIFFICULTY_LEVEL")
-    private int difficultyLevel;
+    @Column(name = "THRILL_METER")
+    protected int thrillMeter;
 
     @Column(name = "PRICE_PER_ADULT")
     private Double pricePerAdult;
 
     @Column(name = "TAC")
-    private Double tac;
+    protected Double tac;
+
+    @OneToMany
+    @JoinColumn(name = "TRIP_ID")
+    private List<TripOption> options;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "TRIP_CITY", schema = "ROAMY",
             joinColumns = {@JoinColumn(name = "TRIP_ID")},
             inverseJoinColumns = {@JoinColumn(name = "CITY_ID")})
-    private List<City> targetCities;
+    protected List<City> targetCities;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "TRIP_CATEGORY", schema = "ROAMY",
             joinColumns = {@JoinColumn(name = "TRIP_ID")},
             inverseJoinColumns = {@JoinColumn(name = "CATEGORY_ID")})
-    private List<Category> categories;
-
-    @Column(name = "ITINERARY", length = DbConstants.LONG_TEXT)
-    private String itinerary;
-
-    @Column(name = "INCLUSIONS", length = DbConstants.LONG_TEXT)
-    private String inclusions;
-
-    @Column(name = "EXCLUSIONS", length = DbConstants.LONG_TEXT)
-    private String exclusions;
-
-    @Column(name = "MEETING_POINTS", length = DbConstants.LONG_TEXT)
-    private String meetingPoints;
-
-    @Column(name = "THINGS_TO_CARRY", length = DbConstants.LONG_TEXT)
-    private String thingsToCarry;
+    protected List<Category> categories;
 
     @ElementCollection
     @CollectionTable(
@@ -62,22 +52,11 @@ public class Trip extends CitableEntity {
             name="TRIP_IMAGE",
             joinColumns=@JoinColumn(name="TRIP_ID")
     )
-    private List<TripImage> images;
+    protected List<TripImage> images;
 
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<TripInstance> instances = new ArrayList<TripInstance>();
-
-    @Transient
-    private boolean favorite = false;
-
-    public int getNumberOfDays() {
-        return numberOfDays;
-    }
-
-    public void setNumberOfDays(int numberOfDays) {
-        this.numberOfDays = numberOfDays;
-    }
+    protected List<TripInstance> instances = new ArrayList<TripInstance>();
 
     public String getAdditionalDescription() {
         return additionalDescription;
@@ -87,20 +66,12 @@ public class Trip extends CitableEntity {
         this.additionalDescription = additionalDescription;
     }
 
-    public int getDifficultyLevel() {
-        return difficultyLevel;
+    public int getThrillMeter() {
+        return thrillMeter;
     }
 
-    public void setDifficultyLevel(int difficultyLevel) {
-        this.difficultyLevel = difficultyLevel;
-    }
-
-    public Double getPricePerAdult() {
-        return pricePerAdult;
-    }
-
-    public void setPricePerAdult(Double pricePerAdult) {
-        this.pricePerAdult = pricePerAdult;
+    public void setThrillMeter(int thrillMeter) {
+        this.thrillMeter = thrillMeter;
     }
 
     public Double getTac() {
@@ -109,6 +80,14 @@ public class Trip extends CitableEntity {
 
     public void setTac(Double tac) {
         this.tac = tac;
+    }
+
+    public List<TripOption> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<TripOption> options) {
+        this.options = options;
     }
 
     public List<City> getTargetCities() {
@@ -127,46 +106,6 @@ public class Trip extends CitableEntity {
         this.categories = categories;
     }
 
-    public String getItinerary() {
-        return itinerary;
-    }
-
-    public void setItinerary(String itinerary) {
-        this.itinerary = itinerary;
-    }
-
-    public String getInclusions() {
-        return inclusions;
-    }
-
-    public void setInclusions(String inclusions) {
-        this.inclusions = inclusions;
-    }
-
-    public String getExclusions() {
-        return exclusions;
-    }
-
-    public void setExclusions(String exclusions) {
-        this.exclusions = exclusions;
-    }
-
-    public String getMeetingPoints() {
-        return meetingPoints;
-    }
-
-    public void setMeetingPoints(String meetingPoints) {
-        this.meetingPoints = meetingPoints;
-    }
-
-    public String getThingsToCarry() {
-        return thingsToCarry;
-    }
-
-    public void setThingsToCarry(String thingsToCarry) {
-        this.thingsToCarry = thingsToCarry;
-    }
-
     public List<TripImage> getImages() {
         return images;
     }
@@ -181,14 +120,6 @@ public class Trip extends CitableEntity {
 
     public void setInstances(List<TripInstance> instances) {
         this.instances = instances;
-    }
-
-    public boolean isFavorite() {
-        return favorite;
-    }
-
-    public void setFavorite(boolean favorite) {
-        this.favorite = favorite;
     }
 
     @Override

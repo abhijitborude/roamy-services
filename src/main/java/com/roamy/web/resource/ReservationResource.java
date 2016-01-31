@@ -21,6 +21,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Abhijit on 12/13/2015.
  */
@@ -85,10 +88,14 @@ public class ReservationResource {
                 throw new RoamyValidationException("Invalid trip instance");
             }
 
-            Reservation reservation = new Reservation();
+            Reservation reservation = new PackageReservation();
             reservation.setUser(user);
-            reservation.setTripInstance(tripInstance);
-            reservation.setNumberOfTravellers(reservationDto.getNumberOfTravellers());
+
+            List<TripInstance> instances = new ArrayList<>();
+            instances.add(tripInstance);
+            reservation.setTripInstance(instances);
+
+            reservation.setNumberOfRoamies(reservationDto.getNumberOfTravellers());
             reservation.setAmount(reservationDto.getAmount());
 
             if (reservationDto.isUseRomoney() && user.getWalletBalance() != null) {
@@ -182,7 +189,6 @@ public class ReservationResource {
 
             // create payment
             ReservationPayment payment = new ReservationPayment();
-            payment.setReservation(reservation);
             payment.setAmount(reservationPaymentDto.getAmount());
             payment.setTransactionId(reservationPaymentDto.getTransactionId());
             payment.setType(paymentType);

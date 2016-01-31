@@ -13,11 +13,6 @@ import javax.validation.constraints.NotNull;
 @Table(name = "RESERVATION_PAYMENT", schema = "ROAMY")
 public class ReservationPayment extends AbstractEntity {
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RESERVATION_ID")
-    private Reservation reservation;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "TYPE", length = DbConstants.SHORT_TEXT)
     private PaymentType type;
@@ -28,14 +23,6 @@ public class ReservationPayment extends AbstractEntity {
 
     @Column(name = "TRANSACTION_ID", length = DbConstants.SHORT_TEXT)
     private String transactionId;
-
-    public Reservation getReservation() {
-        return reservation;
-    }
-
-    public void setReservation(Reservation reservation) {
-        this.reservation = reservation;
-    }
 
     public PaymentType getType() {
         return type;

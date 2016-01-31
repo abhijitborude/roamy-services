@@ -20,9 +20,9 @@ public interface TripRepository extends CitableRepository<Trip, Long> {
 
     List<Trip> findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelAsc(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterAsc(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelDesc(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterDesc(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
 
     // filter by status, start and end dates, category code
     List<Trip> findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetween(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
@@ -31,8 +31,8 @@ public interface TripRepository extends CitableRepository<Trip, Long> {
 
     List<Trip> findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelAsc(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterAsc(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByDifficultyLevelDesc(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterDesc(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
 
 }

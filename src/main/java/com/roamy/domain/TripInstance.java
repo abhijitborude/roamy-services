@@ -17,7 +17,11 @@ import java.util.List;
  */
 @Entity
 @Table(name = "TRIP_INSTANCE", schema = "ROAMY")
-public class TripInstance extends AbstractEntity {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "TYPE", discriminatorType = DiscriminatorType.STRING)
+public abstract class TripInstance extends AbstractEntity {
+
+    public abstract String getType();
 
     @NotNull
     @Column(name = "NAME", length = DbConstants.SHORT_TEXT)
@@ -29,64 +33,47 @@ public class TripInstance extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "TRIP_ID")
     @JsonIgnore
-    private Trip trip;
-
-    @Column(name = "NUMBER_OF_DAYS")
-    private int numberOfDays;
+    protected Trip trip;
 
     @Column(name = "ADDITIONAL_DESCRIPTION", length = DbConstants.LONG_TEXT)
-    private String additionalDescription;
+    protected String additionalDescription;
 
-    @Column(name = "DIFFICULTY_LEVEL")
-    private int difficultyLevel;
+    @Column(name = "THRILL_METER")
+    protected int thrillMeter;
 
     @Column(name = "PRICE_PER_ADULT")
-    private Double pricePerAdult;
+    protected Double pricePerAdult;
 
     @Column(name = "TAC")
-    private Double tac;
+    protected Double tac;
+
+    @OneToMany
+    @JoinColumn(name = "TRIP_INSTANCE_ID")
+    private List<TripInstanceOption> options;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "TRIP_INSTANCE_CITY", schema = "ROAMY",
             joinColumns = {@JoinColumn(name = "TRIP_INSTANCE_ID")},
             inverseJoinColumns = {@JoinColumn(name = "CITY_ID")})
     @Fetch(FetchMode.SUBSELECT)
-    private List<City> targetCities;
-
-    @Column(name = "ITINERARY", length = DbConstants.LONG_TEXT)
-    private String itinerary;
-
-    @Column(name = "INCLUSIONS", length = DbConstants.LONG_TEXT)
-    private String inclusions;
-
-    @Column(name = "EXCLUSIONS", length = DbConstants.LONG_TEXT)
-    private String exclusions;
-
-    @Column(name = "MEETING_POINTS", length = DbConstants.LONG_TEXT)
-    private String meetingPoints;
-
-    @Column(name = "THINGS_TO_CARRY", length = DbConstants.LONG_TEXT)
-    private String thingsToCarry;
+    protected List<City> targetCities;
 
     @NotNull
     @Column(name = "TRAVELLER_CAPACITY")
-    private int travellerCapacity;
-
-    @Column(name = "ADDITIONAL_CAPACITY")
-    private int additionalCapacity;
+    protected int travellerCapacity;
 
     @NotNull
     @Column(name = "DATE")
     @JsonSerialize(using = CustomDateSerializer.class)
-    private Date date;
+    protected Date date;
 
     @Column(name = "DISPLAY_START_DATE")
     @JsonSerialize(using = CustomDateSerializer.class)
-    private Date displayStartDate;
+    protected Date displayStartDate;
 
     @Column(name = "DISPLAY_END_DATE")
     @JsonSerialize(using = CustomDateSerializer.class)
-    private Date displayEndDate;
+    protected Date displayEndDate;
 
     public String getName() {
         return name;
@@ -112,14 +99,6 @@ public class TripInstance extends AbstractEntity {
         this.trip = trip;
     }
 
-    public int getNumberOfDays() {
-        return numberOfDays;
-    }
-
-    public void setNumberOfDays(int numberOfDays) {
-        this.numberOfDays = numberOfDays;
-    }
-
     public String getAdditionalDescription() {
         return additionalDescription;
     }
@@ -128,12 +107,12 @@ public class TripInstance extends AbstractEntity {
         this.additionalDescription = additionalDescription;
     }
 
-    public int getDifficultyLevel() {
-        return difficultyLevel;
+    public int getThrillMeter() {
+        return thrillMeter;
     }
 
-    public void setDifficultyLevel(int difficultyLevel) {
-        this.difficultyLevel = difficultyLevel;
+    public void setThrillMeter(int thrillMeter) {
+        this.thrillMeter = thrillMeter;
     }
 
     public Double getPricePerAdult() {
@@ -152,6 +131,14 @@ public class TripInstance extends AbstractEntity {
         this.tac = tac;
     }
 
+    public List<TripInstanceOption> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<TripInstanceOption> options) {
+        this.options = options;
+    }
+
     public List<City> getTargetCities() {
         return targetCities;
     }
@@ -160,60 +147,12 @@ public class TripInstance extends AbstractEntity {
         this.targetCities = targetCities;
     }
 
-    public String getItinerary() {
-        return itinerary;
-    }
-
-    public void setItinerary(String itinerary) {
-        this.itinerary = itinerary;
-    }
-
-    public String getInclusions() {
-        return inclusions;
-    }
-
-    public void setInclusions(String inclusions) {
-        this.inclusions = inclusions;
-    }
-
-    public String getExclusions() {
-        return exclusions;
-    }
-
-    public void setExclusions(String exclusions) {
-        this.exclusions = exclusions;
-    }
-
-    public String getMeetingPoints() {
-        return meetingPoints;
-    }
-
-    public void setMeetingPoints(String meetingPoints) {
-        this.meetingPoints = meetingPoints;
-    }
-
-    public String getThingsToCarry() {
-        return thingsToCarry;
-    }
-
-    public void setThingsToCarry(String thingsToCarry) {
-        this.thingsToCarry = thingsToCarry;
-    }
-
     public int getTravellerCapacity() {
         return travellerCapacity;
     }
 
     public void setTravellerCapacity(int travellerCapacity) {
         this.travellerCapacity = travellerCapacity;
-    }
-
-    public int getAdditionalCapacity() {
-        return additionalCapacity;
-    }
-
-    public void setAdditionalCapacity(int additionalCapacity) {
-        this.additionalCapacity = additionalCapacity;
     }
 
     public Date getDate() {

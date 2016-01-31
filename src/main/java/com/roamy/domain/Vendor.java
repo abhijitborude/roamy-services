@@ -26,15 +26,11 @@ public class Vendor extends CitableEntity {
     @Column(name = "PHONE_NUMBER", length = DbConstants.SHORT_TEXT)
     private String phoneNumber;
 
+    @Column(name = "COMMISSION")
+    private Double commission;
+
     @OneToMany(mappedBy = "vendor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<VendorAccount> account;
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "VENDOR_CITY", schema = "ROAMY",
-            joinColumns = {@JoinColumn(name = "VENDOR_ID")},
-            inverseJoinColumns = {@JoinColumn(name = "CITY_ID")})
-    @Fetch(FetchMode.SUBSELECT)
-    private List<City> cities;
 
     public String getNotes() {
         return notes;
@@ -68,20 +64,20 @@ public class Vendor extends CitableEntity {
         this.phoneNumber = phoneNumber;
     }
 
+    public Double getCommission() {
+        return commission;
+    }
+
+    public void setCommission(Double commission) {
+        this.commission = commission;
+    }
+
     public List<VendorAccount> getAccount() {
         return account;
     }
 
     public void setAccount(List<VendorAccount> account) {
         this.account = account;
-    }
-
-    public List<City> getCities() {
-        return cities;
-    }
-
-    public void setCities(List<City> cities) {
-        this.cities = cities;
     }
 
     @Override

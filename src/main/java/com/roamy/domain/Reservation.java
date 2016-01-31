@@ -1,10 +1,13 @@
 package com.roamy.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.roamy.config.CustomDateSerializer;
 import com.roamy.util.DbConstants;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,40 +15,56 @@ import java.util.List;
  */
 @Entity
 @Table(name = "RESERVATION", schema = "ROAMY")
-public class Reservation extends AbstractEntity {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "TYPE", discriminatorType = DiscriminatorType.STRING)
+public abstract class Reservation extends AbstractEntity {
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "TRIP_INSTANCE_ID")
-    private TripInstance tripInstance;
+    public abstract String getType();
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "RESERVATION_TRIP_INSTANCE", schema = "ROAMY",
+            joinColumns = {@JoinColumn(name = "RESERVATION_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "TRIP_INSTANCE_ID")})
+    protected List<TripInstance> tripInstance;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "USER_ID")
-    private User user;
+    protected User user;
 
     @NotNull
-    @Column(name = "NUMBER_OF_TRAVELLERS")
-    private int numberOfTravellers;
+    @Column(name = "NUMBER_OF_ROAMIES")
+    protected int numberOfRoamies;
+
+    @NotNull
+    @Column(name = "START_DATE")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    protected Date startDate;
 
     @NotNull
     @Column(name = "AMOUNT")
-    private Double amount;
+    protected Double amount;
 
     @NotNull
     @Column(name = "PHONE_NUMBER", length = DbConstants.SHORT_TEXT)
-    private String phoneNumber;
+    protected String phoneNumber;
 
     @NotNull
     @Column(name = "EMAIL", length = DbConstants.MEDIUM_TEXT)
-    private String email;
+    protected String email;
 
-    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ReservationPayment> payments = new ArrayList<>();
+    @OneToMany
+    @JoinColumn(name = "RESERVATION_ID")
+    protected List<ReservationPayment> payments;
 
-    public TripInstance getTripInstance() {
+    @OneToMany
+    @JoinColumn(name = "RESERVATION_ID")
+    protected List<ReservationTripOption> tripOptions;
+
+    public List<TripInstance> getTripInstance() {
         return tripInstance;
     }
 
-    public void setTripInstance(TripInstance tripInstance) {
+    public void setTripInstance(List<TripInstance> tripInstance) {
         this.tripInstance = tripInstance;
     }
 
@@ -57,12 +76,20 @@ public class Reservation extends AbstractEntity {
         this.user = user;
     }
 
-    public int getNumberOfTravellers() {
-        return numberOfTravellers;
+    public int getNumberOfRoamies() {
+        return numberOfRoamies;
     }
 
-    public void setNumberOfTravellers(int numberOfTravellers) {
-        this.numberOfTravellers = numberOfTravellers;
+    public void setNumberOfRoamies(int numberOfRoamies) {
+        this.numberOfRoamies = numberOfRoamies;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
     public Double getAmount() {
@@ -103,7 +130,6 @@ public class Reservation extends AbstractEntity {
         }
 
         this.payments.add(payment);
-        payment.setReservation(this);
     }
 
     @Override
@@ -111,7 +137,7 @@ public class Reservation extends AbstractEntity {
         return "Reservation{" +
                 "tripInstance=" + tripInstance +
                 ", user=" + user +
-                ", numberOfTravellers=" + numberOfTravellers +
+                ", numberOfRoamies=" + numberOfRoamies +
                 ", amount=" + amount +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
