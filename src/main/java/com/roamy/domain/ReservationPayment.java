@@ -1,6 +1,5 @@
 package com.roamy.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.roamy.util.DbConstants;
 
 import javax.persistence.*;

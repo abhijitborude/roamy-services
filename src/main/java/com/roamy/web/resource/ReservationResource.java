@@ -1,10 +1,7 @@
 package com.roamy.web.resource;
 
 import com.roamy.config.ConfigProperties;
-import com.roamy.dao.api.ReservationPaymentRepository;
-import com.roamy.dao.api.ReservationRepository;
-import com.roamy.dao.api.TripInstanceRepository;
-import com.roamy.dao.api.UserRepository;
+import com.roamy.dao.api.*;
 import com.roamy.domain.*;
 import com.roamy.dto.ReservationDto;
 import com.roamy.dto.ReservationPaymentDto;
@@ -18,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +44,12 @@ public class ReservationResource {
     private ReservationPaymentRepository reservationPaymentRepository;
 
     @Autowired
+    private ReservationTripOptionRepository reservationTripOptionRepository;
+
+    @Autowired
+    private TripInstanceOptionRepository tripInstanceOptionRepository;
+
+    @Autowired
     @Qualifier("razorpayGatewayService")
     private PaymentGatewayService razorpayGatewayService;
 
@@ -66,10 +70,8 @@ public class ReservationResource {
                 throw new RoamyValidationException("User not provided");
             } else if (reservationDto.getTripInstanceId() == null) {
                 throw new RoamyValidationException("Trip instance not provided");
-            } else if (reservationDto.getNumberOfTravellers() <= 0) {
-                throw new RoamyValidationException("Invalid number of travellers provided: " + reservationDto.getNumberOfTravellers());
-            } else if (reservationDto.getAmount() == null || reservationDto.getAmount() <= 0) {
-                throw new RoamyValidationException("Invalid amount: " + reservationDto.getAmount());
+            } else if (CollectionUtils.isEmpty(reservationDto.getTripOptionReserations())) {
+                throw new RoamyValidationException("Trip option reservation not provided");
             } else if (!StringUtils.hasText(reservationDto.getEmail())) {
                 throw new RoamyValidationException("Invalid email provided");
             } else if (!StringUtils.hasText(reservationDto.getPhoneNumber())) {
@@ -88,6 +90,30 @@ public class ReservationResource {
                 throw new RoamyValidationException("Invalid trip instance");
             }
 
+            // 1. validate tripInstanceOptionId, count and create ReservationTripOptions
+            List<ReservationTripOption> reservationTripOptions = new ArrayList<>();
+
+            reservationDto.getTripOptionReserations().forEach((tripInstanceOptionId, count) -> {
+                if (tripInstanceOptionId == null || tripInstanceOptionId < 0) {
+                    throw new RoamyValidationException("Invalid trip instance option id provided: " + tripInstanceOptionId);
+                }
+
+                if (count == null || count < 0) {
+                    throw new RoamyValidationException("Invalid count provided: " + count);
+                }
+
+                TripInstanceOption tripInstanceOption = tripInstanceOptionRepository.findOne(tripInstanceOptionId);
+                if (tripInstanceOption == null) {
+                    throw new RoamyValidationException("Invalid trip instance option id provided: " + tripInstanceOptionId);
+                }
+
+                ReservationTripOption option = new ReservationTripOption();
+                option.setCount(count);
+                option.setTripInstanceOption(tripInstanceOption);
+
+                reservationTripOptions.add(option);
+            });
+
             Reservation reservation = new PackageReservation();
             reservation.setUser(user);
 
@@ -95,9 +121,32 @@ public class ReservationResource {
             instances.add(tripInstance);
             reservation.setTripInstance(instances);
 
-            reservation.setNumberOfRoamies(reservationDto.getNumberOfTravellers());
-            reservation.setAmount(reservationDto.getAmount());
+            // find total amount
+            Double totalAmount = 0d;
+            for (ReservationTripOption option : reservationTripOptions) {
+                totalAmount += option.getCount() * option.getTripInstanceOption().getPrice();
+            }
+            reservation.setAmount(totalAmount);
+            reservation.setStartDate(tripInstance.getDate());
 
+            // if email for reservation is not provided then fetch it from user
+            if (StringUtils.hasText(reservationDto.getEmail())) {
+                reservation.setEmail(reservationDto.getEmail());
+            } else {
+                reservation.setEmail(user.getEmail());
+            }
+
+            reservation.setPhoneNumber(reservationDto.getPhoneNumber());
+            reservation.setStatus(Status.Pending);
+            reservation.setCreatedBy("test");
+            reservation.setLastModifiedBy("test");
+
+            LOGGER.info("saving {}", reservation);
+            Reservation savedReservation = reservationRepository.save(reservation);
+
+            savedReservation.setTripOptions(reservationTripOptions);
+
+            // apply romoney
             if (reservationDto.isUseRomoney() && user.getWalletBalance() != null) {
 
                 Double romoneyPaymentAmount = 0d;
@@ -116,26 +165,17 @@ public class ReservationResource {
                 payment.setCreatedBy("test");
                 payment.setLastModifiedBy("test");
 
-                reservation.addPayment(payment);
+                savedReservation.addPayment(payment);
 
                 // reduce user's wallet balance
                 user.setWalletBalance(user.getWalletBalance() - romoneyPaymentAmount);
             }
 
-            // if email for reservation is not provided then fetch it from user
-            if (StringUtils.hasText(reservationDto.getEmail())) {
-                reservation.setEmail(reservationDto.getEmail());
-            } else {
-                reservation.setEmail(user.getEmail());
-            }
+            LOGGER.info("saving {}", savedReservation);
+            savedReservation = reservationRepository.save(savedReservation);
 
-            reservation.setPhoneNumber(reservationDto.getPhoneNumber());
-            reservation.setStatus(Status.Pending);
-            reservation.setCreatedBy("test");
-            reservation.setLastModifiedBy("test");
-
-            LOGGER.info("saving {}", reservation);
-            Reservation savedReservation = reservationRepository.save(reservation);
+            LOGGER.info("saving {}", user);
+            userRepository.save(user);
             LOGGER.info("save complete");
 
             response = new RestResponse(savedReservation, HttpStatus.OK_200);
