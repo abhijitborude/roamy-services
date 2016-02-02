@@ -20,7 +20,7 @@ public class SmsServiceImpl implements SmsService {
 
     private static final String SMS_SERVICE_URI = "http://mainadmin.dove-sms.com/sendsms.jsp?user=Roamy1&password=745745&mobiles={phoneNumber}&sms={text}&senderid=iROAMY";
 
-    private RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @Override
     public SmsResult sendSms(String phoneNumber, String text) {

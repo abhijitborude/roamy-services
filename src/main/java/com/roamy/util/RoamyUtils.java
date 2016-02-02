@@ -29,7 +29,7 @@ public class RoamyUtils {
         return generateRandomAlphanumericString(REFERRAL_CODE_LENGTH);
     }
 
-    public static final Date getVerificationCodeExpiryDate() {
+    public static Date getVerificationCodeExpiryDate() {
         return new DateTime(new Date()).plusHours(VERIFICATION_CODE_VALIDITY_HOURS).toDate();
     }
 

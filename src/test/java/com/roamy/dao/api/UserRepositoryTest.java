@@ -36,7 +36,7 @@ public class UserRepositoryTest {
         user.setEmail(email);
         user.setFirstName(fname);
         user.setLastName(lname);
-        user.setType(AccountType.Email);
+        user.setType(AccountType.Phone);
         user.setStatus(Status.Active);
         user.setCreatedBy("test");
         user.setCreatedOn(new Date());

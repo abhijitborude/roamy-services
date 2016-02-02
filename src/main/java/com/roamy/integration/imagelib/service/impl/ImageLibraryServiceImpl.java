@@ -18,7 +18,7 @@ import java.util.Map;
 @Service("imageLibraryService")
 public class ImageLibraryServiceImpl implements ImageLibraryService {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(ImageLibraryServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageLibraryServiceImpl.class);
 
     @Autowired
     private Cloudinary cloudinary;

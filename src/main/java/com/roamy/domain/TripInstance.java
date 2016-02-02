@@ -47,7 +47,7 @@ public abstract class TripInstance extends AbstractEntity {
     @Column(name = "TAC")
     protected Double tac;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "TRIP_INSTANCE_ID")
     private List<TripInstanceOption> options;
 

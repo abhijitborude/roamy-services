@@ -28,7 +28,7 @@ public abstract class AbstractEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS", length = DbConstants.SHORT_TEXT)
-    protected Status status = Status.Active;;
+    protected Status status = Status.Active;
 
     @NotNull
     @CreatedDate
@@ -54,7 +54,7 @@ public abstract class AbstractEntity {
     protected String lastModifiedBy = "";
 
     @Transient
-    protected Map<String, String> _links = new HashMap<String, String>();
+    protected Map<String, String> _links = new HashMap<>();
 
     public Long getId() {
         return id;

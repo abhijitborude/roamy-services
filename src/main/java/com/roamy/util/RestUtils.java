@@ -19,7 +19,7 @@ public class RestUtils {
     }
 
     public static Map<String, String> getLinks(Page page, int size) {
-        Map<String, String> links = new HashMap<String, String>();
+        Map<String, String> links = new HashMap<>();
         if (page.hasPrevious()) {
             links.put("previous", "/?page=" + page.previousPageable().getOffset() + "&size=" + size);
         }
@@ -30,7 +30,7 @@ public class RestUtils {
     }
 
     public static Map<String, String> getErrorMessages(Throwable t) {
-        Map<String, String> messages = new HashMap<String, String>();
+        Map<String, String> messages = new HashMap<>();
         messages.put("error", t.getMessage());
         messages.put("developerErrorMessage", RestUtils.getStackTraceAsString(t));
         return messages;

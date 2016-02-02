@@ -24,8 +24,8 @@ public class RestResponse {
     public RestResponse(Object data, int status) {
         this.data = data;
         this.status = status;
-        messages = new HashMap<String, String>();
-        _links = new HashMap<String, String>();
+        messages = new HashMap<>();
+        _links = new HashMap<>();
     }
 
     public RestResponse(Object data, int status, Map<String, String> messages, Map<String, String> links) {
@@ -34,12 +34,12 @@ public class RestResponse {
         if (messages != null) {
             this.messages = messages;
         } else {
-            this.messages = new HashMap<String, String>();
+            this.messages = new HashMap<>();
         }
         if (links != null) {
             this._links = links;
         } else {
-            this._links = new HashMap<String, String>();
+            this._links = new HashMap<>();
         }
     }
 

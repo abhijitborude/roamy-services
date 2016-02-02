@@ -28,7 +28,7 @@ public class RazorpayGatewayServiceImpl implements PaymentGatewayService {
     @Value("${razorpay.key-id}:${razorpay.key-secret}")
     private String key;
 
-    private RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate();
 
     private String getBaseUrl() {
         return "https://api.razorpay.com/v1";
@@ -58,7 +58,7 @@ public class RazorpayGatewayServiceImpl implements PaymentGatewayService {
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.set("Authorization", getAuthHeader());
 
-            HttpEntity<String> entity = new HttpEntity<String>(headers);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
             ResponseEntity<PaymentDto> responseEntity = restTemplate.exchange(new URI(url), HttpMethod.GET, entity, PaymentDto.class);
 
             paymentDto = responseEntity.getBody();
@@ -94,7 +94,7 @@ public class RazorpayGatewayServiceImpl implements PaymentGatewayService {
             long amountToCapture = amount.longValue() * 100;
             StringBuilder sb = new StringBuilder("{\"amount\":").append(amountToCapture).append("}");
 
-            HttpEntity<String> entity = new HttpEntity<String>(sb.toString(), headers);
+            HttpEntity<String> entity = new HttpEntity<>(sb.toString(), headers);
             PaymentDto responseEntity = restTemplate.postForObject(new URI(url), entity, PaymentDto.class);
 
         } catch (URISyntaxException e) {

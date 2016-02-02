@@ -433,7 +433,7 @@ public class UserResource extends IdentityResource<User, Long> {
             List<FavoriteTrip> favoriteTrips = favoriteTripRepository.findByUserPhoneNumber(user.getPhoneNumber());
             LOGGER.info("{} favorite trips found for {}", favoriteTrips == null ? 0 : favoriteTrips.size(), user);
 
-            List<Trip> trips = new ArrayList<Trip>();
+            List<Trip> trips = new ArrayList<>();
             if (!CollectionUtils.isEmpty(favoriteTrips)) {
                 for (FavoriteTrip favoriteTrip : favoriteTrips) {
                     trips.add(favoriteTrip.getTrip());
@@ -466,7 +466,7 @@ public class UserResource extends IdentityResource<User, Long> {
             List<FavoriteTrip> favoriteTrips = favoriteTripRepository.findByUserPhoneNumber(user.getPhoneNumber());
             LOGGER.info("{} favorite trips found for {}", favoriteTrips == null ? 0 : favoriteTrips.size(), user);
 
-            List<String> tripCodes = new ArrayList<String>();
+            List<String> tripCodes = new ArrayList<>();
             if (!CollectionUtils.isEmpty(favoriteTrips)) {
                 for (FavoriteTrip favoriteTrip : favoriteTrips) {
                     tripCodes.add(favoriteTrip.getTrip().getCode());

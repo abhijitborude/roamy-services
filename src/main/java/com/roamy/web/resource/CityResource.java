@@ -78,7 +78,7 @@ public class CityResource extends CitableResource<City, Long> {
             List<TripInstance> instances = tripInstanceRepository.findByTargetCitiesCodeAndStatus(code, Status.Active);
 
             // 2. find all categories of the trip instances
-            Set<Category> categories = new HashSet<Category>();
+            Set<Category> categories = new HashSet<>();
 
             for (TripInstance instance : instances) {
                 Trip trip = instance.getTrip();

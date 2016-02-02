@@ -135,21 +135,21 @@ public class TripResource extends CitableResource<Trip, Long> {
             }
 
             // create city code list
-            List<String> cityCodes = new ArrayList<String>();
+            List<String> cityCodes = new ArrayList<>();
             cityCodes.add("ALL");
             if (StringUtils.hasText(cityCode)) {
                 cityCodes.add(cityCode);
             }
 
             // create category code list
-            List<String> categoryCodes = new ArrayList<String>();
+            List<String> categoryCodes = new ArrayList<>();
             if (StringUtils.hasText(categoryCode)) {
                 categoryCodes.add(categoryCode);
             }
 
             // TODO: instead of if-else statements, use reflection to construct method name and invoke on the bean
 
-            List<Trip> trips = new ArrayList<Trip>();
+            List<Trip> trips = new ArrayList<>();
 
             // 1. find active trips with instances that are active and have date between start and end date
             if (CollectionUtils.isEmpty(categoryCodes)) {
@@ -191,7 +191,7 @@ public class TripResource extends CitableResource<Trip, Long> {
             }
 
             // hack- remove duplicates by using a Set
-            Set<Trip> tripSet = new HashSet<Trip>(trips);
+            Set<Trip> tripSet = new HashSet<>(trips);
             LOGGER.info("number of trips in the listing: {}", tripSet == null ? 0 : tripSet.size());
 
             // return response

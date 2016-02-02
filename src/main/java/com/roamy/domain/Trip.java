@@ -30,7 +30,7 @@ public abstract class Trip extends CitableEntity {
     @Column(name = "TAC")
     protected Double tac;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "TRIP_ID")
     private List<TripOption> options;
 
@@ -56,7 +56,7 @@ public abstract class Trip extends CitableEntity {
 
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    protected List<TripInstance> instances = new ArrayList<TripInstance>();
+    protected List<TripInstance> instances = new ArrayList<>();
 
     public String getAdditionalDescription() {
         return additionalDescription;
