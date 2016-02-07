@@ -8,6 +8,7 @@ import com.roamy.dto.ReservationPaymentDto;
 import com.roamy.dto.RestResponse;
 import com.roamy.integration.paymentGateway.dto.PaymentDto;
 import com.roamy.integration.paymentGateway.service.api.PaymentGatewayService;
+import com.roamy.service.notification.api.EmailNotificationService;
 import com.roamy.util.RestUtils;
 import com.roamy.util.RoamyValidationException;
 import org.eclipse.jetty.http.HttpStatus;
@@ -55,6 +56,9 @@ public class ReservationResource {
 
     @Autowired
     private ConfigProperties configProperties;
+
+    @Autowired
+    private EmailNotificationService emailNotificationService;
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public RestResponse createReservation(@RequestBody ReservationDto reservationDto) {
@@ -119,7 +123,7 @@ public class ReservationResource {
 
             List<TripInstance> instances = new ArrayList<>();
             instances.add(tripInstance);
-            reservation.setTripInstance(instances);
+            reservation.setTripInstances(instances);
 
             // find total amount
             Double totalAmount = 0d;
@@ -177,6 +181,9 @@ public class ReservationResource {
             LOGGER.info("saving {}", user);
             userRepository.save(user);
             LOGGER.info("save complete");
+
+            // send email
+            emailNotificationService.sendTripReservationEmail(savedReservation);
 
             response = new RestResponse(savedReservation, HttpStatus.OK_200);
 

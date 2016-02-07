@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
-    List<Reservation> findTop50ByUserIdAndTripInstanceDateLessThanOrderByTripInstanceDateDesc(Long userId, Date date);
+    List<Reservation> findTop50ByUserIdAndStartDateLessThanOrderByStartDateDesc(Long userId, Date date);
 
-    List<Reservation> findByUserIdAndStatusAndTripInstanceDateGreaterThanEqualOrderByTripInstanceDateAsc(Long userId, Status status, Date date);
+    List<Reservation> findByUserIdAndStatusAndStartDateGreaterThanEqualOrderByStartDateAsc(Long userId, Status status, Date date);
 }

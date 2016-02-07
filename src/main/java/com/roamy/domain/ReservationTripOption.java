@@ -10,9 +10,21 @@ import javax.validation.constraints.NotNull;
 @Table(name = "RESERVATION_TRIP_OPTION", schema = "ROAMY")
 public class ReservationTripOption extends AbstractEntity {
 
-    @NotNull
     @Column(name = "COUNT")
     protected int count;
+
+    @NotNull
+    @Column(name = "AGE_BASED_PRICING")
+    protected boolean ageBasedPricing;
+
+    @Column(name = "ADULT_COUNT")
+    protected int adultCount;
+
+    @Column(name = "SENIOR_COUNT")
+    protected int seniorCount;
+
+    @Column(name = "CHILD_COUNT")
+    protected int childCount;
 
     @NotNull
     @ManyToOne
@@ -27,6 +39,38 @@ public class ReservationTripOption extends AbstractEntity {
         this.count = count;
     }
 
+    public boolean isAgeBasedPricing() {
+        return ageBasedPricing;
+    }
+
+    public void setAgeBasedPricing(boolean ageBasedPricing) {
+        this.ageBasedPricing = ageBasedPricing;
+    }
+
+    public int getAdultCount() {
+        return adultCount;
+    }
+
+    public void setAdultCount(int adultCount) {
+        this.adultCount = adultCount;
+    }
+
+    public int getSeniorCount() {
+        return seniorCount;
+    }
+
+    public void setSeniorCount(int seniorCount) {
+        this.seniorCount = seniorCount;
+    }
+
+    public int getChildCount() {
+        return childCount;
+    }
+
+    public void setChildCount(int childCount) {
+        this.childCount = childCount;
+    }
+
     public TripInstanceOption getTripInstanceOption() {
         return tripInstanceOption;
     }
@@ -39,6 +83,10 @@ public class ReservationTripOption extends AbstractEntity {
     public String toString() {
         return "ReservationTripOption{" +
                 "count=" + count +
+                ", ageBasedPricing=" + ageBasedPricing +
+                ", adultCount=" + adultCount +
+                ", seniorCount=" + seniorCount +
+                ", childCount=" + childCount +
                 ", tripInstanceOption=" + tripInstanceOption +
                 '}';
     }

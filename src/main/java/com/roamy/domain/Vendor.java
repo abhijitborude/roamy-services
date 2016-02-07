@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name = "VENDOR", schema = "ROAMY")
 public class Vendor extends CitableEntity {
 
-    @Column(name = "NOTES", length = DbConstants.ULTRA_LONG_TEXT)
+    @Column(name = "NOTES", length = DbConstants.VERY_LONG_TEXT)
     private String notes;
 
     @Column(name = "EMAIL", length = DbConstants.MEDIUM_TEXT)

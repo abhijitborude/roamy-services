@@ -11,5 +11,7 @@ public class DbConstants {
 
     public static final int LONG_TEXT = 1024;
 
-    public static final int ULTRA_LONG_TEXT = 2048;
+    public static final int VERY_LONG_TEXT = 2048;
+
+    public static final int ULTRA_LONG_TEXT = 4096;
 }

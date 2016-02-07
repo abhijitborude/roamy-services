@@ -95,7 +95,7 @@ public class RazorpayGatewayServiceImpl implements PaymentGatewayService {
             StringBuilder sb = new StringBuilder("{\"amount\":").append(amountToCapture).append("}");
 
             HttpEntity<String> entity = new HttpEntity<>(sb.toString(), headers);
-            PaymentDto responseEntity = restTemplate.postForObject(new URI(url), entity, PaymentDto.class);
+            paymentDto = restTemplate.postForObject(new URI(url), entity, PaymentDto.class);
 
         } catch (URISyntaxException e) {
             LOGGER.error("Error while calling Razorpay: ", e);

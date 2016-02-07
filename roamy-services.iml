@@ -147,5 +147,8 @@
     <orderEntry type="library" exported="" name="Gradle: org.apache.httpcomponents:httpmime:4.4" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.apache.httpcomponents:httpcore:4.4" level="project" />
     <orderEntry type="library" exported="" name="Gradle: commons-codec:commons-codec:1.9" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.apache.velocity:velocity:1.7" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: commons-collections:commons-collections:3.2.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: commons-lang:commons-lang:2.4" level="project" />
   </component>
 </module>

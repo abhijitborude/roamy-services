@@ -25,7 +25,7 @@ public abstract class Reservation extends AbstractEntity {
     @JoinTable(name = "RESERVATION_TRIP_INSTANCE", schema = "ROAMY",
             joinColumns = {@JoinColumn(name = "RESERVATION_ID")},
             inverseJoinColumns = {@JoinColumn(name = "TRIP_INSTANCE_ID")})
-    protected List<TripInstance> tripInstance;
+    protected List<TripInstance> tripInstances;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "USER_ID")
@@ -60,12 +60,12 @@ public abstract class Reservation extends AbstractEntity {
     @JoinColumn(name = "RESERVATION_ID")
     protected List<ReservationTripOption> tripOptions;
 
-    public List<TripInstance> getTripInstance() {
-        return tripInstance;
+    public List<TripInstance> getTripInstances() {
+        return tripInstances;
     }
 
-    public void setTripInstance(List<TripInstance> tripInstance) {
-        this.tripInstance = tripInstance;
+    public void setTripInstances(List<TripInstance> tripInstances) {
+        this.tripInstances = tripInstances;
     }
 
     public User getUser() {
@@ -143,7 +143,7 @@ public abstract class Reservation extends AbstractEntity {
     @Override
     public String toString() {
         return "Reservation{" +
-                "tripInstance=" + tripInstance +
+                "tripInstances=" + tripInstances +
                 ", user=" + user +
                 ", numberOfRoamies=" + numberOfRoamies +
                 ", amount=" + amount +

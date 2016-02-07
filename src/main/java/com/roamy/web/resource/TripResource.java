@@ -192,7 +192,7 @@ public class TripResource extends CitableResource<Trip, Long> {
 
             // hack- remove duplicates by using a Set
             Set<Trip> tripSet = new HashSet<>(trips);
-            LOGGER.info("number of trips in the listing: {}", tripSet == null ? 0 : tripSet.size());
+            LOGGER.info("number of trips in the listing: {}", tripSet.size());
 
             // return response
             response = new RestResponse(tripSet, HttpStatus.OK_200, null, null);

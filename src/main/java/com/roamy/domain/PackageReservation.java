@@ -18,7 +18,7 @@ public class PackageReservation extends Reservation {
     @Override
     public String toString() {
         return "PackageReservation{" +
-                "tripInstance=" + tripInstance +
+                "tripInstances=" + tripInstances +
                 ", user=" + user +
                 ", numberOfRoamies=" + numberOfRoamies +
                 ", amount=" + amount +

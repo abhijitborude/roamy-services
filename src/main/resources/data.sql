@@ -82,9 +82,9 @@ insert into ROAMY.trip_image
 (1,         null,                   'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg');
 
 insert into ROAMY.trip_option
-(id,    trip_id,    name,                               description,    price,  capacity,   status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
-(1,     1,          'Adult',                            '',             7500,   25,         'Active',   'test',             current_timestamp,  'test',             current_timestamp),
-(2,     1,          'Children (10 years or below)',     '',             5000,   25,         'Active',   'test',             current_timestamp,  'test',             current_timestamp);
+(id,    trip_id,    name,                               description,    price,  capacity,   age_based_pricing,      adult_price,    senior_price,   child_price,    status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
+(1,     1,          'Adult',                            '',             7500,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(2,     1,          'Children (10 years or below)',     '',             5000,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp);
 
 insert into ROAMY.favorite_trip
 (id,    user_id,   trip_id,     status,     created_by, created_on,         last_modified_by,   last_modified_on) values
@@ -178,11 +178,11 @@ insert into ROAMY.trip_instance_city
 (2,         2);
 
 insert into ROAMY.trip_instance_option
-(id,    trip_instance_id,    name,                              description,    price,  capacity,   status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
-(1,     1,                  'Adult',                            '',             7500,   25,         'Active',   'test',             current_timestamp,  'test',             current_timestamp),
-(2,     1,                  'Children (10 years or below)',     '',             5000,   25,         'Active',   'test',             current_timestamp,  'test',             current_timestamp),
-(3,     2,                  'Adult',                            '',             7500,   25,         'Active',   'test',             current_timestamp,  'test',             current_timestamp),
-(4,     2,                  'Children (10 years or below)',     '',             5000,   25,         'Active',   'test',             current_timestamp,  'test',             current_timestamp);
+(id,    trip_instance_id,    name,                              description,    price,  capacity,   age_based_pricing,      adult_price,    senior_price,   child_price,    status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
+(1,     1,                  'Adult',                            '',             7500,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(2,     1,                  'Children (10 years or below)',     '',             5000,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(3,     2,                  'Adult',                            '',             7500,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(4,     2,                  'Children (10 years or below)',     '',             5000,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp);
 
 
 insert into ROAMY.trip_review
@@ -205,3 +205,33 @@ insert into ROAMY.reservation
 insert into ROAMY.reservation_payment
 (id,    reservation_id,   type,             amount,     transaction_id,         status,         created_by,     created_on,         last_modified_by,   last_modified_on) values
 (1,     1,                'Razorpay',       7500,       'skjfhksjfhkjfhs',      'Success',      'test',         current_timestamp,  'test',             current_timestamp);
+
+
+insert into ROAMY.email_template
+(
+    id,
+    code,
+    description,
+    name,
+    template,
+    email_type,
+    status,
+    created_by,
+    created_on,
+    last_modified_by,
+    last_modified_on
+) values
+(
+    1,  --id
+    'RESERVATION_CONFIRMATION', --code
+    '', --desc
+    'Reservation Confirmation', --name
+    '<p>Reservation #$trip.reservationId</p><p>Congratulations! Your reservation for <b>$trip.name</b> on <b>trip.date</b> is confirmed.</p><p>Thank you for being a ROAMY!</p>', --template
+    'TRIP', --email_type
+    'Active',
+    'test', --created_by
+    current_timestamp, --created_on,
+    'test', --last_modified_by
+    current_timestamp --last_modified_on
+)
+

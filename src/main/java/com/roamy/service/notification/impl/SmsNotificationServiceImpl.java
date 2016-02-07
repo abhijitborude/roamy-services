@@ -1,11 +1,11 @@
-package com.roamy.service.impl;
+package com.roamy.service.notification.impl;
 
 import com.roamy.dao.api.SmsNotificationRepository;
 import com.roamy.domain.SmsNotification;
 import com.roamy.domain.Status;
 import com.roamy.integration.sms.dto.SmsResult;
 import com.roamy.integration.sms.service.api.SmsService;
-import com.roamy.service.api.SmsNotificationService;
+import com.roamy.service.notification.api.SmsNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

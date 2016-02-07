@@ -32,7 +32,7 @@ public class TripReview extends AbstractEntity {
     private String title;
 
     @NotNull
-    @Column(name = "DESCRIPTION", length = DbConstants.ULTRA_LONG_TEXT)
+    @Column(name = "DESCRIPTION", length = DbConstants.VERY_LONG_TEXT)
     private String description;
 
     @NotNull

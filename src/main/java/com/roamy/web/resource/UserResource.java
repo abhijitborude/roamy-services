@@ -8,7 +8,7 @@ import com.roamy.dto.UserActionDto;
 import com.roamy.dto.UserUpdateDto;
 import com.roamy.integration.imagelib.dto.ImageLibraryIdentifier;
 import com.roamy.integration.imagelib.service.api.ImageLibraryService;
-import com.roamy.service.api.SmsNotificationService;
+import com.roamy.service.notification.api.SmsNotificationService;
 import com.roamy.util.RestUtils;
 import com.roamy.util.RoamyUtils;
 import com.roamy.util.RoamyValidationException;
@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Abhijit on 11/15/2015.
@@ -435,9 +436,7 @@ public class UserResource extends IdentityResource<User, Long> {
 
             List<Trip> trips = new ArrayList<>();
             if (!CollectionUtils.isEmpty(favoriteTrips)) {
-                for (FavoriteTrip favoriteTrip : favoriteTrips) {
-                    trips.add(favoriteTrip.getTrip());
-                }
+                trips.addAll(favoriteTrips.stream().map(FavoriteTrip::getTrip).collect(Collectors.toList()));
             }
 
             // return response
@@ -468,9 +467,7 @@ public class UserResource extends IdentityResource<User, Long> {
 
             List<String> tripCodes = new ArrayList<>();
             if (!CollectionUtils.isEmpty(favoriteTrips)) {
-                for (FavoriteTrip favoriteTrip : favoriteTrips) {
-                    tripCodes.add(favoriteTrip.getTrip().getCode());
-                }
+                tripCodes.addAll(favoriteTrips.stream().map(favoriteTrip -> favoriteTrip.getTrip().getCode()).collect(Collectors.toList()));
             }
 
             // return response
@@ -574,9 +571,9 @@ public class UserResource extends IdentityResource<User, Long> {
 
             List<Reservation> reservations = null;
             if ("true".equalsIgnoreCase(active)) {
-                reservations = reservationRepository.findByUserIdAndStatusAndTripInstanceDateGreaterThanEqualOrderByTripInstanceDateAsc(id, Status.Active, new Date());
+                reservations = reservationRepository.findByUserIdAndStatusAndStartDateGreaterThanEqualOrderByStartDateAsc(id, Status.Active, new Date());
             } else {
-                reservations = reservationRepository.findTop50ByUserIdAndTripInstanceDateLessThanOrderByTripInstanceDateDesc(id, new Date());
+                reservations = reservationRepository.findTop50ByUserIdAndStartDateLessThanOrderByStartDateDesc(id, new Date());
             }
 
             // return response

@@ -1,4 +1,4 @@
-package com.roamy.service.api;
+package com.roamy.service.notification.api;
 
 /**
  * Created by Abhijit on 12/8/2015.

@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -63,5 +64,10 @@ public class RoamyUtils {
         }
 
         return smsErrorArray;
+    }
+
+    public static String getEmailFormattedDate(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE, d MMM yyyy");
+        return formatter.format(date);
     }
 }

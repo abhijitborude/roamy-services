@@ -21,13 +21,24 @@ public class TripInstanceOption extends AbstractEntity {
     @Column(name = "DESCRIPTION", length = DbConstants.MEDIUM_TEXT)
     protected String description;
 
-    @NotNull
     @Column(name = "PRICE")
     protected Double price;
 
-    @NotNull
     @Column(name = "CAPACITY")
     protected Double capacity;
+
+    @NotNull
+    @Column(name = "AGE_BASED_PRICING")
+    protected boolean ageBasedPricing;
+
+    @Column(name = "ADULT_PRICE")
+    protected Double adultPrice;
+
+    @Column(name = "SENIOR_PRICE")
+    protected Double seniorPrice;
+
+    @Column(name = "CHILD_PRICE")
+    protected Double childPrice;
 
     public String getName() {
         return name;
@@ -61,13 +72,49 @@ public class TripInstanceOption extends AbstractEntity {
         this.capacity = capacity;
     }
 
+    public boolean isAgeBasedPricing() {
+        return ageBasedPricing;
+    }
+
+    public void setAgeBasedPricing(boolean ageBasedPricing) {
+        this.ageBasedPricing = ageBasedPricing;
+    }
+
+    public Double getAdultPrice() {
+        return adultPrice;
+    }
+
+    public void setAdultPrice(Double adultPrice) {
+        this.adultPrice = adultPrice;
+    }
+
+    public Double getSeniorPrice() {
+        return seniorPrice;
+    }
+
+    public void setSeniorPrice(Double seniorPrice) {
+        this.seniorPrice = seniorPrice;
+    }
+
+    public Double getChildPrice() {
+        return childPrice;
+    }
+
+    public void setChildPrice(Double childPrice) {
+        this.childPrice = childPrice;
+    }
+
     @Override
     public String toString() {
         return "TripInstanceOption{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
                 ", price=" + price +
                 ", capacity=" + capacity +
+                ", ageBasedPricing=" + ageBasedPricing +
+                ", adultPrice=" + adultPrice +
+                ", seniorPrice=" + seniorPrice +
+                ", childPrice=" + childPrice +
                 '}';
     }
 }
