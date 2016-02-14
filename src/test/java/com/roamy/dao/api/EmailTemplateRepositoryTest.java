@@ -38,6 +38,7 @@ public class EmailTemplateRepositoryTest {
         emailTemplate.setCode(TEST_TEMPLATE_CODE);
         emailTemplate.setDescription("Test Description");
         emailTemplate.setEmailType(TEST_TEMPLATE_TYPE);
+        emailTemplate.setSubjectTemplate("test subject");
         emailTemplate.setTemplate("<h1>test</h1>");
         emailTemplate.setCreatedBy("test");
         emailTemplate.setLastModifiedBy("test");
