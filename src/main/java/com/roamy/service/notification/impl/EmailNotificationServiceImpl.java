@@ -3,10 +3,9 @@ package com.roamy.service.notification.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.roamy.dao.api.EmailNotificationRepository;
 import com.roamy.dao.api.EmailTemplateRepository;
-import com.roamy.domain.EmailNotification;
-import com.roamy.domain.EmailTemplate;
-import com.roamy.domain.Reservation;
-import com.roamy.domain.TripInstance;
+import com.roamy.domain.*;
+import com.roamy.integration.sendgrid.dto.SendGridEmailDto;
+import com.roamy.integration.sendgrid.service.api.SendGridService;
 import com.roamy.service.notification.api.EmailNotificationService;
 import com.roamy.service.notification.dto.TripNotificationDto;
 import com.roamy.util.RoamyUtils;
@@ -37,6 +36,9 @@ public class EmailNotificationServiceImpl implements EmailNotificationService {
 
     @Autowired
     private EmailNotificationRepository emailNotificationRepository;
+
+    @Autowired
+    private SendGridService sendGridService;
 
     @Autowired
     private TemplateTranslator templateTranslator;
@@ -74,10 +76,37 @@ public class EmailNotificationServiceImpl implements EmailNotificationService {
         emailNotification.setReservationId(reservation.getId());
         emailNotification.setUserId(reservation.getUser().getId());
         emailNotification.setParams(paramsJson);
+        emailNotification.setStatus(Status.Pending);
         emailNotification = emailNotificationRepository.save(emailNotification);
 
         // later move email send logic to an async process
-        String email = templateTranslator.translate(emailTemplate.getTemplate(), params);
-        LOGGER.info("sending {}", email);
+        String subject = emailTemplate.getSubjectTemplate();
+        String content = templateTranslator.translate(emailTemplate.getTemplate(), params);
+
+        try {
+            sendEmail(emailNotification, subject, content);
+            emailNotification.setStatus(Status.Success);
+
+        } catch (RuntimeException e) {
+            LOGGER.error("Error while sending email: " + emailNotification);
+            emailNotification.setStatus(Status.Failed);
+        }
+
+        emailNotification = emailNotificationRepository.save(emailNotification);
+    }
+
+    private void sendEmail(EmailNotification email, String subject, String content) {
+        SendGridEmailDto dto = new SendGridEmailDto();
+        dto.addToAddress(email.getEmail());
+        dto.setCategory("Booking");
+
+        dto.setFromName("Roamy");
+        dto.setFromAddress("roamy@roamy.com");
+        dto.setReplyToAddress("no-reply@roamy.com");
+
+        dto.setSubject(subject);
+        dto.setHtml(content);
+
+        sendGridService.sendEmail(dto);
     }
 }

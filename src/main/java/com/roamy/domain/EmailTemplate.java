@@ -15,12 +15,24 @@ import javax.validation.constraints.NotNull;
 public class EmailTemplate extends CitableEntity {
 
     @NotNull
+    @Column(name = "SUBJECT_TEMPLATE", length = DbConstants.LONG_TEXT)
+    private String subjectTemplate;
+
+    @NotNull
     @Column(name = "TEMPLATE", length = DbConstants.ULTRA_LONG_TEXT)
     private String template;
 
     @NotNull
     @Column(name = "EMAIL_TYPE", length = DbConstants.SHORT_TEXT)
     private String emailType;
+
+    public String getSubjectTemplate() {
+        return subjectTemplate;
+    }
+
+    public void setSubjectTemplate(String subjectTemplate) {
+        this.subjectTemplate = subjectTemplate;
+    }
 
     public String getTemplate() {
         return template;

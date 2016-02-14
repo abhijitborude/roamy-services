@@ -64,27 +64,59 @@ insert into ROAMY.trip
     current_timestamp, --created_on,
     'test', --last_modified_by
     current_timestamp --last_modified_on
+),
+(
+    2, --id
+    'TICKET',
+    'DELLA_ADVENTURE', --code
+    'Della Adventure', --name
+    'Della offers a range of Adventure activities & Sports, a perfect place for weekend getaway & a holiday destination to visit near Mumbai and Pune for a one day', --description
+    '', --additional_description
+    4, --thrill_meter
+    null, --number_of_days
+    2004, --default_price_per_adult
+    15.00, --tac
+    null, -- itinerary
+    null, --inclusions
+    null, --exclusions
+    null, --meeting_points
+    null,   --things_to_carry
+    'Active', --status
+    'test', --created_by
+    current_timestamp, --created_on,
+    'test', --last_modified_by
+    current_timestamp --last_modified_on
 );
 
 insert into ROAMY.trip_category
 (trip_id,   category_id ) values
 (1,         1),
-(1,         3);
+(1,         3),
+(2,         1),
+(2,         3);
 
 insert into ROAMY.trip_city
 (trip_id,   city_id ) values
 (1,         1),
-(1,         2);
+(1,         2),
+(2,         1),
+(2,         2);
 
 insert into ROAMY.trip_image
 (trip_id,   caption,                url ) values
 (1,         'Nice Image',           'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg'),
-(1,         null,                   'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg');
+(1,         null,                   'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg'),
+(2,         'Nice Image',           'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg');
 
 insert into ROAMY.trip_option
 (id,    trip_id,    name,                               description,    price,  capacity,   age_based_pricing,      adult_price,    senior_price,   child_price,    status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
 (1,     1,          'Adult',                            '',             7500,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
 (2,     1,          'Children (10 years or below)',     '',             5000,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp);
+
+insert into ROAMY.trip_option
+(id,    trip_id,    name,                               description,    price,  capacity,   age_based_pricing,      adult_price,    senior_price,   child_price,    status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
+(3,     2,          'Day Pass',                         '',             2004,   null,       true,                   2004,           1431,           1431,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(4,     2,          'Jumbo Pass',                       '',             5000,   null,       true,                   5724,           3500,           3500,           'Active',   'test',             current_timestamp,  'test',             current_timestamp);
 
 insert into ROAMY.favorite_trip
 (id,    user_id,   trip_id,     status,     created_by, created_on,         last_modified_by,   last_modified_on) values
@@ -168,6 +200,58 @@ insert into ROAMY.trip_instance
     current_timestamp, --created_on,
     'test', --last_modified_by
     current_timestamp --last_modified_on
+),
+(
+    3,
+    'TICKET', --type,
+    'Della Adventure', --name
+    2,  --trip_id
+    'Della offers a range of Adventure activities & Sports, a perfect place for weekend getaway & a holiday destination to visit near Mumbai and Pune for a one day', --description
+    '', --additional_description
+    4, --thrill_meter
+    null, --number_of_days
+    2004, --price_per_adult
+    15.00, --tac
+    'Day 1:<br/>07:00 Hrs: Breakfast en-route @ Hotel Alankar, HatKhamba<br/> 11:30 Hrs: Check in Hotel @ Malvan<br/>12:00 Hrs: Lunch in Hotel (Veg Thali / Chicken Thali / Fish Thali - Soundale Fish + Prawns Curry -Unlimited)<br/>14:00 Hrs: TSUNAMI Island<br/>17:00 Hrs: Tarkarli / Devbaug Beach - FUN Time<br/>19:00 Hrs: Snacks - Kanda Bhajji & Tea<br/>19:30 Hrs: Free time for Malvan Market / Beach / Rock Garden etc. (Optional)<br/>21:00 Hrs: Dinner (Veg Thali / Chicken Thali / Fish Thali - Paplet / Surmai Fish as available -Limited)', -- itinerary
+        'Dadar to Dadar transportation fare for private vehicle (Non-A/c)<br/>Surface Supply ScubaDiving, Snorkeling Charges, Dolphin Safari, Boating charges, Permissions and entry fees, Guide Charges<br/>Food', --inclusions
+    '', --exclusions
+    null, --meeting_points
+    null,   --things_to_carry
+    null, --traveller_capacity
+    dateadd('DAY', 1, current_timestamp),  --date
+    current_timestamp,  --display_start_date
+    dateadd('DAY', 2, current_timestamp),  --display_end_date
+    'Active', --status
+    'test', --created_by
+    current_timestamp, --created_on,
+    'test', --last_modified_by
+    current_timestamp --last_modified_on
+),
+(
+    4,
+    'TICKET', --type,
+    'Della Adventure', --name
+    2,  --trip_id
+    'Della offers a range of Adventure activities & Sports, a perfect place for weekend getaway & a holiday destination to visit near Mumbai and Pune for a one day', --description
+    '', --additional_description
+    4, --thrill_meter
+    null, --number_of_days
+    2004, --price_per_adult
+    15.00, --tac
+    'Day 1:<br/>07:00 Hrs: Breakfast en-route @ Hotel Alankar, HatKhamba<br/> 11:30 Hrs: Check in Hotel @ Malvan<br/>12:00 Hrs: Lunch in Hotel (Veg Thali / Chicken Thali / Fish Thali - Soundale Fish + Prawns Curry -Unlimited)<br/>14:00 Hrs: TSUNAMI Island<br/>17:00 Hrs: Tarkarli / Devbaug Beach - FUN Time<br/>19:00 Hrs: Snacks - Kanda Bhajji & Tea<br/>19:30 Hrs: Free time for Malvan Market / Beach / Rock Garden etc. (Optional)<br/>21:00 Hrs: Dinner (Veg Thali / Chicken Thali / Fish Thali - Paplet / Surmai Fish as available -Limited)', -- itinerary
+        'Dadar to Dadar transportation fare for private vehicle (Non-A/c)<br/>Surface Supply ScubaDiving, Snorkeling Charges, Dolphin Safari, Boating charges, Permissions and entry fees, Guide Charges<br/>Food', --inclusions
+    '', --exclusions
+    null, --meeting_points
+    null,   --things_to_carry
+    null, --traveller_capacity
+    dateadd('DAY', 2, current_timestamp),  --date
+    current_timestamp,  --display_start_date
+    dateadd('DAY', 3, current_timestamp),  --display_end_date
+    'Active', --status
+    'test', --created_by
+    current_timestamp, --created_on,
+    'test', --last_modified_by
+    current_timestamp --last_modified_on
 );
 
 insert into ROAMY.trip_instance_city
@@ -175,7 +259,11 @@ insert into ROAMY.trip_instance_city
 (1,         1),
 (1,         2),
 (2,         1),
-(2,         2);
+(2,         2),
+(3,         1),
+(3,         2),
+(4,         1),
+(4,         2);
 
 insert into ROAMY.trip_instance_option
 (id,    trip_instance_id,    name,                              description,    price,  capacity,   age_based_pricing,      adult_price,    senior_price,   child_price,    status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
@@ -183,6 +271,13 @@ insert into ROAMY.trip_instance_option
 (2,     1,                  'Children (10 years or below)',     '',             5000,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
 (3,     2,                  'Adult',                            '',             7500,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
 (4,     2,                  'Children (10 years or below)',     '',             5000,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp);
+
+insert into ROAMY.trip_instance_option
+(id,    trip_instance_id,    name,                              description,    price,  capacity,   age_based_pricing,      adult_price,    senior_price,   child_price,    status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
+(5,     3,                  'Day Pass',                         '',             2004,   null,       true,                   2004,           1431,           1431,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(6,     3,                  'Jumbo Pass',                       '',             5000,   null,       true,                   5724,           3500,           3500,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(7,     4,                  'Day Pass',                         '',             2004,   null,       true,                   2004,           1431,           1431,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(8,     4,                  'Jumbo Pass',                       '',             5000,   null,       true,                   5724,           3500,           3500,           'Active',   'test',             current_timestamp,  'test',             current_timestamp);
 
 
 insert into ROAMY.trip_review
@@ -213,6 +308,7 @@ insert into ROAMY.email_template
     code,
     description,
     name,
+    subject_template,
     template,
     email_type,
     status,
@@ -226,12 +322,13 @@ insert into ROAMY.email_template
     'RESERVATION_CONFIRMATION', --code
     '', --desc
     'Reservation Confirmation', --name
-    '<p>Reservation #$trip.reservationId</p><p>Congratulations! Your reservation for <b>$trip.name</b> on <b>trip.date</b> is confirmed.</p><p>Thank you for being a ROAMY!</p>', --template
+    'Your Roamy Booking is confirmed', --subject_template
+    '<p>Reservation #$trip.reservationId</p><p>Congratulations! Your booking for <b>$trip.name</b> on <b>$trip.date</b> is confirmed.</p><p>Thank you for being a ROAMY!</p>', --template
     'TRIP', --email_type
     'Active',
     'test', --created_by
     current_timestamp, --created_on,
     'test', --last_modified_by
     current_timestamp --last_modified_on
-)
+);
 

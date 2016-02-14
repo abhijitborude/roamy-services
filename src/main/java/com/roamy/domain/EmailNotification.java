@@ -19,7 +19,9 @@ public class EmailNotification extends AbstractEntity {
     @Column(name = "EMAIL", length = DbConstants.MEDIUM_TEXT)
     private String email;
 
-    @NotNull
+    @Column(name = "SUBJECT_PARAMS", length = DbConstants.LONG_TEXT)
+    private String subjectParams;
+
     @Column(name = "PARAMS", length = DbConstants.ULTRA_LONG_TEXT)
     private String params;
 
@@ -44,6 +46,14 @@ public class EmailNotification extends AbstractEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getSubjectParams() {
+        return subjectParams;
+    }
+
+    public void setSubjectParams(String subjectParams) {
+        this.subjectParams = subjectParams;
     }
 
     public String getParams() {

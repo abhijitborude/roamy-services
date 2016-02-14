@@ -58,9 +58,8 @@ public abstract class TripInstance extends AbstractEntity {
     @Fetch(FetchMode.SUBSELECT)
     protected List<City> targetCities;
 
-    @NotNull
     @Column(name = "TRAVELLER_CAPACITY")
-    protected int travellerCapacity;
+    protected Integer travellerCapacity;
 
     @NotNull
     @Column(name = "DATE")
@@ -147,11 +146,11 @@ public abstract class TripInstance extends AbstractEntity {
         this.targetCities = targetCities;
     }
 
-    public int getTravellerCapacity() {
+    public Integer getTravellerCapacity() {
         return travellerCapacity;
     }
 
-    public void setTravellerCapacity(int travellerCapacity) {
+    public void setTravellerCapacity(Integer travellerCapacity) {
         this.travellerCapacity = travellerCapacity;
     }
 
