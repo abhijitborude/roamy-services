@@ -39,7 +39,6 @@ public class TripResource extends CitableResource<Trip, Long> {
     private static final String SORT_BY_DIFFICULTY = "difficulty";
     private static final String SORT_BY_PRICE = "price";
 
-    private static final String SORT_TYPE_ASC = "asc";
     private static final String SORT_TYPE_DESC = "desc";
 
     @Autowired
@@ -82,7 +81,10 @@ public class TripResource extends CitableResource<Trip, Long> {
     }
 
     @RequestMapping(value = "/{code}/activeinstances", method = RequestMethod.GET)
-    public RestResponse findActiveInstanes(@PathVariable("code") String code) {
+    @ApiOperation(value = "Get active instances of a trip", notes = "Fetches list of active trip instances for a trip. " +
+                            "Actual result is contained in the data field of the response.")
+    public RestResponse findActiveTripInstanes(@ApiParam(value = "Trip Code", required = true)
+                                               @PathVariable("code") String code) {
 
         RestResponse response = null;
 
@@ -105,18 +107,18 @@ public class TripResource extends CitableResource<Trip, Long> {
                         "start and end date for a city and category. List could be sorted in ascending or descending " +
                         "order using the fields sortBy and sortType. " +
                         "Actual result is contained in the data field of the response.")
-    public RestResponse getTripsForCityAndCategoryWithActiveInstancesBetweenDates(
+    public RestResponse getTripListing(
                                 @ApiParam(value = "City Code", required = false)
                                     @RequestParam(value = "cityCode", required = false) String cityCode,
                                 @ApiParam(value = "Category Code", required = false)
                                     @RequestParam(value = "categoryCode", required = false) String categoryCode,
-                                @ApiParam(value = "Start Date (Defaulted to current date)", required = false)
+                                @ApiParam(value = "Start Date in the format 'yyyy-DD-MM' (Defaulted to current date)", required = false)
                                     @RequestParam(value = "startDate", required = false) String startDate,
-                                @ApiParam(value = "End Date (Defaulted to 30 days from current date)", required = false)
+                                @ApiParam(value = "End Date in the format 'yyyy-DD-MM' (Defaulted to 30 days from current date)", required = false)
                                     @RequestParam(value = "endDate", required = false) String endDate,
-                                @ApiParam(value = "Sort By", required = false)
+                                @ApiParam(value = "Sort By [price/difficulty]", required = false)
                                     @RequestParam(value = "sortBy", required = false) String sortBy,
-                                @ApiParam(value = "Sort Type", required = false)
+                                @ApiParam(value = "Sort Type [asc/desc]", required = false)
                                     @RequestParam(value = "sortType", required = false) String sortType) {
 
         LOGGER.info("Finding trip listing for category ({}) from {} to {} and sorted by {} ({})", categoryCode, startDate, endDate, sortBy, sortType);
@@ -130,21 +132,14 @@ public class TripResource extends CitableResource<Trip, Long> {
 
             // convert start date
             Date sDate = new Date();
-
             if (StringUtils.hasText(startDate)) {
-                DateTime dateTime = dtf.parseDateTime(startDate);
-                if (dateTime != null) {
-                    sDate = dateTime.toDate();
-                }
+                sDate = dtf.parseDateTime(startDate).toDate();
             }
 
-            // convert end date
+            // Convert end date. If not provided set to 30 days from current date.
             Date eDate = new Date();
             if (StringUtils.hasText(endDate)) {
-                DateTime dateTime = dtf.parseDateTime(endDate);
-                if (dateTime != null) {
-                    eDate = dateTime.toDate();
-                }
+                eDate = dtf.parseDateTime(endDate).toDate();
             } else {
                 eDate = new DateTime(eDate).plusDays(30).toDate();
             }
@@ -168,14 +163,14 @@ public class TripResource extends CitableResource<Trip, Long> {
 
             // 1. find active trips with instances that are active and have date between start and end date
             if (CollectionUtils.isEmpty(categoryCodes)) {
-                if (SORT_BY_DIFFICULTY.equalsIgnoreCase(sortBy)) {
+                if (SORT_BY_PRICE.equalsIgnoreCase(sortBy)) {
                     if (SORT_TYPE_DESC.equals(sortType)) {
                         trips = tripRepository.findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status.Active, cityCodes, Status.Active, sDate, eDate);
                     } else {
                         trips = tripRepository.findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status.Active, cityCodes, Status.Active, sDate, eDate);
                     }
 
-                } else if (SORT_BY_PRICE.equalsIgnoreCase(sortBy)) {
+                } else if (SORT_BY_DIFFICULTY.equalsIgnoreCase(sortBy)) {
                     if (SORT_TYPE_DESC.equals(sortType)) {
                         trips = tripRepository.findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterDesc(Status.Active, cityCodes, Status.Active, sDate, eDate);
                     } else {
@@ -186,14 +181,14 @@ public class TripResource extends CitableResource<Trip, Long> {
                     trips = tripRepository.findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetween(Status.Active, cityCodes, Status.Active, sDate, eDate);
                 }
             } else {
-                if (SORT_BY_DIFFICULTY.equalsIgnoreCase(sortBy)) {
+                if (SORT_BY_PRICE.equalsIgnoreCase(sortBy)) {
                     if (SORT_TYPE_DESC.equals(sortType)) {
                         trips = tripRepository.findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
                     } else {
                         trips = tripRepository.findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
                     }
 
-                } else if (SORT_BY_PRICE.equalsIgnoreCase(sortBy)) {
+                } else if (SORT_BY_DIFFICULTY.equalsIgnoreCase(sortBy)) {
                     if (SORT_TYPE_DESC.equals(sortType)) {
                         trips = tripRepository.findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterDesc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
                     } else {
@@ -221,7 +216,10 @@ public class TripResource extends CitableResource<Trip, Long> {
     }
 
     @RequestMapping(value = "/{code}/reviews", method = RequestMethod.GET)
-    public RestResponse findByTripCodeAndStatus(@PathVariable("code") String code) {
+    @ApiOperation(value = "Get trip reviews", notes = "Fetches list of trip reviews for a trip. " +
+                            "Actual result is contained in the data field of the response.")
+    public RestResponse findReviewsByTripCode(@ApiParam(value = "Trip Code", required = true)
+                                                    @PathVariable("code") String code) {
 
         RestResponse response = null;
 

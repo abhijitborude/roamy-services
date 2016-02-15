@@ -13,6 +13,8 @@ import com.roamy.util.RestUtils;
 import com.roamy.util.RoamyUtils;
 import com.roamy.util.RoamyValidationException;
 import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +71,13 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public RestResponse createOne(@RequestBody User entity) {
+    @ApiOperation(value = "Create user entity", notes = "Creates a user entity with the user information provided. " +
+            "If a user with the same phoneNumber already exists then simply updates the values of the existing entity. " +
+            " Otherwise a new entity is created. In both cases, user's verification code is reset and an SMS is sent " +
+            " to the user's phoneNumber for verification." +
+            "Actual result is contained in the data field of the response.")
+    public RestResponse createOne(@ApiParam(name = "userDetails", value = "User Details", required = true)
+                                      @RequestBody User entity) {
         LOGGER.info("Saving: {}", entity);
 
         RestResponse response = null;
@@ -112,6 +120,7 @@ public class UserResource extends IdentityResource<User, Long> {
                 savedEntity = userRepository.save(user);
                 LOGGER.info("Existing entity updated: {}", savedEntity);
 
+                // send verification SMS
                 afterEntityCreated(entity);
 
             } else {
@@ -120,6 +129,7 @@ public class UserResource extends IdentityResource<User, Long> {
                 savedEntity = userRepository.save(entity);
                 LOGGER.info("Entity Saved: {}", savedEntity);
 
+                // send verification SMS
                 afterEntityCreated(entity);
             }
 
@@ -134,7 +144,10 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/{id}/", method = RequestMethod.PUT)
-    public RestResponse updateUser(@PathVariable Long id, @RequestBody UserUpdateDto dto) {
+    @ApiOperation(value = "Update user entity", notes = "Updates user entity with a given user ID." +
+                        "Actual result is contained in the data field of the response.")
+    public RestResponse updateUser(@ApiParam(value = "User ID", required = true) @PathVariable Long id,
+                                   @ApiParam(value = "User Details", required = true) @RequestBody UserUpdateDto dto) {
         LOGGER.info("updating: {}", dto);
 
         RestResponse response = null;
@@ -176,7 +189,7 @@ public class UserResource extends IdentityResource<User, Long> {
             user.setLastModifiedOn(new Date());
 
             User savedEntity = userRepository.save(user);
-            LOGGER.info("entity updated: {}", savedEntity);
+            LOGGER.info("user updated: {}", savedEntity);
 
             response = new RestResponse(savedEntity, HttpStatus.OK_200);
 
@@ -221,11 +234,7 @@ public class UserResource extends IdentityResource<User, Long> {
         // set referral code
         entity.setReferralCode(RoamyUtils.generateReferralCode());
 
-        entity.setCreatedBy("test");
-        entity.setCreatedOn(new Date());
-        entity.setLastModifiedBy("test");
-        entity.setLastModifiedOn(new Date());
-
+        RoamyUtils.addAuditPropertiesForCreateEntity(entity, "test");
         entity.setStatus(Status.Inactive);
     }
 
@@ -241,7 +250,12 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/{id}/profileImage", method = RequestMethod.POST)
-    public RestResponse uploadImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+    @ApiOperation(value = "Update user profile image", notes = "Updates profile image of the user with a given user ID." +
+            " Returns URL of the image uploaded. Actual result is contained in the data field of the response.")
+    public RestResponse uploadImage(@ApiParam(value = "User ID", required = true)
+                                        @PathVariable Long id,
+                                    @ApiParam(value = "Multipart file data", required = true)
+                                        @RequestParam("file") MultipartFile file) {
 
         LOGGER.info("uploading profile image for user with id: {}", id);
 
@@ -295,7 +309,16 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/{id}/action", method = RequestMethod.POST)
-    public RestResponse actionUser(@PathVariable Long id, @RequestBody UserActionDto userActionDto) {
+    @ApiOperation(value = "Take action on user entity", notes = "Takes action on the user with a given user ID." +
+                " Which action to perform is provided as a POST payload in the form of userAction. Currently, two" +
+                " actions are supported- activate user by matching verificationCode provided or reset the user. In" +
+                " case of reset new verification code is generated and sent as an SMS to the user's phone number." +
+                " Actual result is contained in the data field of the response.")
+    public RestResponse actionUser(@ApiParam(value = "User ID", required = true)
+                                        @PathVariable Long id,
+                                   @ApiParam(name = "userAction", value = "action can be [activate/reset]. " +
+                                           "verificationCode is required when the action is activate.", required = true)
+                                        @RequestBody UserActionDto userActionDto) {
 
         LOGGER.info("taking action on userId({}): {}", id, userActionDto);
 
@@ -370,7 +393,9 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/{id}/walletBalance", method = RequestMethod.GET)
-    public RestResponse getWalletBalance(@PathVariable Long id) {
+    @ApiOperation(value = "Get user's wallet balance", notes = "Fetches current wallet balance of the user." +
+                        " Actual result is contained in the data field of the response.")
+    public RestResponse getWalletBalance(@ApiParam(value = "User ID", required = true) @PathVariable Long id) {
 
         LOGGER.info("Finding wallet balance for user id: {}", id);
 
@@ -394,8 +419,11 @@ public class UserResource extends IdentityResource<User, Long> {
 
         return response;
     }
+
     @RequestMapping(value = "/{id}/notifications", method = RequestMethod.GET)
-    public RestResponse getNotifications(@PathVariable Long id) {
+    @ApiOperation(value = "Get user notifications", notes = "Fetches notifications for the user." +
+            " Actual result is contained in the data field of the response.")
+    public RestResponse getNotifications(@ApiParam(value = "User ID", required = true) @PathVariable Long id) {
         RestResponse response = null;
 
         try {
@@ -422,7 +450,9 @@ public class UserResource extends IdentityResource<User, Long> {
 
 
     @RequestMapping(value = "/{id}/favoriteTrips", method = RequestMethod.GET)
-    public RestResponse getFavoriteTrips(@PathVariable Long id) {
+    @ApiOperation(value = "Get user's favorite trips", notes = "Fetches trips marked as favorite by the user." +
+            " Actual result is contained in the data field of the response.")
+    public RestResponse getFavoriteTrips(@ApiParam(value = "User ID", required = true) @PathVariable Long id) {
         RestResponse response = null;
 
         try {
@@ -453,7 +483,9 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/{id}/favoriteTripCodes", method = RequestMethod.GET)
-    public RestResponse getFavoriteTripCodes(@PathVariable Long id) {
+    @ApiOperation(value = "Get user's favorite trip code", notes = "Fetches codes of trips marked as favorite by the user." +
+            " Actual result is contained in the data field of the response.")
+    public RestResponse getFavoriteTripCodes(@ApiParam(value = "User ID", required = true) @PathVariable Long id) {
         RestResponse response = null;
 
         try {
@@ -484,7 +516,9 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/{id}/favoriteTrips", method = RequestMethod.POST)
-    public RestResponse manageFavoriteTrip(@PathVariable Long id, @RequestBody FavoriteTripAction action) {
+    @ApiOperation(value = "Get user's favorite trips", notes = "Fetches trips marked as favorite by the user." +
+                        " Actual result is contained in the data field of the response.")
+    public RestResponse manageFavoriteTrip(@ApiParam(value = "User ID", required = true) @PathVariable Long id, @RequestBody FavoriteTripAction action) {
 
         LOGGER.info("Performing {} for userId {}", action, id);
 
@@ -559,7 +593,7 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/{id}/reservations", method = RequestMethod.GET)
-    public RestResponse getReservations(@PathVariable Long id,
+    public RestResponse getReservations(@ApiParam(value = "User ID", required = true) @PathVariable Long id,
                                         @RequestParam(value = "active", required = false, defaultValue = "true") String active) {
         RestResponse response = null;
 
