@@ -10,6 +10,9 @@ import com.roamy.domain.TripInstance;
 import com.roamy.domain.TripReview;
 import com.roamy.dto.RestResponse;
 import com.roamy.util.RestUtils;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.eclipse.jetty.http.HttpStatus;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -28,6 +31,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/trips")
+@Api("trip")
 public class TripResource extends CitableResource<Trip, Long> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TripResource.class);
@@ -97,12 +101,23 @@ public class TripResource extends CitableResource<Trip, Long> {
     }
 
     @RequestMapping(value = "/listing", method = RequestMethod.GET)
-    public RestResponse getTripsForCityAndCategoryWithActiveInstancesBetweenDates(@RequestParam(value = "cityCode", required = false) String cityCode,
-                                                                                  @RequestParam(value = "categoryCode", required = false) String categoryCode,
-                                                                                  @RequestParam(value = "startDate", required = false) String startDate,
-                                                                                  @RequestParam(value = "endDate", required = false) String endDate,
-                                                                                  @RequestParam(value = "sortBy", required = false) String sortBy,
-                                                                                  @RequestParam(value = "sortType", required = false) String sortType) {
+    @ApiOperation(value = "Get trip listing", notes = "Fetches list of trips that have active instances between given " +
+                        "start and end date for a city and category. List could be sorted in ascending or descending " +
+                        "order using the fields sortBy and sortType. " +
+                        "Actual result is contained in the data field of the response.")
+    public RestResponse getTripsForCityAndCategoryWithActiveInstancesBetweenDates(
+                                @ApiParam(value = "City Code", required = false)
+                                    @RequestParam(value = "cityCode", required = false) String cityCode,
+                                @ApiParam(value = "Category Code", required = false)
+                                    @RequestParam(value = "categoryCode", required = false) String categoryCode,
+                                @ApiParam(value = "Start Date (Defaulted to current date)", required = false)
+                                    @RequestParam(value = "startDate", required = false) String startDate,
+                                @ApiParam(value = "End Date (Defaulted to 30 days from current date)", required = false)
+                                    @RequestParam(value = "endDate", required = false) String endDate,
+                                @ApiParam(value = "Sort By", required = false)
+                                    @RequestParam(value = "sortBy", required = false) String sortBy,
+                                @ApiParam(value = "Sort Type", required = false)
+                                    @RequestParam(value = "sortType", required = false) String sortType) {
 
         LOGGER.info("Finding trip listing for category ({}) from {} to {} and sorted by {} ({})", categoryCode, startDate, endDate, sortBy, sortType);
 

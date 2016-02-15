@@ -6,6 +6,9 @@ import com.roamy.domain.Status;
 import com.roamy.dto.RestResponse;
 import com.roamy.util.RestUtils;
 import com.roamy.util.RoamyValidationException;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/smsNotifications")
+@Api("sms-notification")
 public class SmsNotificationResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SmsNotificationResource.class);
@@ -31,10 +35,18 @@ public class SmsNotificationResource {
     private SmsNotificationRepository smsNotificationRepository;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public RestResponse findSmsNotifications(@RequestParam(value = "phoneNumber", required = true) String phoneNumber,
-                                             @RequestParam(value = "status", required = false) String status,
-                                             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-                                             @RequestParam(value = "size", required = false, defaultValue = "100") int size) {
+    @ApiOperation(value = "Find SMS notifications", notes = "Finds SMS notifications by phone number and status. " +
+            "Pagination is enabled and can be controlled using two parameters- page and size." +
+            "By default first page is displayed with 100 elements (page=0, size=100). " +
+            " Actual result is contained in the data field of the response.")
+    public RestResponse findSmsNotifications(@ApiParam(value = "Phone number", required = true)
+                                                @RequestParam(value = "phoneNumber", required = true) String phoneNumber,
+                                             @ApiParam(value = "status [PENDING/SUCCESS/FAILED]", required = false)
+                                                @RequestParam(value = "status", required = false) String status,
+                                             @ApiParam(value = "Page number", defaultValue = "0", required = false)
+                                                @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+                                             @ApiParam(value = "Page size", defaultValue = "100", required = false)
+                                                 @RequestParam(value = "size", required = false, defaultValue = "100") int size) {
 
         LOGGER.info("finding sms notifications by phoneNumber({}) and status({})", phoneNumber, status);
 

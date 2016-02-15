@@ -2,6 +2,7 @@ package com.roamy.web.resource;
 
 import com.roamy.dao.api.TripInstanceRepository;
 import com.roamy.domain.TripInstance;
+import com.wordnik.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/tripinstances")
+@Api("tripinstance")
 public class TripInstanceResource extends IdentityResource<TripInstance, Long> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TripInstanceResource.class);

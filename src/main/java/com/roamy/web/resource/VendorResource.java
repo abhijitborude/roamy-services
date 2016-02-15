@@ -3,6 +3,7 @@ package com.roamy.web.resource;
 import com.roamy.dao.api.CitableRepository;
 import com.roamy.dao.api.VendorRepository;
 import com.roamy.domain.Vendor;
+import com.wordnik.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/vendors")
+@Api("vendor")
 public class VendorResource extends CitableResource<Vendor, Long> {
 
     @Autowired

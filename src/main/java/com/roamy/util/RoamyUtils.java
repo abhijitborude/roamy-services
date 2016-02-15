@@ -1,6 +1,7 @@
 package com.roamy.util;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.roamy.domain.AbstractEntity;
 import com.roamy.integration.sms.dto.Sms;
 import com.roamy.integration.sms.dto.SmsError;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -69,5 +70,13 @@ public class RoamyUtils {
     public static String getEmailFormattedDate(Date date) {
         SimpleDateFormat formatter = new SimpleDateFormat("EEE, d MMM yyyy");
         return formatter.format(date);
+    }
+
+    public static void addAuditPropertiesForCreateEntity(AbstractEntity entity, String user) {
+        Date date = new Date();
+        entity.setCreatedBy(user);
+        entity.setCreatedOn(date);
+        entity.setLastModifiedBy(user);
+        entity.setLastModifiedOn(date);
     }
 }

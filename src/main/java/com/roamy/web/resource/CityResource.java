@@ -6,11 +6,17 @@ import com.roamy.dao.api.TripInstanceRepository;
 import com.roamy.domain.*;
 import com.roamy.dto.RestResponse;
 import com.roamy.util.RestUtils;
+import com.roamy.util.RoamyUtils;
+import com.roamy.util.RoamyValidationException;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +31,7 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("/cities")
+@Api("city")
 public class CityResource extends CitableResource<City, Long> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CitableResource.class);
@@ -42,7 +49,12 @@ public class CityResource extends CitableResource<City, Long> {
 
     @Override
     protected void validateForCreate(City entity) {
-
+        if (!StringUtils.hasText(entity.getCode())) {
+            throw new RoamyValidationException("City code not provided");
+        }
+        if (!StringUtils.hasText(entity.getName())) {
+            throw new RoamyValidationException("City name not provided");
+        }
     }
 
     @Override
@@ -52,7 +64,10 @@ public class CityResource extends CitableResource<City, Long> {
 
     @Override
     protected void enrichForCreate(City entity) {
-
+        if (entity.getStatus() == null) {
+            entity.setStatus(Status.Active);
+        }
+        RoamyUtils.addAuditPropertiesForCreateEntity(entity, "test");
     }
 
     @Override
@@ -67,7 +82,9 @@ public class CityResource extends CitableResource<City, Long> {
     }
 
     @RequestMapping(value = "/{code}/categories", method = RequestMethod.GET)
-    public RestResponse getCategories(@PathVariable String code) {
+    @ApiOperation(value = "Get categories for the city", notes = "Fetches the categories that have trips scheduled for the city. " +
+                            "Actual result is contained in the data field of the response.")
+    public RestResponse getCategoriesForCity(@ApiParam(value = "City Code", required = true) @PathVariable String code) {
 
         RestResponse response = null;
 
@@ -80,11 +97,13 @@ public class CityResource extends CitableResource<City, Long> {
             // 2. find all categories of the trip instances
             Set<Category> categories = new HashSet<>();
 
-            for (TripInstance instance : instances) {
-                Trip trip = instance.getTrip();
-                if (!CollectionUtils.isEmpty(trip.getCategories())) {
-                    categories.addAll(trip.getCategories());
-                }
+            if (instances != null) {
+                instances.forEach(instance -> {
+                    Trip trip = instance.getTrip();
+                    if (!CollectionUtils.isEmpty(trip.getCategories())) {
+                        categories.addAll(trip.getCategories());
+                    }
+                });
             }
             LOGGER.info("categories for code({}): {}", code, categories);
 
@@ -92,7 +111,7 @@ public class CityResource extends CitableResource<City, Long> {
             response = new RestResponse(categories, HttpStatus.OK_200, null, null);
 
         } catch (Throwable t) {
-            LOGGER.error("error in getCategories: ", t);
+            LOGGER.error("error in getCategoriesForCity: ", t);
             response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
         }
 

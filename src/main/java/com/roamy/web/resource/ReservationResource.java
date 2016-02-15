@@ -11,6 +11,9 @@ import com.roamy.integration.paymentGateway.service.api.PaymentGatewayService;
 import com.roamy.service.notification.api.EmailNotificationService;
 import com.roamy.util.RestUtils;
 import com.roamy.util.RoamyValidationException;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +31,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/reservations")
+@Api("reservation")
 public class ReservationResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservationDto.class);
@@ -39,6 +43,9 @@ public class ReservationResource {
     private TripInstanceRepository tripInstanceRepository;
 
     @Autowired
+    private TripInstanceOptionRepository tripInstanceOptionRepository;
+
+    @Autowired
     private ReservationRepository reservationRepository;
 
     @Autowired
@@ -46,9 +53,6 @@ public class ReservationResource {
 
     @Autowired
     private ReservationTripOptionRepository reservationTripOptionRepository;
-
-    @Autowired
-    private TripInstanceOptionRepository tripInstanceOptionRepository;
 
     @Autowired
     @Qualifier("razorpayGatewayService")
@@ -61,7 +65,14 @@ public class ReservationResource {
     private EmailNotificationService emailNotificationService;
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public RestResponse createReservation(@RequestBody ReservationDto reservationDto) {
+    @ApiOperation(value = "Create a reservation", notes = "Creates reservation for a user, tripInstance and " +
+            "tripInstanceOptions. TripInstanceOptions provide selections made by the user (e.g. regular vs premium, " +
+            "adult and senior). useRomoney flag can be set to true to use Romoney in user's account and apply it " +
+            "towards this reservation. Email and Phone number are mandatory." +
+            " Actual result is contained in the data field of the response.")
+    public RestResponse createReservation(@ApiParam(name = "reservationDetails", value = "Reservation Details. " +
+                                                    "All fields are mandatory", required = true)
+                                              @RequestBody ReservationDto reservationDto) {
         LOGGER.info("Creating {}", reservationDto);
 
         RestResponse response = null;
@@ -196,7 +207,10 @@ public class ReservationResource {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public RestResponse getReservation(@PathVariable Long id) {
+    @ApiOperation(value = "Get reservation By id", notes = "Fetches reservation details for a given ID. " +
+                            "Actual result is contained in the data field of the response.")
+    public RestResponse getReservation(@ApiParam(value = "Reservation ID", required = true)
+                                           @PathVariable Long id) {
         LOGGER.info("Loading reservation with id ({})", id);
 
         RestResponse response = null;
@@ -215,7 +229,14 @@ public class ReservationResource {
     }
 
     @RequestMapping(value = "/{id}/payments/", method = RequestMethod.POST)
-    public RestResponse createPayment(@PathVariable Long id, @RequestBody ReservationPaymentDto reservationPaymentDto) {
+    @ApiOperation(value = "Create a payment", notes = "Creates payment for a Reservation represented by given " +
+                        "Reservation ID. Actual result is contained in the data field of the response.")
+    public RestResponse createPayment(@ApiParam(name = "reservationId", value = "Reservation ID for which payment is being made", required = true)
+                                            @PathVariable Long id,
+                                      @ApiParam(name = "paymentDetails", value = "Payment Details including amount, type " +
+                                              "[Razorpay/Discount/Romoney], and transactionID [Razorpay transaction ID " +
+                                              "when type is Razorpay]", required = true)
+                                            @RequestBody ReservationPaymentDto reservationPaymentDto) {
         LOGGER.info("Received payment {}", reservationPaymentDto);
 
         RestResponse response = null;

@@ -3,6 +3,8 @@ package com.roamy.web.resource;
 import com.roamy.domain.AbstractEntity;
 import com.roamy.dto.RestResponse;
 import com.roamy.util.RestUtils;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +22,9 @@ public abstract class IdentityResource<T extends AbstractEntity, ID extends Seri
     private static final Logger LOGGER = LoggerFactory.getLogger(IdentityResource.class);
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public RestResponse findById(@PathVariable ID id) {
+    @ApiOperation(value = "Get entity by ID", notes = "Fetches the entity with a given ID. " +
+                        "Actual result is contained in the data field of the response.")
+    public RestResponse findById(@ApiParam(value = "ID", required = true) @PathVariable ID id) {
 
         RestResponse response = null;
 
@@ -29,7 +33,7 @@ public abstract class IdentityResource<T extends AbstractEntity, ID extends Seri
             T entity = getJpaRepository().findOne(id);
             LOGGER.info("entity by id({}): {}", id, entity);
 
-            // Enrich the entity e.g. set additional properties
+            // Enrich the entity before returning e.g. set additional properties
             enrichForGet(entity);
 
             // Add hyperlinks to the related entities e.g. TripReview link in Trip resource

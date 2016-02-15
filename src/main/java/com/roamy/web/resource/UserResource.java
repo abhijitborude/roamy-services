@@ -12,6 +12,7 @@ import com.roamy.service.notification.api.SmsNotificationService;
 import com.roamy.util.RestUtils;
 import com.roamy.util.RoamyUtils;
 import com.roamy.util.RoamyValidationException;
+import com.wordnik.swagger.annotations.Api;
 import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/users")
+@Api("user")
 public class UserResource extends IdentityResource<User, Long> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserResource.class);

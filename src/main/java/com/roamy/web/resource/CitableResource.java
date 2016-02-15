@@ -4,6 +4,8 @@ import com.roamy.dao.api.CitableRepository;
 import com.roamy.domain.CitableEntity;
 import com.roamy.dto.RestResponse;
 import com.roamy.util.RestUtils;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,16 +30,18 @@ public abstract class CitableResource<T extends CitableEntity, ID extends Serial
     }
 
     @RequestMapping(value = "/{code}", method = RequestMethod.GET)
-    public RestResponse findByCode(@PathVariable String code) {
+    @ApiOperation(value = "Get entity by code", notes = "Fetches the entity with a given code. " +
+                            "Actual result is contained in the data field of the response.")
+    public RestResponse findByCode(@ApiParam(value = "Code", required = true) @PathVariable String code) {
 
         RestResponse response = null;
 
         try {
             // find object
             T entity = getCitableRepository().findByCode(code);
-            LOGGER.info("entity by code({}): {}", code, entity);
+            LOGGER.info("finding entity by code({}): {}", code, entity);
 
-            // Enrich the entity e.g. set additional properties
+            // Enrich the entity before returning e.g. set additional properties
             enrichForGet(entity);
 
             // Add hyperlinks to the related entities e.g. TripReview link in Trip resource
@@ -47,7 +51,7 @@ public abstract class CitableResource<T extends CitableEntity, ID extends Serial
             response = new RestResponse(entity, HttpStatus.OK_200, null, null);
 
         } catch (Throwable t) {
-            LOGGER.error("error in findAll: ", t);
+            LOGGER.error("error in findByCode: ", t);
             response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
         }
 
