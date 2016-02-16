@@ -589,7 +589,8 @@ public class UserResource extends IdentityResource<User, Long> {
             " can be used to control if only active, inactive or both reservations are returned. When inactive " +
             " reservations are included only top 50 are returned. Actual result is contained in the data field of the response.")
     public RestResponse getReservations(@ApiParam(value = "User ID", required = true) @PathVariable Long id,
-                                        @ApiParam(value = "fetch all or only active reservations.", required = false)
+                                        @ApiParam(value = "Whether to return only active (active=true), only inactive " +
+                                                "(active=false) or all (no value)", required = false)
                                             @RequestParam(value = "active", required = false) String active) {
         RestResponse response = null;
 
