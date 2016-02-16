@@ -49,7 +49,6 @@ public class RazorpayGatewayServiceImpl implements PaymentGatewayService {
         LOGGER.info("fetching payment details for transactionId: {}", transactionId);
 
         String url = getBaseUrl() + "/payments/" + transactionId;
-        LOGGER.info(url);
 
         PaymentDto paymentDto = null;
         try {

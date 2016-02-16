@@ -8,6 +8,7 @@ import com.roamy.integration.sendgrid.dto.SendGridEmailDto;
 import com.roamy.integration.sendgrid.service.api.SendGridService;
 import com.roamy.service.notification.api.EmailNotificationService;
 import com.roamy.service.notification.dto.TripNotificationDto;
+import com.roamy.util.RestUtils;
 import com.roamy.util.RoamyUtils;
 import com.roamy.util.TemplateTranslator;
 import org.apache.velocity.app.VelocityEngine;
@@ -57,14 +58,7 @@ public class EmailNotificationServiceImpl implements EmailNotificationService {
         params.put("trip", dto);
 
         // create json to store params
-        StringWriter writer = new StringWriter();
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            objectMapper.writeValue(writer, dto);
-        } catch (IOException e) {
-            LOGGER.error("Error converting dto to JSON: " + dto, e);
-        }
-        String paramsJson = writer.toString();
+        String paramsJson = RestUtils.convertToJson(dto);
 
         // load template
         EmailTemplate emailTemplate = emailTemplateRepository.findByCode("RESERVATION_CONFIRMATION");
@@ -78,9 +72,10 @@ public class EmailNotificationServiceImpl implements EmailNotificationService {
         emailNotification.setParams(paramsJson);
         emailNotification.setStatus(Status.Pending);
         emailNotification = emailNotificationRepository.save(emailNotification);
+        emailNotificationRepository.flush();
 
         // later move email send logic to an async process
-        String subject = emailTemplate.getSubjectTemplate();
+        String subject = templateTranslator.translate(emailTemplate.getSubjectTemplate(), params);
         String content = templateTranslator.translate(emailTemplate.getTemplate(), params);
 
         try {
@@ -92,7 +87,7 @@ public class EmailNotificationServiceImpl implements EmailNotificationService {
             emailNotification.setStatus(Status.Failed);
         }
 
-        emailNotification = emailNotificationRepository.save(emailNotification);
+        emailNotificationRepository.save(emailNotification);
     }
 
     private void sendEmail(EmailNotification email, String subject, String content) {

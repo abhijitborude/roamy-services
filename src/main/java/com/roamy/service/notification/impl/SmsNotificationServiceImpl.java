@@ -6,6 +6,7 @@ import com.roamy.domain.Status;
 import com.roamy.integration.sms.dto.SmsResult;
 import com.roamy.integration.sms.service.api.SmsService;
 import com.roamy.service.notification.api.SmsNotificationService;
+import com.roamy.util.RoamyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,7 @@ public class SmsNotificationServiceImpl implements SmsNotificationService {
 
         // create smsNotification object with pending status
         SmsNotification notification = new SmsNotification(phoneNumber, message, Status.Pending);
-        notification.setCreatedBy("test");
-        notification.setLastModifiedBy("test");
+        RoamyUtils.addAuditPropertiesForCreateEntity(notification, "test");
 
         notification = smsNotificationRepository.save(notification);
         smsNotificationRepository.flush();
