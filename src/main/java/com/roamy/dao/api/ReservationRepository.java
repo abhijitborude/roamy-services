@@ -14,7 +14,11 @@ import java.util.List;
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
+    List<Reservation> findTop50ByUserIdOrderByStartDateDesc(Long userId);
+
     List<Reservation> findTop50ByUserIdAndStartDateLessThanOrderByStartDateDesc(Long userId, Date date);
+
+    List<Reservation> findByUserIdAndStatusNotAndStartDateGreaterThanEqualOrderByStartDateAsc(Long userId, Status status, Date date);
 
     List<Reservation> findByUserIdAndStatusAndStartDateGreaterThanEqualOrderByStartDateAsc(Long userId, Status status, Date date);
 }

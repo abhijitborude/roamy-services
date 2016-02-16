@@ -26,9 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -516,9 +514,12 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/{id}/favoriteTrips", method = RequestMethod.POST)
-    @ApiOperation(value = "Get user's favorite trips", notes = "Fetches trips marked as favorite by the user." +
-                        " Actual result is contained in the data field of the response.")
-    public RestResponse manageFavoriteTrip(@ApiParam(value = "User ID", required = true) @PathVariable Long id, @RequestBody FavoriteTripAction action) {
+    @ApiOperation(value = "Manage user's favorite trips", notes = "Add/remove trip as a favorite trip for a user." +
+                        " Does not return any data. Http status reflects success/failure")
+    public RestResponse manageFavoriteTrip(@ApiParam(value = "User ID", required = true)
+                                                @PathVariable Long id,
+                                           @ApiParam(value = "action can be [add/remove] and tripCode is required", required = true)
+                                                @RequestBody FavoriteTripAction action) {
 
         LOGGER.info("Performing {} for userId {}", action, id);
 
@@ -539,18 +540,9 @@ public class UserResource extends IdentityResource<User, Long> {
             }
 
             if (FavoriteTripAction.ADD_ACTION.equals(action.getAction())) {
-                List<FavoriteTrip> favoriteTrips = favoriteTripRepository.findByUserPhoneNumber(user.getPhoneNumber());
+                FavoriteTrip favoriteTrip = favoriteTripRepository.findByUserIdAndTripCode(user.getId(), action.getTripCode());
 
-                boolean favoriteExsists = false;
-                if (!CollectionUtils.isEmpty(favoriteTrips)) {
-                    for (FavoriteTrip favoriteTrip : favoriteTrips) {
-                        if (favoriteTrip.getTrip().getCode().equalsIgnoreCase(action.getTripCode())) {
-                            favoriteExsists = true;
-                        }
-                    }
-                }
-
-                if (!favoriteExsists) {
+                if (favoriteTrip == null) {
                     // find trip
                     Trip trip = tripRepository.findByCode(action.getTripCode());
                     if (trip == null) {
@@ -560,7 +552,7 @@ public class UserResource extends IdentityResource<User, Long> {
                     LOGGER.info("Adding favorite {} for {}", trip, user);
 
                     // save as favorite trip
-                    FavoriteTrip favoriteTrip = new FavoriteTrip(user, trip);
+                    favoriteTrip = new FavoriteTrip(user, trip);
                     favoriteTripRepository.save(favoriteTrip);
                     LOGGER.info("saved {}", favoriteTrip);
 
@@ -593,8 +585,12 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/{id}/reservations", method = RequestMethod.GET)
+    @ApiOperation(value = "Get reservations for user", notes = "Fetches reservations made by the user. Active flag " +
+            " can be used to control if only active, inactive or both reservations are returned. When inactive " +
+            " reservations are included only top 50 are returned. Actual result is contained in the data field of the response.")
     public RestResponse getReservations(@ApiParam(value = "User ID", required = true) @PathVariable Long id,
-                                        @RequestParam(value = "active", required = false, defaultValue = "true") String active) {
+                                        @ApiParam(value = "fetch all or only active reservations.", required = false)
+                                            @RequestParam(value = "active", required = false) String active) {
         RestResponse response = null;
 
         try {
@@ -606,10 +602,28 @@ public class UserResource extends IdentityResource<User, Long> {
             LOGGER.info("Finding reservations for {} with active={}", user, active);
 
             List<Reservation> reservations = null;
+
             if ("true".equalsIgnoreCase(active)) {
-                reservations = reservationRepository.findByUserIdAndStatusAndStartDateGreaterThanEqualOrderByStartDateAsc(id, Status.Active, new Date());
+                // find reservations for user which are active and start date is in future
+                reservations = reservationRepository.
+                        findByUserIdAndStatusAndStartDateGreaterThanEqualOrderByStartDateAsc(id, Status.Active, new Date());
+
+            } if ("false".equalsIgnoreCase(active)) {
+
+                // find reservations for user which are *NOT* active and start date is in future
+                Set<Reservation> inactiveReservations = new HashSet<>();
+                inactiveReservations.addAll(reservationRepository.
+                        findByUserIdAndStatusNotAndStartDateGreaterThanEqualOrderByStartDateAsc(id, Status.Active, new Date()));
+
+                // find top 50 reservations for user which have start date in the past
+                inactiveReservations.addAll(reservationRepository.
+                        findTop50ByUserIdAndStartDateLessThanOrderByStartDateDesc(id, new Date()));
+
+                reservations = new ArrayList<>();
+                reservations.addAll(inactiveReservations);
             } else {
-                reservations = reservationRepository.findTop50ByUserIdAndStartDateLessThanOrderByStartDateDesc(id, new Date());
+                // find top 50 reservations for user
+                reservations = reservationRepository.findTop50ByUserIdOrderByStartDateDesc(id);
             }
 
             // return response
