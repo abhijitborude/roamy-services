@@ -84,13 +84,29 @@ public class TripResource extends CitableResource<Trip, Long> {
     @ApiOperation(value = "Get active instances of a trip", notes = "Fetches list of active trip instances for a trip. " +
                             "Actual result is contained in the data field of the response.")
     public RestResponse findActiveTripInstanes(@ApiParam(value = "Trip Code", required = true)
-                                               @PathVariable("code") String code) {
+                                               @PathVariable("code") String code,
+                                               @ApiParam(value = "Trip Instance Date in the format 'dd-MM-yyyy'", required = false)
+                                               @RequestParam(value = "date", required = false) String sDate) {
 
         RestResponse response = null;
 
         try {
-            List<TripInstance> tripInstances = tripInstanceRepository.findByTripCodeAndStatus(code, Status.Active);
-            LOGGER.info("active Trip Instances by code({}): {}", code, tripInstances);
+            DateTimeFormatter dtf = DateTimeFormat.forPattern("dd-MM-yyyy");
+
+            // convert date
+            Date date = new Date();
+            if (StringUtils.hasText(sDate)) {
+                date = dtf.parseDateTime(sDate).toDate();
+            }
+
+            List<TripInstance> tripInstances = null;
+            if (sDate == null) {
+                tripInstances = tripInstanceRepository.findByTripCodeAndStatus(code, Status.Active);
+                LOGGER.info("active Trip Instances by code({}): {}", code, tripInstances);
+            } else {
+                tripInstances = tripInstanceRepository.findByTripCodeAndDateAndStatus(code, date, Status.Active);
+                LOGGER.info("active Trip Instances by code({}) and date ({} - {}): {}", code, sDate, date, tripInstances);
+            }
 
             response = new RestResponse(tripInstances, HttpStatus.OK_200, null, null);
 
@@ -112,9 +128,9 @@ public class TripResource extends CitableResource<Trip, Long> {
                                     @RequestParam(value = "cityCode", required = false) String cityCode,
                                 @ApiParam(value = "Category Code", required = false)
                                     @RequestParam(value = "categoryCode", required = false) String categoryCode,
-                                @ApiParam(value = "Start Date in the format 'yyyy-DD-MM' (Defaulted to current date)", required = false)
+                                @ApiParam(value = "Start Date in the format 'dd-MM-yyyy' (Defaulted to current date)", required = false)
                                     @RequestParam(value = "startDate", required = false) String startDate,
-                                @ApiParam(value = "End Date in the format 'yyyy-DD-MM' (Defaulted to 30 days from current date)", required = false)
+                                @ApiParam(value = "End Date in the format 'dd-MM-yyyy' (Defaulted to 30 days from current date)", required = false)
                                     @RequestParam(value = "endDate", required = false) String endDate,
                                 @ApiParam(value = "Sort By [price/difficulty]", required = false)
                                     @RequestParam(value = "sortBy", required = false) String sortBy,
@@ -128,7 +144,7 @@ public class TripResource extends CitableResource<Trip, Long> {
         try {
             // TODO: add validations and optimize queries below
 
-            DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-DD-MM");
+            DateTimeFormatter dtf = DateTimeFormat.forPattern("dd-MM-yyyy");
 
             // convert start date
             Date sDate = new Date();

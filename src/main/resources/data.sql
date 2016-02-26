@@ -218,7 +218,7 @@ insert into ROAMY.trip_instance
     null, --meeting_points
     null,   --things_to_carry
     null, --traveller_capacity
-    dateadd('DAY', 1, current_timestamp),  --date
+    dateadd('DAY', 1, current_date),  --date
     current_timestamp,  --display_start_date
     dateadd('DAY', 2, current_timestamp),  --display_end_date
     'Active', --status
@@ -244,7 +244,7 @@ insert into ROAMY.trip_instance
     null, --meeting_points
     null,   --things_to_carry
     null, --traveller_capacity
-    dateadd('DAY', 2, current_timestamp),  --date
+    dateadd('DAY', 2, current_date),  --date
     current_timestamp,  --display_start_date
     dateadd('DAY', 3, current_timestamp),  --display_end_date
     'Active', --status

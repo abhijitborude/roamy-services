@@ -9,6 +9,8 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Date;
+
 /**
  * Created by Abhijit on 11/16/2015.
  */
@@ -23,5 +25,15 @@ public class TripInstanceRepositoryTest {
     @Test
     public void testFindByTripCodeAndStatus() throws Exception {
         tripInstanceRepository.findByTripCodeAndStatus("", Status.Active);
+    }
+
+    @Test
+    public void testFindByTargetCitiesCodeAndStatus() throws Exception {
+        tripInstanceRepository.findByTargetCitiesCodeAndStatus("MUMBAI", Status.Active);
+    }
+
+    @Test
+    public void testFindByTripCodeAndDateAndStatus() throws Exception {
+        tripInstanceRepository.findByTripCodeAndDateAndStatus("", new Date(), Status.Active);
     }
 }
