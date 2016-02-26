@@ -1,6 +1,6 @@
 package com.roamy.dto;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * Created by Abhijit on 12/13/2015.
@@ -11,7 +11,7 @@ public class ReservationDto {
 
     private Long tripInstanceId;
 
-    private Map<Long, Integer> tripOptionReserations;
+    private List<ReservationTripOptionDto> reservationTripOptions;
 
     private boolean useRomoney = false;
 
@@ -35,12 +35,12 @@ public class ReservationDto {
         this.tripInstanceId = tripInstanceId;
     }
 
-    public Map<Long, Integer> getTripOptionReserations() {
-        return tripOptionReserations;
+    public List<ReservationTripOptionDto> getReservationTripOptions() {
+        return reservationTripOptions;
     }
 
-    public void setTripOptionReserations(Map<Long, Integer> tripOptionReserations) {
-        this.tripOptionReserations = tripOptionReserations;
+    public void setReservationTripOptions(List<ReservationTripOptionDto> reservationTripOptions) {
+        this.reservationTripOptions = reservationTripOptions;
     }
 
     public boolean isUseRomoney() {
@@ -72,7 +72,7 @@ public class ReservationDto {
         return "ReservationDto{" +
                 "userId=" + userId +
                 ", tripInstanceId=" + tripInstanceId +
-                ", tripOptionReserations=" + tripOptionReserations +
+                ", reservationTripOptions=" + reservationTripOptions +
                 ", useRomoney=" + useRomoney +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +

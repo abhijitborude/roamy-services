@@ -85,7 +85,7 @@ public class ReservationResource {
                 throw new RoamyValidationException("User not provided");
             } else if (reservationDto.getTripInstanceId() == null) {
                 throw new RoamyValidationException("Trip instance not provided");
-            } else if (CollectionUtils.isEmpty(reservationDto.getTripOptionReserations())) {
+            } else if (CollectionUtils.isEmpty(reservationDto.getReservationTripOptions())) {
                 throw new RoamyValidationException("Trip option reservation not provided");
             } else if (!StringUtils.hasText(reservationDto.getEmail())) {
                 throw new RoamyValidationException("Invalid email provided");
@@ -108,23 +108,42 @@ public class ReservationResource {
             // 1. validate tripInstanceOptionId, count and create ReservationTripOptions
             List<ReservationTripOption> reservationTripOptions = new ArrayList<>();
 
-            reservationDto.getTripOptionReserations().forEach((tripInstanceOptionId, count) -> {
-                if (tripInstanceOptionId == null || tripInstanceOptionId < 0) {
-                    throw new RoamyValidationException("Invalid trip instance option id provided: " + tripInstanceOptionId);
+            reservationDto.getReservationTripOptions().forEach((optionDto) -> {
+                if (optionDto.getTripInstanceOptionId() == null || optionDto.getTripInstanceOptionId() < 0) {
+                    throw new RoamyValidationException("Invalid trip instance option id provided: " + optionDto.getTripInstanceOptionId());
                 }
 
-                if (count == null || count < 0) {
-                    throw new RoamyValidationException("Invalid count provided: " + count);
-                }
-
-                TripInstanceOption tripInstanceOption = tripInstanceOptionRepository.findOne(tripInstanceOptionId);
+                TripInstanceOption tripInstanceOption = tripInstanceOptionRepository.findOne(optionDto.getTripInstanceOptionId());
                 if (tripInstanceOption == null) {
-                    throw new RoamyValidationException("Invalid trip instance option id provided: " + tripInstanceOptionId);
+                    throw new RoamyValidationException("Invalid trip instance option id provided: " + optionDto.getTripInstanceOptionId());
+                }
+
+                // check whether this tripInstanceOption supports age based pricing or not
+                boolean ageBasedPricing = tripInstanceOption.isAgeBasedPricing();
+
+                if (ageBasedPricing) {
+                    if ((optionDto.getAdultCount() == null || optionDto.getAdultCount() < 0)
+                        || (optionDto.getSeniorCount() == null || optionDto.getSeniorCount() < 0)
+                        || (optionDto.getChildCount() == null || optionDto.getChildCount() < 0)) {
+                        throw new RoamyValidationException("Invalid age based reservation counts provided");
+                    }
+                } else {
+                    if (optionDto.getCount() == null || optionDto.getCount() < 0) {
+                        throw new RoamyValidationException("Inbalid count provided: " + optionDto.getCount());
+                    }
                 }
 
                 ReservationTripOption option = new ReservationTripOption();
-                option.setCount(count);
                 option.setTripInstanceOption(tripInstanceOption);
+                option.setAgeBasedPricing(ageBasedPricing);
+
+                if (ageBasedPricing) {
+                    option.setAdultCount(optionDto.getAdultCount());
+                    option.setSeniorCount(optionDto.getSeniorCount());
+                    option.setChildCount(optionDto.getChildCount());
+                } else {
+                    option.setCount(optionDto.getCount());
+                }
 
                 reservationTripOptions.add(option);
             });
