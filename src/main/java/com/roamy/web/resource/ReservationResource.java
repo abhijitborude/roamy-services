@@ -195,6 +195,7 @@ public class ReservationResource {
 
             savedReservation.setTripOptions(reservationTripOptions);
 
+
             // apply romoney
             if (reservationDto.isUseRomoney() && user.getWalletBalance() != null) {
 
