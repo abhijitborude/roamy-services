@@ -136,17 +136,32 @@ public class ReservationResource {
                 ReservationTripOption option = new ReservationTripOption();
                 option.setTripInstanceOption(tripInstanceOption);
                 option.setAgeBasedPricing(ageBasedPricing);
+                boolean validCount = false;
 
                 if (ageBasedPricing) {
-                    option.setAdultCount(optionDto.getAdultCount());
-                    option.setSeniorCount(optionDto.getSeniorCount());
-                    option.setChildCount(optionDto.getChildCount());
+                    if ((optionDto.getAdultCount() != null && optionDto.getAdultCount() > 0)
+                            || (optionDto.getSeniorCount() != null && optionDto.getSeniorCount() > 0)
+                            || (optionDto.getChildCount() != null && optionDto.getChildCount() > 0)) {
+                        validCount = true;
+                        option.setAdultCount(optionDto.getAdultCount() == null ? 0 : optionDto.getAdultCount());
+                        option.setSeniorCount(optionDto.getSeniorCount() == null ? 0 : optionDto.getSeniorCount());
+                        option.setChildCount(optionDto.getChildCount() == null ? 0 : optionDto.getChildCount());
+                    }
                 } else {
-                    option.setCount(optionDto.getCount());
+                    if (optionDto.getCount() != null && optionDto.getCount() > 0) {
+                        validCount = true;
+                        option.setCount(optionDto.getCount());
+                    }
                 }
 
-                reservationTripOptions.add(option);
+                if (validCount) {
+                    reservationTripOptions.add(option);
+                }
             });
+
+            if (CollectionUtils.isEmpty(reservationTripOptions)) {
+                throw new RoamyValidationException("Invalid counts provided. Please select at least one trip option.");
+            }
 
             Reservation reservation = new PackageReservation();
             reservation.setUser(user);
@@ -179,6 +194,7 @@ public class ReservationResource {
             Reservation savedReservation = reservationRepository.save(reservation);
 
             savedReservation.setTripOptions(reservationTripOptions);
+
 
             // apply romoney
             if (reservationDto.isUseRomoney() && user.getWalletBalance() != null) {
