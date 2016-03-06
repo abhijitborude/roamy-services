@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
  * Created by Abhijit on 2/2/2016.
  */
 @Entity
-@Table(name = "EMAIL_TEMPLATE", schema = "ROAMY")
+@Table(name = "EMAIL_TEMPLATE")
 public class EmailTemplate extends CitableEntity {
 
     @NotNull

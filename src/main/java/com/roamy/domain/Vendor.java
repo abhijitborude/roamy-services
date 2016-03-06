@@ -9,7 +9,7 @@ import java.util.List;
  * Created by Abhijit on 7/1/2015.
  */
 @Entity
-@Table(name = "VENDOR", schema = "ROAMY")
+@Table(name = "VENDOR")
 public class Vendor extends CitableEntity {
 
     @Column(name = "NOTES", length = DbConstants.VERY_LONG_TEXT)

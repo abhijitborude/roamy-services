@@ -8,7 +8,7 @@ import javax.persistence.*;
  * Created by Abhijit on 7/1/2015.
  */
 @Entity
-@Table(name = "VENDOR_ACCOUNT", schema = "ROAMY")
+@Table(name = "VENDOR_ACCOUNT")
 public class VendorAccount extends AbstractEntity {
 
     @Column(name = "NAME", nullable = false, length = DbConstants.MEDIUM_TEXT)

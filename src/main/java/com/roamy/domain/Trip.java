@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Abhijit on 7/1/2015.
  */
 @Entity
-@Table(name = "TRIP", schema = "ROAMY")
+@Table(name = "TRIP")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TYPE", discriminatorType = DiscriminatorType.STRING)
 public abstract class Trip extends CitableEntity {
@@ -35,20 +35,19 @@ public abstract class Trip extends CitableEntity {
     private List<TripOption> options;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "TRIP_CITY", schema = "ROAMY",
+    @JoinTable(name = "TRIP_CITY",
             joinColumns = {@JoinColumn(name = "TRIP_ID")},
             inverseJoinColumns = {@JoinColumn(name = "CITY_ID")})
     protected List<City> targetCities;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "TRIP_CATEGORY", schema = "ROAMY",
+    @JoinTable(name = "TRIP_CATEGORY",
             joinColumns = {@JoinColumn(name = "TRIP_ID")},
             inverseJoinColumns = {@JoinColumn(name = "CATEGORY_ID")})
     protected List<Category> categories;
 
     @ElementCollection
     @CollectionTable(
-            schema = "ROAMY",
             name="TRIP_IMAGE",
             joinColumns=@JoinColumn(name="TRIP_ID")
     )

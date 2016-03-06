@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  * Created by Abhijit on 1/10/2016.
  */
 @Entity
-@Table(name = "RESERVATION_PAYMENT", schema = "ROAMY")
+@Table(name = "RESERVATION_PAYMENT")
 public class ReservationPayment extends AbstractEntity {
 
     @Enumerated(EnumType.STRING)

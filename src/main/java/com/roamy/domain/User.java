@@ -15,7 +15,7 @@ import java.util.Date;
  * Created by Abhijit on 7/1/2015.
  */
 @Entity
-@Table(name = "USER", schema = "ROAMY")
+@Table(name = "USER")
 @JsonInclude(JsonInclude.Include.ALWAYS)
 public class User extends AbstractEntity {
 

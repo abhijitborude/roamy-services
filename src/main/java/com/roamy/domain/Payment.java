@@ -13,7 +13,7 @@ import java.util.Date;
  * Created by Abhijit on 7/1/2015.
  */
 @Entity
-@Table(name = "PAYMENT", schema = "ROAMY")
+@Table(name = "PAYMENT")
 public class Payment extends AbstractEntity {
 
     @NotNull

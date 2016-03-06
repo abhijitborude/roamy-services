@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
  * Created by Abhijit on 1/31/2016.
  */
 @Entity
-@Table(name = "RESERVATION_TRIP_OPTION", schema = "ROAMY")
+@Table(name = "RESERVATION_TRIP_OPTION")
 public class ReservationTripOption extends AbstractEntity {
 
     @Column(name = "COUNT")

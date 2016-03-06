@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
  * Created by Abhijit on 1/30/2016.
  */
 @Entity
-@Table(name = "TRIP_INSTANCE_OPTION", schema = "ROAMY")
+@Table(name = "TRIP_INSTANCE_OPTION")
 public class TripInstanceOption extends AbstractEntity {
 
     @NotNull

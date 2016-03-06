@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
  * Created by Abhijit on 7/1/2015.
  */
 @Entity
-@Table(name = "CATEGORY", schema = "ROAMY")
+@Table(name = "CATEGORY")
 public class Category extends CitableEntity {
 
     @Column(name = "IMAGE_CAPTION", length = DbConstants.MEDIUM_TEXT)

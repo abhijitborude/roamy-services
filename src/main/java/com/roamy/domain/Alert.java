@@ -13,7 +13,7 @@ import java.util.Date;
  * Created by Abhijit on 12/22/2015.
  */
 @Entity
-@Table(name = "ALERT", schema = "ROAMY")
+@Table(name = "ALERT")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TYPE")
 public abstract class Alert extends AbstractEntity {

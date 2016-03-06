@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
  * Created by Abhijit on 11/4/2015.
  */
 @Entity
-@Table(schema = "ROAMY", name = "TRIP_REVIEW")
+@Table(name = "TRIP_REVIEW")
 public class TripReview extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

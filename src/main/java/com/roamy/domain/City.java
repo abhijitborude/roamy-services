@@ -7,7 +7,7 @@ import javax.persistence.Table;
  * Created by Abhijit on 7/1/2015.
  */
 @Entity
-@Table(name = "CITY", schema = "ROAMY")
+@Table(name = "CITY")
 public class City extends CitableEntity {
 
     @Override

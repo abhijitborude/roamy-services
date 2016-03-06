@@ -12,7 +12,7 @@ import java.util.Date;
  * Created by Abhijit on 2/2/2016.
  */
 @Entity
-@Table(name = "EMAIL_NOTIFICATION", schema = "ROAMY")
+@Table(name = "EMAIL_NOTIFICATION")
 public class EmailNotification extends AbstractEntity {
 
     @NotNull

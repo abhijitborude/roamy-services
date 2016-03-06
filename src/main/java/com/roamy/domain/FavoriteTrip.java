@@ -9,7 +9,7 @@ import javax.persistence.Table;
  * Created by Abhijit on 11/20/2015.
  */
 @Entity
-@Table(name = "FAVORITE_TRIP", schema = "ROAMY")
+@Table(name = "FAVORITE_TRIP")
 public class FavoriteTrip extends AbstractEntity {
 
     @ManyToOne

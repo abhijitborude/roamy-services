@@ -16,7 +16,7 @@ import java.util.List;
  * Created by Abhijit on 7/1/2015.
  */
 @Entity
-@Table(name = "TRIP_INSTANCE", schema = "ROAMY")
+@Table(name = "TRIP_INSTANCE")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TYPE", discriminatorType = DiscriminatorType.STRING)
 public abstract class TripInstance extends AbstractEntity {
@@ -52,7 +52,7 @@ public abstract class TripInstance extends AbstractEntity {
     private List<TripInstanceOption> options;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "TRIP_INSTANCE_CITY", schema = "ROAMY",
+    @JoinTable(name = "TRIP_INSTANCE_CITY",
             joinColumns = {@JoinColumn(name = "TRIP_INSTANCE_ID")},
             inverseJoinColumns = {@JoinColumn(name = "CITY_ID")})
     @Fetch(FetchMode.SUBSELECT)

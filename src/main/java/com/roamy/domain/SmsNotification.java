@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
  * Created by Abhijit on 12/8/2015.
  */
 @Entity
-@Table(name = "SMS_NOTIFICATION", schema = "ROAMY")
+@Table(name = "SMS_NOTIFICATION")
 public class SmsNotification extends AbstractEntity {
 
     @NotNull
