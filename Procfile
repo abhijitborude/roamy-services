@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -Dserver.port=$PORT -jar build/libs/roamy-services-1.0-SNAPSHOT.jar
+web: java $JAVA_OPTS -Dserver.port=$PORT -Dspring.profiles.active=$ENV -jar build/libs/roamy-services-1.0-SNAPSHOT.jar
