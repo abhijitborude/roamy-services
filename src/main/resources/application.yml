@@ -18,9 +18,10 @@ razorpay:
 
 spring:
   profiles: unit-test
-  jpa.generate-ddl: true
+  jpa:
+    generate-ddl: true
+    hibernate.ddl-auto: create
   h2.console.enabled: true
-  jpa.hibernate.ddl-auto: create
 
 logging.level.org.hibernate.SQL: DEBUG
 
@@ -28,13 +29,16 @@ logging.level.org.hibernate.SQL: DEBUG
 
 spring:
   profiles: dev
-  jpa.generate-ddl: false
-  jpa.hibernate.ddl-auto:
-  datasource.initialize: false
-  datasource.url: jdbc:mysql://l3855uft9zao23e2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/avh2fhkb22dm0j8k
-  datasource.username: z9td61e4pbq5xu01
-  datasource.password: t4kmyhxgoblzgyeb
-  datasource.driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    generate-ddl: false
+    hibernate.ddl-auto:
+  datasource:
+    initialize: false
+    url: jdbc:mysql://l3855uft9zao23e2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/avh2fhkb22dm0j8k
+    username: z9td61e4pbq5xu01
+    password: t4kmyhxgoblzgyeb
+    driver-class-name: com.mysql.jdbc.Driver
+    max-active: 5
 
 logging.level.org.hibernate.SQL: DEBUG
 
@@ -42,16 +46,17 @@ logging.level.org.hibernate.SQL: DEBUG
 
 spring:
   profiles: uat
-  jpa.generate-ddl: false
-  jpa.hibernate.ddl-auto:
-  datasource.initialize: false
-  datasource.url: jdbc:mysql://l3855uft9zao23e2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/avh2fhkb22dm0j8k
-  datasource.username: z9td61e4pbq5xu01
-  datasource.password: t4kmyhxgoblzgyeb
-  datasource.driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+      generate-ddl: false
+      hibernate.ddl-auto:
+  datasource:
+      initialize: false
+      url: jdbc:mysql://l3855uft9zao23e2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/avh2fhkb22dm0j8k
+      username: z9td61e4pbq5xu01
+      password: t4kmyhxgoblzgyeb
+      driver-class-name: com.mysql.jdbc.Driver
+      max-active: 5
 
 logging.level.org.hibernate.SQL: DEBUG
-
-
 
 
