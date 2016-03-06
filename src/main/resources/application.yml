@@ -18,12 +18,9 @@ razorpay:
 
 spring:
   profiles: unit-test
+  jpa.generate-ddl: true
   h2.console.enabled: true
   jpa.hibernate.ddl-auto: create
-  jpa.properties.hibernate.default_schema: roamy
-
-hibernate:
-  default_schema: roamy
 
 logging.level.org.hibernate.SQL: DEBUG
 

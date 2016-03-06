@@ -1,5 +1,5 @@
 -- City Data
-insert into ROAMY.city(id,  code,   name,       status,     created_by, created_on,         last_modified_by,   last_modified_on) values
+insert into city(id,  code,   name,       status,     created_by, created_on,         last_modified_by,   last_modified_on) values
 (1, 'MUMBAI',   'Mumbai',   'Active',   'test',     current_timestamp,  'test',             current_timestamp),
 (2, 'PUNE',     'Pune',     'Active',   'test',     current_timestamp,  'test',             current_timestamp),
 (3, 'PATNA',    'Patna',    'Inactive', 'test',     current_timestamp,  'test',             current_timestamp),
@@ -7,7 +7,7 @@ insert into ROAMY.city(id,  code,   name,       status,     created_by, created_
 
 
 -- Category Data
-insert into ROAMY.category
+insert into category
 (id,  code,                     name,                       description,                            image_caption,              image_url,                                                                              status,     created_by, created_on,         last_modified_by,   last_modified_on) values
 (1,   'GET_OUT_OF_THE_CITY',    'Get out of the city',      'Get out of the city Description',      'Get out of the city',      'http://res.cloudinary.com/abhijitab/image/upload/v1449990238/category1_q9uyh3.png',    'Active',   'test',     current_timestamp,  'test',             current_timestamp),
 (2,   'TREK_IT_EASY',           'Trek it easy',             'Trek it easy Description',             'Trek it easy',             'http://res.cloudinary.com/abhijitab/image/upload/v1449990245/category2_dclwtj.png',    'Active',   'test',     current_timestamp,  'test',             current_timestamp),
@@ -16,11 +16,11 @@ insert into ROAMY.category
 
 
 -- User
-insert into ROAMY.user
+insert into user
 (id,    type,       phone_number,   email,              fname,      lname,      wallet_balance,         profile_image_id,       profile_image_url,                                                                                      birth_date,     address,            city,       country,    pin,        status,     verification_code,     verification_expiry,     referral_code,  device_id,    verified,   created_by,     created_on,         last_modified_by,   last_modified_on) values
 (1,     'Email',    '12345',        'abcd@abcd.com',    'fname',    'lname',    1000.00,                  'category1_q9uyh3',     'http://res.cloudinary.com/abhijitab/image/upload/v1449990238/category1_q9uyh3.png',                    null,           '100 street rd.',   'Mumbai',   'India',    '100000',   'Active',   null,                   null,                   'abcd',         null,         1,          'test',         current_timestamp,  'test',             current_timestamp);
 
-insert into ROAMY.trip
+insert into trip
 (
     id,
     type,
@@ -88,41 +88,41 @@ insert into ROAMY.trip
     current_timestamp --last_modified_on
 );
 
-insert into ROAMY.trip_category
+insert into trip_category
 (trip_id,   category_id ) values
 (1,         1),
 (1,         3),
 (2,         1),
 (2,         3);
 
-insert into ROAMY.trip_city
+insert into trip_city
 (trip_id,   city_id ) values
 (1,         1),
 (1,         2),
 (2,         1),
 (2,         2);
 
-insert into ROAMY.trip_image
+insert into trip_image
 (trip_id,   caption,                url ) values
 (1,         'Nice Image',           'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg'),
 (1,         null,                   'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg'),
 (2,         'Nice Image',           'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg');
 
-insert into ROAMY.trip_option
+insert into trip_option
 (id,    trip_id,    name,                               description,    price,  capacity,   age_based_pricing,      adult_price,    senior_price,   child_price,    status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
 (1,     1,          'Adult',                            '',             7500,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
 (2,     1,          'Children (10 years or below)',     '',             5000,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp);
 
-insert into ROAMY.trip_option
+insert into trip_option
 (id,    trip_id,    name,                               description,    price,  capacity,   age_based_pricing,      adult_price,    senior_price,   child_price,    status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
 (3,     2,          'Day Pass',                         '',             2004,   null,       true,                   2004,           1431,           1431,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
 (4,     2,          'Jumbo Pass',                       '',             5000,   null,       true,                   5724,           3500,           3500,           'Active',   'test',             current_timestamp,  'test',             current_timestamp);
 
-insert into ROAMY.favorite_trip
+insert into favorite_trip
 (id,    user_id,   trip_id,     status,     created_by, created_on,         last_modified_by,   last_modified_on) values
 (1,     1,         1,           'Active',   'test',     current_timestamp,  'test',             current_timestamp);
 
-insert into ROAMY.trip_instance
+insert into trip_instance
 (
     id,
     type,
@@ -254,7 +254,7 @@ insert into ROAMY.trip_instance
     current_timestamp --last_modified_on
 );
 
-insert into ROAMY.trip_instance_city
+insert into trip_instance_city
 (trip_instance_id,   city_id ) values
 (1,         1),
 (1,         2),
@@ -265,14 +265,14 @@ insert into ROAMY.trip_instance_city
 (4,         1),
 (4,         2);
 
-insert into ROAMY.trip_instance_option
+insert into trip_instance_option
 (id,    trip_instance_id,    name,                              description,    price,  capacity,   age_based_pricing,      adult_price,    senior_price,   child_price,    status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
 (1,     1,                  'Adult',                            '',             7500,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
 (2,     1,                  'Children (10 years or below)',     '',             5000,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
 (3,     2,                  'Adult',                            '',             7500,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
 (4,     2,                  'Children (10 years or below)',     '',             5000,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp);
 
-insert into ROAMY.trip_instance_option
+insert into trip_instance_option
 (id,    trip_instance_id,    name,                              description,    price,  capacity,   age_based_pricing,      adult_price,    senior_price,   child_price,    status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
 (5,     3,                  'Day Pass',                         '',             2004,   null,       true,                   2004,           1431,           1431,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
 (6,     3,                  'Jumbo Pass',                       '',             5000,   null,       true,                   5724,           3500,           3500,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
@@ -280,29 +280,29 @@ insert into ROAMY.trip_instance_option
 (8,     4,                  'Jumbo Pass',                       '',             5000,   null,       true,                   5724,           3500,           3500,           'Active',   'test',             current_timestamp,  'test',             current_timestamp);
 
 
-insert into ROAMY.trip_review
+insert into trip_review
 (id,     trip_id,    reservation_id,    user_id,    title,                      description,                                                                        rating,     status,     created_by,     created_on,         last_modified_by,   last_modified_on) values
 (1,     1,           null,              1,          'Amazing trip!',            'This was an amazing trip. All the arrangements were great. Food was awesome too.',   5,          'Active',   'test',         current_timestamp,  'test',             current_timestamp),
 (2,     1,           null,              1,          'Nice trip!',               'This was a nice trip. All the arrangements were fine. Food was good too.',           4,          'Active',   'test',         current_timestamp,  'test',             current_timestamp);
 
-insert into ROAMY.alert
+insert into alert
 (id,    type,       user_id,    title,                      message,                                                                                                        promo_code,        read_status,    expiry_date,                                status,     created_by,     created_on,         last_modified_by,   last_modified_on) values
 (1,     'PROMO',    1,          'New Year Special!',        'Book now and earn 20% off on all trips. Offer valid only until January 10th. Hurry up!',                       'WELCOME2016',     0,              dateadd('DAY', 10, current_timestamp),      'Active',   'test',         current_timestamp,  'test',             current_timestamp),
 (2,     'PROMO',    1,          'Book 3 and get 1 free!',   'Get a discount on group bookings. Book 3 trips and get 4th trip free. Make plans with your friends now!!',     '3PE1FREE',        1,              dateadd('DAY', 10, current_timestamp),      'Active',   'test',         current_timestamp,  'test',             current_timestamp),
 (3,     'INFO',     1,          'Your trip is arriving',    'You trip is scheduled for tomorrow',                                                                           null,              1,              dateadd('DAY', 10, current_timestamp),      'Active',   'test',         current_timestamp,  'test',             current_timestamp);
 
-insert into ROAMY.reservation
+insert into reservation
 (id,    type,           user_id,    email,              number_of_roamies,      amount,     start_date,         end_date,       phone_number,   status,     created_by,     created_on,         last_modified_by,   last_modified_on) values
 (1,     'PACKAGE',      1,          'abc@abc.com',      4,                      30000,      current_timestamp,  null,           '12345',        'Active',   'test',         current_timestamp,  'test',             current_timestamp),
 (2,     'PACKAGE',      1,          'abc@abc.com',      2,                      20000,      current_timestamp,  null,           '12345',        'Active',   'test',         current_timestamp,  'test',             current_timestamp);
 
 
-insert into ROAMY.reservation_payment
+insert into reservation_payment
 (id,    reservation_id,   type,             amount,     transaction_id,         status,         created_by,     created_on,         last_modified_by,   last_modified_on) values
 (1,     1,                'Razorpay',       7500,       'skjfhksjfhkjfhs',      'Success',      'test',         current_timestamp,  'test',             current_timestamp);
 
 
-insert into ROAMY.email_template
+insert into email_template
 (
     id,
     code,
