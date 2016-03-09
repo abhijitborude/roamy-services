@@ -38,7 +38,7 @@ spring:
     username: z9td61e4pbq5xu01
     password: t4kmyhxgoblzgyeb
     driver-class-name: com.mysql.jdbc.Driver
-    max-active: 9
+    max-active: 8
 
 logging.level.org.hibernate.SQL: DEBUG
 
@@ -55,7 +55,7 @@ spring:
       username: z9td61e4pbq5xu01
       password: t4kmyhxgoblzgyeb
       driver-class-name: com.mysql.jdbc.Driver
-      max-active: 9
+      max-active: 8
 
 logging.level.org.hibernate.SQL: DEBUG
 
