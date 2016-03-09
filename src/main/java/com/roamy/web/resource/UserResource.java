@@ -119,7 +119,7 @@ public class UserResource extends IdentityResource<User, Long> {
                 LOGGER.info("Existing entity updated: {}", savedEntity);
 
                 // send verification SMS
-                afterEntityCreated(entity);
+                afterEntityCreated(savedEntity);
 
             } else {
                 enrichForCreate(entity);
@@ -128,7 +128,7 @@ public class UserResource extends IdentityResource<User, Long> {
                 LOGGER.info("Entity Saved: {}", savedEntity);
 
                 // send verification SMS
-                afterEntityCreated(entity);
+                afterEntityCreated(savedEntity);
             }
 
             response = new RestResponse(savedEntity, HttpStatus.OK_200);

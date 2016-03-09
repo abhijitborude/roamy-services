@@ -38,12 +38,9 @@ public class SmsNotificationServiceImpl implements SmsNotificationService {
         SmsNotification notification = new SmsNotification(phoneNumber, message, Status.Pending);
         RoamyUtils.addAuditPropertiesForCreateEntity(notification, "test");
 
-        notification = smsNotificationRepository.saveAndFlush(notification);
-
         // send SMS
         SmsResult smsResult = smsService.sendSms(phoneNumber, message);
 
-        notification = smsNotificationRepository.findOne(notification.getId());
         if (smsResult.isSuccess()) {
             notification.setStatus(Status.Success);
         } else {
