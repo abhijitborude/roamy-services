@@ -71,8 +71,6 @@ public class EmailNotificationServiceImpl implements EmailNotificationService {
         emailNotification.setUserId(reservation.getUser().getId());
         emailNotification.setParams(paramsJson);
         emailNotification.setStatus(Status.Pending);
-        emailNotification = emailNotificationRepository.save(emailNotification);
-        emailNotificationRepository.flush();
 
         // later move email send logic to an async process
         String subject = templateTranslator.translate(emailTemplate.getSubjectTemplate(), params);
