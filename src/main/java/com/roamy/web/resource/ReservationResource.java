@@ -311,8 +311,6 @@ public class ReservationResource {
                 reservation.setStatus(Status.Pending);
             }
 
-            reservationPaymentRepository.save(payment);
-
             reservation.getPayments().add(payment);
             reservationRepository.save(reservation);
 
