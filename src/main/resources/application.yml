@@ -5,9 +5,6 @@ spring:
 
 spring:
   profiles: default
-  datasource:
-    testOnBorrow: true
-    validationQuery: SELECT 1
 
 multipart:
   maxFileSize: 5000KB
@@ -42,6 +39,10 @@ spring:
     password: t4kmyhxgoblzgyeb
     driver-class-name: com.mysql.jdbc.Driver
     max-active: 8
+    initial-size: 5
+    test-while-idle: true
+    test-on-borrow: true
+    validation-query: SELECT 1
 
 logging.level.org.hibernate.SQL: DEBUG
 
@@ -59,6 +60,10 @@ spring:
       password: t4kmyhxgoblzgyeb
       driver-class-name: com.mysql.jdbc.Driver
       max-active: 8
+      initial-size: 5
+      test-while-idle: true
+      test-on-borrow: true
+      validation-query: SELECT 1
 
 logging.level.org.hibernate.SQL: DEBUG
 
