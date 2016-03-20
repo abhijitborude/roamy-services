@@ -10,6 +10,9 @@ multipart:
   maxFileSize: 5000KB
   maxRequestSize: 5000KB
 
+security:
+  user.password: pass
+
 razorpay:
   key-id: rzp_test_aoq1vFZS49sAlN
   key-secret: y1hIwOiePI3N3Ruaj7dsu53z
