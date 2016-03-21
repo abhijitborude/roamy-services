@@ -17,8 +17,8 @@ insert into category
 
 -- User
 insert into user
-(id,    type,       phone_number,   email,              fname,      lname,      wallet_balance,         profile_image_id,       profile_image_url,                                                                                      birth_date,     address,            city,       country,    pin,        status,     verification_code,     verification_expiry,     referral_code,  device_id,    verified,   created_by,     created_on,         last_modified_by,   last_modified_on) values
-(1,     'Email',    '12345',        'abcd@abcd.com',    'fname',    'lname',    1000.00,                  'category1_q9uyh3',     'http://res.cloudinary.com/abhijitab/image/upload/v1449990238/category1_q9uyh3.png',                    null,           '100 street rd.',   'Mumbai',   'India',    '100000',   'Active',   null,                   null,                   'abcd',         null,         1,          'test',         current_timestamp,  'test',             current_timestamp);
+(id,    type,       account_type,       phone_number,   email,              fname,      lname,      wallet_balance,         profile_image_id,       profile_image_url,                                                                                      birth_date,     address,            city,       country,    pin,        status,     verification_code,     verification_expiry,     referral_code,  device_id,    token,        verified,   created_by,     created_on,         last_modified_by,   last_modified_on) values
+(1,     'ROAMY',    'Email',            '12345',        'abcd@abcd.com',    'fname',    'lname',    1000.00,                'category1_q9uyh3',     'http://res.cloudinary.com/abhijitab/image/upload/v1449990238/category1_q9uyh3.png',                    null,           '100 street rd.',   'Mumbai',   'India',    '100000',   'Active',   null,                   null,                   'abcd',         null,         'pass',       1,          'test',         current_timestamp,  'test',             current_timestamp);
 
 insert into trip
 (

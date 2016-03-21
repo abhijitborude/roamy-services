@@ -22,7 +22,12 @@ public class User extends AbstractEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "TYPE", length = DbConstants.SHORT_TEXT)
-    private AccountType type;
+    private UserType type;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ACCOUNT_TYPE", length = DbConstants.SHORT_TEXT)
+    private AccountType accountType;
 
     @NotNull
     @Column(name = "PHONE_NUMBER", length = DbConstants.SHORT_TEXT)
@@ -83,12 +88,24 @@ public class User extends AbstractEntity {
     //@JsonIgnore
     private String deviceId;
 
-    public AccountType getType() {
+    @Column(name = "TOKEN", length = DbConstants.SHORT_TEXT)
+    //@JsonIgnore
+    private String token;
+
+    public UserType getType() {
         return type;
     }
 
-    public void setType(AccountType type) {
+    public void setType(UserType type) {
         this.type = type;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
     }
 
     public String getPhoneNumber() {
@@ -227,10 +244,19 @@ public class User extends AbstractEntity {
         this.deviceId = deviceId;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "type='" + type + '\'' +
+                ", accountType='" + accountType + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 '}';

@@ -4,6 +4,7 @@ import com.roamy.TestApplication;
 import com.roamy.domain.AccountType;
 import com.roamy.domain.Status;
 import com.roamy.domain.User;
+import com.roamy.domain.UserType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,11 +35,12 @@ public class UserRepositoryTest {
 
     private User getUser(String phoneNumber, String email, String fname, String lname, String password) {
         User user = new User();
+        user.setType(UserType.ROAMY);
+        user.setAccountType(AccountType.Phone);
         user.setPhoneNumber(phoneNumber);
         user.setEmail(email);
         user.setFirstName(fname);
         user.setLastName(lname);
-        user.setType(AccountType.Phone);
         user.setStatus(Status.Active);
         user.setCreatedBy("test");
         user.setCreatedOn(new Date());
