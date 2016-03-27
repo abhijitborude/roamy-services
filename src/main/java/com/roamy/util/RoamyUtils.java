@@ -21,6 +21,7 @@ public class RoamyUtils {
 
     public static final int VERIFICATION_CODE_LENGTH = 6;
     public static final int REFERRAL_CODE_LENGTH = 6;
+    public static final int TOKEN_LENGTH = 6;
     public static final int VERIFICATION_CODE_VALIDITY_HOURS = 2;
 
     public static String generateVerificationCode() {
@@ -29,6 +30,10 @@ public class RoamyUtils {
 
     public static String generateReferralCode() {
         return generateRandomAlphanumericString(REFERRAL_CODE_LENGTH);
+    }
+
+    public static String generateToken() {
+        return generateRandomAlphanumericString(TOKEN_LENGTH);
     }
 
     public static Date getVerificationCodeExpiryDate() {

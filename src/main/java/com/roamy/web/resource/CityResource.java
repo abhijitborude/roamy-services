@@ -15,12 +15,10 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
@@ -71,11 +69,6 @@ public class CityResource extends CitableResource<City, Long> {
     }
 
     @Override
-    protected void afterEntityCreated(City entity) {
-
-    }
-
-    @Override
     protected void addLinks(City entity) {
         entity.get_links().put("categories", "/" + entity.getCode() + "/categories");
 
@@ -112,6 +105,38 @@ public class CityResource extends CitableResource<City, Long> {
 
         } catch (Throwable t) {
             LOGGER.error("error in getCategoriesForCity: ", t);
+            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
+        }
+
+        return response;
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ADMIN')")
+    @ApiOperation(value = "Create a City", notes = "Creates a City and returns the created entity with it's ID. " +
+            "Actual result is contained in the data field of the response.")
+    public RestResponse createCity(@ApiParam(value = "City to be created in the JSON format sent as payload of the POST operation. " +
+            "ID is not required and will be ignored.", required = true)
+                                  @RequestBody City entity) {
+        LOGGER.info("Saving: {}", entity);
+
+        RestResponse response = null;
+
+        try {
+            // validate the incoming data
+            validateForCreate(entity);
+
+            // add missing information to the entity before it is saved
+            enrichForCreate(entity);
+
+            // save the entity
+            City city = cityRepository.save(entity);
+            LOGGER.info("Entity Saved: {}", city);
+
+            response = new RestResponse(city, HttpStatus.OK_200);
+
+        } catch (Throwable t) {
+            LOGGER.error("error in createCity: ", t);
             response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
         }
 

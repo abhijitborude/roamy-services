@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -110,6 +111,10 @@ public class UserResource extends IdentityResource<User, Long> {
                 // set referral code
                 user.setReferralCode(RoamyUtils.generateReferralCode());
 
+                // set token
+                String token = RoamyUtils.generateToken();
+                user.setToken((new BCryptPasswordEncoder()).encode(token));
+
                 user.setLastModifiedBy("test");
                 user.setLastModifiedOn(new Date());
 
@@ -118,17 +123,16 @@ public class UserResource extends IdentityResource<User, Long> {
                 savedEntity = userRepository.save(user);
                 LOGGER.info("Existing entity updated: {}", savedEntity);
 
-                // send verification SMS
-                afterEntityCreated(savedEntity);
-
+                // send sms with verification code
+                smsNotificationService.sendVerificationSms(savedEntity.getPhoneNumber(), savedEntity.getVerificationCode());
             } else {
                 enrichForCreate(entity);
 
                 savedEntity = userRepository.save(entity);
                 LOGGER.info("Entity Saved: {}", savedEntity);
 
-                // send verification SMS
-                afterEntityCreated(savedEntity);
+                // send sms with verification code
+                smsNotificationService.sendVerificationSms(savedEntity.getPhoneNumber(), savedEntity.getVerificationCode());
             }
 
             response = new RestResponse(savedEntity, HttpStatus.OK_200);
@@ -232,14 +236,12 @@ public class UserResource extends IdentityResource<User, Long> {
         // set referral code
         entity.setReferralCode(RoamyUtils.generateReferralCode());
 
+        // set token
+        String token = RoamyUtils.generateToken();
+        entity.setToken((new BCryptPasswordEncoder()).encode(token));
+
         RoamyUtils.addAuditPropertiesForCreateEntity(entity, "test");
         entity.setStatus(Status.Inactive);
-    }
-
-    @Override
-    protected void afterEntityCreated(User entity) {
-        // send sms with verification code
-        smsNotificationService.sendVerificationSms(entity.getPhoneNumber(), entity.getVerificationCode());
     }
 
     @Override

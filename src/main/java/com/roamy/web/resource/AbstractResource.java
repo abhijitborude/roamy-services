@@ -1,6 +1,5 @@
 package com.roamy.web.resource;
 
-import com.roamy.domain.City;
 import com.roamy.dto.RestResponse;
 import com.roamy.util.RestUtils;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -11,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,13 +48,6 @@ public abstract class AbstractResource<T, ID extends Serializable> {
     protected abstract void enrichForCreate(T entity);
 
     /**
-     * Performs additional processing required after creating an entity e.g. sending email after creating a user profile
-     *
-     * @param entity entity that requires additional processing after being saved
-     */
-    protected abstract void afterEntityCreated(T entity);
-
-    /**
      * Adds hyperlinks to the entity being returned via API. e.g. Trip has links to TripReviews
      *
      * @param entity entity to be enriched with hyperlinks
@@ -82,7 +73,7 @@ public abstract class AbstractResource<T, ID extends Serializable> {
 
             // enrich each entity
             if (content != null) {
-                content.forEach(e -> enrichForCreate(e));
+                content.forEach(e -> enrichForGet(e));
             }
 
             // construct return result
@@ -96,37 +87,4 @@ public abstract class AbstractResource<T, ID extends Serializable> {
         return response;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
-    @ApiOperation(value = "Create an entity", notes = "Creates an entity and returns the created entity with it's ID. " +
-                            "Actual result is contained in the data field of the response.")
-    public RestResponse createOne(@ApiParam(value = "Entity to be created in the JSON format sent as payload of the POST operation. " +
-                                                    "ID is not required and will be ignored.", required = true)
-                                      @RequestBody T entity) {
-        LOGGER.info("Saving: {}", entity);
-
-        RestResponse response = null;
-
-        try {
-            // validate the incoming data
-            validateForCreate(entity);
-
-            // add missing information to the entity before it is saved
-            enrichForCreate(entity);
-
-            // save the entity
-            T savedEntity = getJpaRepository().save(entity);
-            LOGGER.info("Entity Saved: {}", savedEntity);
-
-            // perform additional processing if required
-            afterEntityCreated(entity);
-
-            response = new RestResponse(savedEntity, HttpStatus.OK_200);
-
-        } catch (Throwable t) {
-            LOGGER.error("error in save: ", t);
-            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
-        }
-
-        return response;
-    }
 }

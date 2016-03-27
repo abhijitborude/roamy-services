@@ -89,7 +89,6 @@ public class User extends AbstractEntity {
     private String deviceId;
 
     @Column(name = "TOKEN", length = DbConstants.SHORT_TEXT)
-    //@JsonIgnore
     private String token;
 
     public UserType getType() {

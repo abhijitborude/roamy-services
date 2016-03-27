@@ -1,6 +1,5 @@
 package com.roamy.service.notification.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.roamy.dao.api.EmailNotificationRepository;
 import com.roamy.dao.api.EmailTemplateRepository;
 import com.roamy.domain.*;
@@ -11,16 +10,11 @@ import com.roamy.service.notification.dto.TripNotificationDto;
 import com.roamy.util.RestUtils;
 import com.roamy.util.RoamyUtils;
 import com.roamy.util.TemplateTranslator;
-import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
