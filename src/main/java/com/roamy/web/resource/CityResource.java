@@ -4,6 +4,7 @@ import com.roamy.dao.api.CitableRepository;
 import com.roamy.dao.api.CityRepository;
 import com.roamy.dao.api.TripInstanceRepository;
 import com.roamy.domain.*;
+import com.roamy.dto.CityDto;
 import com.roamy.dto.RestResponse;
 import com.roamy.util.RestUtils;
 import com.roamy.util.RoamyUtils;
@@ -47,12 +48,7 @@ public class CityResource extends CitableResource<City, Long> {
 
     @Override
     protected void validateForCreate(City entity) {
-        if (!StringUtils.hasText(entity.getCode())) {
-            throw new RoamyValidationException("City code not provided");
-        }
-        if (!StringUtils.hasText(entity.getName())) {
-            throw new RoamyValidationException("City name not provided");
-        }
+
     }
 
     @Override
@@ -62,10 +58,7 @@ public class CityResource extends CitableResource<City, Long> {
 
     @Override
     protected void enrichForCreate(City entity) {
-        if (entity.getStatus() == null) {
-            entity.setStatus(Status.Active);
-        }
-        RoamyUtils.addAuditPropertiesForCreateEntity(entity, "test");
+
     }
 
     @Override
@@ -113,24 +106,34 @@ public class CityResource extends CitableResource<City, Long> {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ADMIN')")
-    @ApiOperation(value = "Create a City", notes = "Creates a City and returns the created entity with it's ID. " +
+    @ApiOperation(value = "Create a City", notes = "Creates a City and returns the newly created entity. " +
             "Actual result is contained in the data field of the response.")
-    public RestResponse createCity(@ApiParam(value = "City to be created in the JSON format sent as payload of the POST operation. " +
-            "ID is not required and will be ignored.", required = true)
-                                  @RequestBody City entity) {
-        LOGGER.info("Saving: {}", entity);
+    public RestResponse createCity(@ApiParam(value = "City to be created in the JSON format sent as payload of the POST operation.",
+                                            required = true)
+                                  @RequestBody CityDto cityDto) {
+        LOGGER.info("Saving: {}", cityDto);
 
         RestResponse response = null;
 
         try {
-            // validate the incoming data
-            validateForCreate(entity);
+            // validate
+            if (!StringUtils.hasText(cityDto.getCode())) {
+                throw new RoamyValidationException("City code not provided");
+            }
+            if (!StringUtils.hasText(cityDto.getName())) {
+                throw new RoamyValidationException("City name not provided");
+            }
 
             // add missing information to the entity before it is saved
-            enrichForCreate(entity);
+            City city = new City();
+            city.setCode(cityDto.getCode());
+            city.setName(cityDto.getName());
+            city.setDescription(cityDto.getDescription());
+            city.setStatus(Status.Active);
+            RoamyUtils.addAuditPropertiesForCreateEntity(city, "test");
 
             // save the entity
-            City city = cityRepository.save(entity);
+            city = cityRepository.save(city);
             LOGGER.info("Entity Saved: {}", city);
 
             response = new RestResponse(city, HttpStatus.OK_200);

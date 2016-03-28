@@ -4,6 +4,7 @@ import com.roamy.dao.api.CategoryRepository;
 import com.roamy.dao.api.CitableRepository;
 import com.roamy.domain.Category;
 import com.roamy.domain.Status;
+import com.roamy.dto.CategoryDto;
 import com.roamy.dto.RestResponse;
 import com.roamy.util.RestUtils;
 import com.roamy.util.RoamyUtils;
@@ -42,12 +43,8 @@ public class CategoryResource extends CitableResource<Category, Long> {
 
     @Override
     protected void validateForCreate(Category entity) {
-        if (!StringUtils.hasText(entity.getCode())) {
-            throw new RoamyValidationException("Category code not provided");
-        }
-        if (!StringUtils.hasText(entity.getName())) {
-            throw new RoamyValidationException("Category name not provided");
-        }
+
+
     }
 
     @Override
@@ -57,10 +54,7 @@ public class CategoryResource extends CitableResource<Category, Long> {
 
     @Override
     protected void enrichForCreate(Category entity) {
-        if (entity.getStatus() == null) {
-            entity.setStatus(Status.Active);
-        }
-        RoamyUtils.addAuditPropertiesForCreateEntity(entity, "test");
+
     }
 
     @Override
@@ -70,24 +64,39 @@ public class CategoryResource extends CitableResource<Category, Long> {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ADMIN')")
-    @ApiOperation(value = "Create a Category", notes = "Creates a Category and returns the created entity with it's ID. " +
+    @ApiOperation(value = "Create a Category", notes = "Creates a Category and returns the newly created entity." +
             "Actual result is contained in the data field of the response.")
-    public RestResponse createCategory(@ApiParam(value = "Category to be created in the JSON format sent as payload of the POST operation. " +
-            "ID is not required and will be ignored.", required = true)
-                                   @RequestBody Category entity) {
-        LOGGER.info("Saving: {}", entity);
+    public RestResponse createCategory(@ApiParam(value = "Category to be created in the JSON format sent as payload of the POST operation.",
+                                                required = true)
+                                   @RequestBody CategoryDto categoryDto) {
+        LOGGER.info("Saving: {}", categoryDto);
 
         RestResponse response = null;
 
         try {
-            // validate the incoming data
-            validateForCreate(entity);
+            // validate
+            if (!StringUtils.hasText(categoryDto.getCode())) {
+                throw new RoamyValidationException("Category code not provided");
+            }
+            if (!StringUtils.hasText(categoryDto.getName())) {
+                throw new RoamyValidationException("Category name not provided");
+            }
+            if (!StringUtils.hasText(categoryDto.getImageUrl())) {
+                throw new RoamyValidationException("Category image url not provided");
+            }
 
             // add missing information to the entity before it is saved
-            enrichForCreate(entity);
+            Category category = new Category();
+            category.setCode(categoryDto.getCode());
+            category.setName(categoryDto.getName());
+            category.setDescription(categoryDto.getDescription());
+            category.setImageUrl(categoryDto.getImageUrl());
+            category.setImageCaption(categoryDto.getImageCaption());
+            category.setStatus(Status.Active);
+            RoamyUtils.addAuditPropertiesForCreateEntity(category, "test");
 
             // save the entity
-            Category category = categoryRepository.save(entity);
+            category = categoryRepository.save(category);
             LOGGER.info("Category Saved: {}", category);
 
             response = new RestResponse(category, HttpStatus.OK_200);
