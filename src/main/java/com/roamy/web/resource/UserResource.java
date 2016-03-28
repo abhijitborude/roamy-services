@@ -5,7 +5,7 @@ import com.roamy.domain.*;
 import com.roamy.dto.FavoriteTripAction;
 import com.roamy.dto.RestResponse;
 import com.roamy.dto.UserActionDto;
-import com.roamy.dto.UserUpdateDto;
+import com.roamy.dto.UserDto;
 import com.roamy.integration.imagelib.dto.ImageLibraryIdentifier;
 import com.roamy.integration.imagelib.service.api.ImageLibraryService;
 import com.roamy.service.notification.api.SmsNotificationService;
@@ -71,83 +71,77 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    @ApiOperation(value = "Create user entity", notes = "Creates a user entity with the user information provided. " +
-            "If a user with the same phoneNumber already exists then simply updates the values of the existing entity. " +
+    @ApiOperation(value = "Create user entity", notes = "Creates a user entity with the user information provided." +
+            " If a user with same phoneNumber already exists then simply updates the values of the existing entity." +
             " Otherwise a new entity is created. In both cases, user's verification code is reset and an SMS is sent " +
             " to the user's phoneNumber for verification." +
             "Actual result is contained in the data field of the response.")
-    public RestResponse createOne(@ApiParam(name = "userDetails", value = "User Details", required = true)
-                                      @RequestBody User entity) {
-        LOGGER.info("Saving: {}", entity);
+    public RestResponse createUser(@ApiParam(name = "userDetails", value = "User Details", required = true)
+                                      @RequestBody UserDto userDto) {
+        LOGGER.info("Saving: {}", userDto);
 
         RestResponse response = null;
 
         try {
-            validateForCreate(entity);
-
-            User savedEntity = null;
+            validateForCreate(userDto);
 
             // check if user with same phoneNumber exists
-            User user = userRepository.findByPhoneNumber(entity.getPhoneNumber());
+            User user = userRepository.findByPhoneNumber(userDto.getPhoneNumber());
 
-            if (user != null) {
-                LOGGER.info("User with phoneNumber({}) already exists: {}", entity.getPhoneNumber(), user);
+            if (user == null) {
+                user = new User();
 
-                // user already exists. Simply update the values and reset codes
-                user.setEmail(entity.getEmail());
-                user.setFirstName(entity.getFirstName());
-                user.setLastName(entity.getLastName());
-                user.setBirthDate(entity.getBirthDate());
-                user.setAddress(entity.getAddress());
-                user.setCity(entity.getCity());
-                user.setPinCode(entity.getPinCode());
-                user.setCountry(entity.getCountry());
-                user.setDeviceId(entity.getDeviceId());
+                if (user.getType() == null) {
+                    user.setType(UserType.ROAMY);
+                }
+                if (user.getAccountType() == null) {
+                    user.setAccountType(AccountType.Phone);
+                }
+                RoamyUtils.addAuditPropertiesForCreateEntity(user, "test");
 
-                // set verification code
-                user.setVerificationCode(RoamyUtils.generateVerificationCode());
-                user.setVerificationCodeExpiry(RoamyUtils.getVerificationCodeExpiryDate());
-                user.setIsVerified(false);
-
-                // set referral code
-                user.setReferralCode(RoamyUtils.generateReferralCode());
-
-                // set token
-                String token = RoamyUtils.generateToken();
-                user.setToken((new BCryptPasswordEncoder()).encode(token));
+            } else {
+                LOGGER.info("User with phoneNumber({}) already exists: {}", userDto.getPhoneNumber(), user);
 
                 user.setLastModifiedBy("test");
                 user.setLastModifiedOn(new Date());
-
-                user.setStatus(Status.Inactive);
-
-                savedEntity = userRepository.save(user);
-                LOGGER.info("Existing entity updated: {}", savedEntity);
-
-                // send sms with verification code
-                smsNotificationService.sendVerificationSms(savedEntity.getPhoneNumber(), savedEntity.getVerificationCode());
-            } else {
-                enrichForCreate(entity);
-
-                savedEntity = userRepository.save(entity);
-                LOGGER.info("Entity Saved: {}", savedEntity);
-
-                // send sms with verification code
-                smsNotificationService.sendVerificationSms(savedEntity.getPhoneNumber(), savedEntity.getVerificationCode());
             }
 
-            response = new RestResponse(savedEntity, HttpStatus.OK_200);
+            updateUserProperties(user, userDto);
+
+            user.setDeviceId(userDto.getDeviceId());
+
+            // set verification code
+            user.setVerificationCode(RoamyUtils.generateVerificationCode());
+            user.setVerificationCodeExpiry(RoamyUtils.getVerificationCodeExpiryDate());
+            user.setIsVerified(false);
+
+            // set referral code
+            user.setReferralCode(RoamyUtils.generateReferralCode());
+
+            // set token
+            String token = RoamyUtils.generateToken();
+            user.setToken((new BCryptPasswordEncoder()).encode(token));
+            LOGGER.info("Created token ({}) for user: {}", token, user);
+
+            user.setStatus(Status.Inactive);
+
+            user = userRepository.save(user);
+            LOGGER.info("Entity Saved: {}", user);
+
+            // send sms with verification code
+            smsNotificationService.sendVerificationSms(user.getPhoneNumber(), user.getVerificationCode());
+
+            response = new RestResponse(user, HttpStatus.OK_200);
 
         } catch (Throwable t) {
-            LOGGER.error("error in save: ", t);
+            LOGGER.error("error in createUser: ", t);
             response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
         }
 
         return response;
     }
 
-    @Override
-    protected void validateForCreate(User entity) {
+    protected void validateForCreate(UserDto entity) {
         if (!StringUtils.hasText(entity.getPhoneNumber())) {
             throw new RoamyValidationException("Phone number not provided");
         }
@@ -162,37 +156,21 @@ public class UserResource extends IdentityResource<User, Long> {
         }
     }
 
-    @Override
-    protected void enrichForGet(User entity) {
-
+    protected void updateUserProperties(User user, UserDto entity) {
+        user.setPhoneNumber(entity.getPhoneNumber());
+        user.setEmail(entity.getEmail());
+        user.setFirstName(entity.getFirstName());
+        user.setLastName(entity.getLastName());
+        user.setBirthDate(entity.getBirthDate());
+        user.setAddress(entity.getAddress());
+        user.setCity(entity.getCity());
+        user.setPinCode(entity.getPinCode());
+        user.setCountry(entity.getCountry());
     }
 
     @Override
-    protected void enrichForCreate(User entity) {
-        entity.setId(null);
+    protected void enrichForGet(User entity) {
 
-        if (entity.getType() == null) {
-            entity.setType(UserType.ROAMY);
-        }
-
-        if (entity.getAccountType() == null) {
-            entity.setAccountType(AccountType.Phone);
-        }
-
-        // set verification code
-        entity.setVerificationCode(RoamyUtils.generateVerificationCode());
-        entity.setVerificationCodeExpiry(RoamyUtils.getVerificationCodeExpiryDate());
-        entity.setIsVerified(false);
-
-        // set referral code
-        entity.setReferralCode(RoamyUtils.generateReferralCode());
-
-        // set token
-        String token = RoamyUtils.generateToken();
-        entity.setToken((new BCryptPasswordEncoder()).encode(token));
-
-        RoamyUtils.addAuditPropertiesForCreateEntity(entity, "test");
-        entity.setStatus(Status.Inactive);
     }
 
     @Override
@@ -205,7 +183,7 @@ public class UserResource extends IdentityResource<User, Long> {
     @ApiOperation(value = "Update user entity", notes = "Updates user entity with a given user ID." +
                         "Actual result is contained in the data field of the response.")
     public RestResponse updateUser(@ApiParam(value = "User ID", required = true) @PathVariable Long id,
-                                   @ApiParam(value = "User Details", required = true) @RequestBody UserUpdateDto dto) {
+                                   @ApiParam(value = "User Details", required = true) @RequestBody UserDto dto) {
         LOGGER.info("updating: {}", dto);
 
         RestResponse response = null;
@@ -234,14 +212,7 @@ public class UserResource extends IdentityResource<User, Long> {
             LOGGER.info("Found {}", user);
 
             // user already exists. Simply update the values and reset codes
-            user.setEmail(dto.getEmail());
-            user.setFirstName(dto.getFirstName());
-            user.setLastName(dto.getLastName());
-            user.setBirthDate(dto.getBirthDate());
-            user.setAddress(dto.getAddress());
-            user.setCity(dto.getCity());
-            user.setPinCode(dto.getPinCode());
-            user.setCountry(dto.getCountry());
+            updateUserProperties(user, dto);
 
             user.setLastModifiedBy("test");
             user.setLastModifiedOn(new Date());

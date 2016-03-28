@@ -4,13 +4,19 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.roamy.config.CustomDateDeserializer;
 import com.roamy.config.CustomDateSerializer;
+import com.roamy.domain.AccountType;
+import com.roamy.domain.UserType;
 
 import java.util.Date;
 
 /**
- * Created by Abhijit on 7/1/2015.
+ * Created by Abhijit on 3/27/16.
  */
-public class UserUpdateDto {
+public class UserDto {
+
+    private UserType type;
+
+    private AccountType accountType;
 
     private String phoneNumber;
 
@@ -31,6 +37,24 @@ public class UserUpdateDto {
     private String country;
 
     private String pinCode;
+
+    private String deviceId;
+
+    public UserType getType() {
+        return type;
+    }
+
+    public void setType(UserType type) {
+        this.type = type;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
+    }
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -104,11 +128,29 @@ public class UserUpdateDto {
         this.pinCode = pinCode;
     }
 
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
     @Override
     public String toString() {
-        return "UserUpdateDto{" +
+        return "UserDto{" +
+                "type=" + type +
+                ", accountType=" + accountType +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthDate=" + birthDate +
+                ", address='" + address + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", pinCode='" + pinCode + '\'' +
+                ", deviceId='" + deviceId + '\'' +
                 '}';
     }
 }

@@ -27,25 +27,11 @@ public abstract class AbstractResource<T, ID extends Serializable> {
     protected abstract JpaRepository<T, ID> getJpaRepository();
 
     /**
-     * Validates the incoming entity data received via the API before it is saved
-     *
-     * @param entity entity received via API
-     */
-    protected abstract void validateForCreate(T entity);
-
-    /**
      * Adds additional information to the entity and enrich it before returning via the API
      *
      * @param entity entity to be returned via API
      */
     protected abstract void enrichForGet(T entity);
-
-    /**
-     * Adds additional required information to the entity received via API before it is saved
-     *
-     * @param entity entity received via API
-     */
-    protected abstract void enrichForCreate(T entity);
 
     /**
      * Adds hyperlinks to the entity being returned via API. e.g. Trip has links to TripReviews

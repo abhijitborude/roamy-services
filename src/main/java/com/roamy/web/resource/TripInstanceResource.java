@@ -29,17 +29,7 @@ public class TripInstanceResource extends IdentityResource<TripInstance, Long> {
     }
 
     @Override
-    protected void validateForCreate(TripInstance entity) {
-
-    }
-
-    @Override
     protected void enrichForGet(TripInstance entity) {
-
-    }
-
-    @Override
-    protected void enrichForCreate(TripInstance entity) {
 
     }
 

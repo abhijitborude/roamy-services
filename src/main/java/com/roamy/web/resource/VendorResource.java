@@ -25,17 +25,7 @@ public class VendorResource extends CitableResource<Vendor, Long> {
     }
 
     @Override
-    protected void validateForCreate(Vendor entity) {
-
-    }
-
-    @Override
     protected void enrichForGet(Vendor entity) {
-
-    }
-
-    @Override
-    protected void enrichForCreate(Vendor entity) {
 
     }
 
