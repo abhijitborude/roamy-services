@@ -13,6 +13,7 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,6 +36,7 @@ public class SmsNotificationResource {
     private SmsNotificationRepository smsNotificationRepository;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "Find SMS notifications", notes = "Finds SMS notifications by phone number and status. " +
             "Pagination is enabled and can be controlled using two parameters- page and size." +
             "By default first page is displayed with 100 elements (page=0, size=100). " +

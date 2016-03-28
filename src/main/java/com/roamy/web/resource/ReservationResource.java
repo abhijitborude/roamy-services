@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -65,6 +66,7 @@ public class ReservationResource {
     private EmailNotificationService emailNotificationService;
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
     @ApiOperation(value = "Create a reservation", notes = "Creates reservation for a user, tripInstance and " +
             "tripInstanceOptions. TripInstanceOptions provide selections made by the user (e.g. regular vs premium, " +
             "adult and senior). useRomoney flag can be set to true to use Romoney in user's account and apply it " +
@@ -244,6 +246,7 @@ public class ReservationResource {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
     @ApiOperation(value = "Get reservation By id", notes = "Fetches reservation details for a given ID. " +
                             "Actual result is contained in the data field of the response.")
     public RestResponse getReservation(@ApiParam(value = "Reservation ID", required = true)
@@ -266,6 +269,7 @@ public class ReservationResource {
     }
 
     @RequestMapping(value = "/{id}/payments/", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
     @ApiOperation(value = "Create a payment", notes = "Creates payment for a Reservation represented by given " +
                         "Reservation ID. Actual result is contained in the data field of the response.")
     public RestResponse createPayment(@ApiParam(name = "reservationId", value = "Reservation ID for which payment is being made", required = true)

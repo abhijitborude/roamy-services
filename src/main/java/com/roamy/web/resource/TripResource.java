@@ -71,11 +71,6 @@ public class TripResource extends CitableResource<Trip, Long> {
     }
 
     @Override
-    protected void afterEntityCreated(Trip entity) {
-
-    }
-
-    @Override
     protected void addLinks(Trip entity) {
 
     }

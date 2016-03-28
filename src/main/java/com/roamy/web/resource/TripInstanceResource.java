@@ -44,11 +44,6 @@ public class TripInstanceResource extends IdentityResource<TripInstance, Long> {
     }
 
     @Override
-    protected void afterEntityCreated(TripInstance entity) {
-
-    }
-
-    @Override
     protected void addLinks(TripInstance entity) {
 
     }

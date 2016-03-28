@@ -12,6 +12,7 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,6 +34,7 @@ public class PaymentResource {
     private PaymentGatewayService paymentGatewayService;
 
     @RequestMapping(value = "/{transactionId}", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
     @ApiOperation(value = "Get payment details for transactionId", notes = "Fetches payment details from " +
                     "Payment Gateway using the transaction id that is persisted with the reservation. " +
                     "Actual result is contained in the data field of the response.")

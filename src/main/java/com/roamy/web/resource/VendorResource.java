@@ -40,11 +40,6 @@ public class VendorResource extends CitableResource<Vendor, Long> {
     }
 
     @Override
-    protected void afterEntityCreated(Vendor entity) {
-
-    }
-
-    @Override
     protected void addLinks(Vendor entity) {
 
     }
