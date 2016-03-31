@@ -91,12 +91,12 @@ public class UserResource extends IdentityResource<User, Long> {
             if (user == null) {
                 user = new User();
 
-                if (user.getType() == null) {
-                    user.setType(UserType.ROAMY);
-                }
-                if (user.getAccountType() == null) {
-                    user.setAccountType(AccountType.Phone);
-                }
+                UserType type = userDto.getType() == null ? UserType.ROAMY : userDto.getType();
+                user.setType(type);
+
+                AccountType accountType = userDto.getAccountType() == null ? AccountType.Phone : userDto.getAccountType();
+                user.setAccountType(accountType);
+
                 RoamyUtils.addAuditPropertiesForCreateEntity(user, "test");
 
             } else {
