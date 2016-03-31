@@ -40,6 +40,8 @@ public class UserDto {
 
     private String deviceId;
 
+    private String token;
+
     public UserType getType() {
         return type;
     }
@@ -134,6 +136,14 @@ public class UserDto {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     @Override
