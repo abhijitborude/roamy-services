@@ -198,12 +198,12 @@ public class UserResource extends IdentityResource<User, Long> {
             if (!StringUtils.hasText(dto.getEmail())) {
                 throw new RoamyValidationException("Email not provided");
             }
-            if (StringUtils.hasText(dto.getCity())) {
-                List<City> cities = cityRepository.findByName(dto.getCity());
-                if (CollectionUtils.isEmpty(cities) || cities.size() > 1) {
-                    throw new RoamyValidationException("City not correct: " + dto.getCity());
-                }
-            }
+//            if (StringUtils.hasText(dto.getCity())) {
+//                List<City> cities = cityRepository.findByName(dto.getCity());
+//                if (CollectionUtils.isEmpty(cities) || cities.size() > 1) {
+//                    throw new RoamyValidationException("City not correct: " + dto.getCity());
+//                }
+//            }
 
             // find the user
             User user = userRepository.findOne(id);
