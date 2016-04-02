@@ -128,6 +128,9 @@ public class UserResource extends IdentityResource<User, Long> {
             user = userRepository.save(user);
             LOGGER.info("Entity Saved: {}", user);
 
+            // set token to be returned to the user app
+            user.setUserToken(token);
+
             // send sms with verification code
             smsNotificationService.sendVerificationSms(user.getPhoneNumber(), user.getVerificationCode());
 

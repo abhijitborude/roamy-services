@@ -91,6 +91,9 @@ public class User extends AbstractEntity {
     @Column(name = "TOKEN", length = DbConstants.SHORT_TEXT)
     private String token;
 
+    @Transient
+    private String userToken;
+
     public UserType getType() {
         return type;
     }
@@ -249,6 +252,14 @@ public class User extends AbstractEntity {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
     }
 
     @Override
