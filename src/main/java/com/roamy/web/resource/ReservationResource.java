@@ -3,12 +3,14 @@ package com.roamy.web.resource;
 import com.roamy.config.ConfigProperties;
 import com.roamy.dao.api.*;
 import com.roamy.domain.*;
+import com.roamy.dto.FriendInfo;
 import com.roamy.dto.ReservationDto;
 import com.roamy.dto.ReservationPaymentDto;
 import com.roamy.dto.RestResponse;
 import com.roamy.integration.paymentGateway.dto.PaymentDto;
 import com.roamy.integration.paymentGateway.service.api.PaymentGatewayService;
 import com.roamy.service.notification.api.EmailNotificationService;
+import com.roamy.service.notification.api.SmsNotificationService;
 import com.roamy.util.RestUtils;
 import com.roamy.util.RoamyValidationException;
 import com.wordnik.swagger.annotations.Api;
@@ -25,6 +27,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -64,6 +67,9 @@ public class ReservationResource {
 
     @Autowired
     private EmailNotificationService emailNotificationService;
+
+    @Autowired
+    private SmsNotificationService smsNotificationService;
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
@@ -321,6 +327,31 @@ public class ReservationResource {
             response = new RestResponse(reservation, HttpStatus.OK_200);
         } catch (Throwable t) {
             LOGGER.error("error in getReservation: ", t);
+            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
+        }
+
+        return response;
+    }
+
+    @RequestMapping(value = "/{id}/sharebysms/", method = RequestMethod.POST)
+    //@PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
+    @ApiOperation(value = "share reservation with friends via sms",
+                    notes = "Sends an sms to the friend provided in the request body.")
+    public RestResponse shareReservationBySms(@ApiParam(name = "reservationId", value = "ID of the reservation being shared", required = true)
+                                                  @PathVariable Long id,
+                                              @ApiParam(name = "friends", value = "List of friend details. Each friend should have a name and phone number.", required = true)
+                                                  @RequestBody List<FriendInfo> friends) {
+
+        LOGGER.info("sharing reservation ({}) details with {}", id, friends);
+
+        RestResponse response = null;
+        try {
+            Reservation reservation = reservationRepository.findOne(id);
+            friends.forEach(friendInfo ->
+                smsNotificationService.sendTripReservationShareSms(reservation, friendInfo.getName(), friendInfo.getPhoneNumber())
+            );
+        } catch (Throwable t) {
+            LOGGER.error("error in shareReservationBySms: ", t);
             response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
         }
 

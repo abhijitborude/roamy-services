@@ -29,7 +29,7 @@ public class SmsServiceImpl implements SmsService {
 
         // Do Get SMS service URI
         String response = restTemplate.getForObject(SMS_SERVICE_URI, String.class, phoneNumber, text);
-        LOGGER.info("Response received from SmsService: {}", response);
+        LOGGER.info("Response received from SmsService: {}", response == null ? null : response.trim());
 
         SmsResult smsResult = new SmsResult();
 

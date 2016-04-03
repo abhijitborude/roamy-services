@@ -16,8 +16,6 @@ import java.util.Map;
 @Service("templateTranslator")
 public class TemplateTranslator {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(TemplateTranslator.class);
-
     @PostConstruct
     private void init() {
         Velocity.init();

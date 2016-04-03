@@ -18,8 +18,8 @@ insert into category
 -- User
 insert into user
 (id,    type,       account_type,       phone_number,   email,              fname,      lname,      wallet_balance,         profile_image_id,       profile_image_url,                                                                                      birth_date,     address,            city,       country,    pin,        status,     verification_code,     verification_expiry,     referral_code,  device_id,    token,                                                                verified,   created_by,     created_on,         last_modified_by,   last_modified_on) values
-(1,     'ROAMY',    'Phone',            '1234',        'abcd@abcd.com',    'fname',    'lname',    1000.00,                'category1_q9uyh3',     'http://res.cloudinary.com/abhijitab/image/upload/v1449990238/category1_q9uyh3.png',                    null,           '100 street rd.',   'Mumbai',   'India',    '100000',   'Active',   null,                   null,                   'abcd',         null,         '$2a$10$Dqmzaiw0aYep.Q1x3ipKi.0u9KFRU33UQ/ZijQLaKv3MYuL32bKfa',       1,          'test',         current_timestamp,  'test',             current_timestamp),
-(2,     'ADMIN',    'Phone',            '5678',        'abcd@abcd.com',    'fname',    'lname',    1000.00,                'category1_q9uyh3',     'http://res.cloudinary.com/abhijitab/image/upload/v1449990238/category1_q9uyh3.png',                    null,           '100 street rd.',   'Mumbai',   'India',    '100000',   'Active',   null,                   null,                   'abcd',         null,         '$2a$10$Dqmzaiw0aYep.Q1x3ipKi.0u9KFRU33UQ/ZijQLaKv3MYuL32bKfa',       1,          'test',         current_timestamp,  'test',             current_timestamp);
+(1,     'ROAMY',    'Phone',            '1234',        'abcd@abcd.com',    'Abhijit',   'Borude',   1000.00,                'category1_q9uyh3',     'http://res.cloudinary.com/abhijitab/image/upload/v1449990238/category1_q9uyh3.png',                    null,           '100 street rd.',   'Mumbai',   'India',    '100000',   'Active',   null,                   null,                   'abcd',         null,         '$2a$10$Dqmzaiw0aYep.Q1x3ipKi.0u9KFRU33UQ/ZijQLaKv3MYuL32bKfa',       1,          'test',         current_timestamp,  'test',             current_timestamp),
+(2,     'ADMIN',    'Phone',            '5678',        'abcd@abcd.com',    'Abhijit',   'Borude',   1000.00,                'category1_q9uyh3',     'http://res.cloudinary.com/abhijitab/image/upload/v1449990238/category1_q9uyh3.png',                    null,           '100 street rd.',   'Mumbai',   'India',    '100000',   'Active',   null,                   null,                   'abcd',         null,         '$2a$10$Dqmzaiw0aYep.Q1x3ipKi.0u9KFRU33UQ/ZijQLaKv3MYuL32bKfa',       1,          'test',         current_timestamp,  'test',             current_timestamp);
 
 insert into trip
 (
@@ -297,6 +297,9 @@ insert into reservation
 (1,     'PACKAGE',      1,          'abc@abc.com',      4,                      30000,      current_timestamp,  null,           '12345',        'Active',   'test',         current_timestamp,  'test',             current_timestamp),
 (2,     'PACKAGE',      1,          'abc@abc.com',      2,                      20000,      current_timestamp,  null,           '12345',        'Active',   'test',         current_timestamp,  'test',             current_timestamp);
 
+insert into reservation_trip_instance
+(reservation_id,    trip_instance_id) values
+(1,                 1);
 
 insert into reservation_payment
 (id,    reservation_id,   type,             amount,     transaction_id,         status,         created_by,     created_on,         last_modified_by,   last_modified_on) values
