@@ -16,14 +16,10 @@ public interface CitableRepository<T extends CitableEntity, ID extends Serializa
 
     T findByCode(String code);
 
-    T findByCodeAndStatus(String code, Status status);
-
     List<T> findByStatus(Status status);
 
     List<T> findByName(String name);
 
     List<T> findByNameIgnoreCase(String name);
-
-    List<T> findByNameIgnoreCaseLike(String name);
 
 }

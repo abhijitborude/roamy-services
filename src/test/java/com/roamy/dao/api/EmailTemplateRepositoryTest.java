@@ -21,7 +21,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ActiveProfiles("unit-test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TestApplication.class)
-@IntegrationTest
 public class EmailTemplateRepositoryTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailTemplateRepositoryTest.class);
@@ -33,7 +32,7 @@ public class EmailTemplateRepositoryTest {
     private EmailTemplateRepository emailTemplateRepository;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 
         EmailTemplate emailTemplate = new EmailTemplate();
         emailTemplate.setName(TEST_TEMPLATE_NAME);
@@ -49,12 +48,12 @@ public class EmailTemplateRepositoryTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         emailTemplateRepository.deleteAll();
     }
 
     @Test
-    public void testFindByCode() throws Exception {
+    public void testFindByCode() {
         EmailTemplate template = emailTemplateRepository.findByCode(TEST_TEMPLATE_CODE);
         LOGGER.info("found " + template);
 

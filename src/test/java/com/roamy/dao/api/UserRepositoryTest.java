@@ -5,9 +5,13 @@ import com.roamy.domain.AccountType;
 import com.roamy.domain.Status;
 import com.roamy.domain.User;
 import com.roamy.domain.UserType;
+import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -22,18 +26,33 @@ import java.util.Date;
 @ActiveProfiles("unit-test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TestApplication.class)
-@IntegrationTest
 public class UserRepositoryTest {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserRepositoryTest.class);
+
+    public static final String PHONE_NUMBER = "100";
+    public static final String FNAME = "fname";
+
+    private Long id;
 
     @Autowired
     private UserRepository userRepository;
 
     @Before
     public void setup() {
+        User user = getUser(PHONE_NUMBER, "a@a.com", FNAME, "lname");
+        user = userRepository.save(user);
 
+        id = user.getId();
+        LOGGER.info("User saved with id: " + id);
     }
 
-    private User getUser(String phoneNumber, String email, String fname, String lname, String password) {
+    @After
+    public void tearDown() {
+        userRepository.deleteAll();
+    }
+
+    private User getUser(String phoneNumber, String email, String fname, String lname) {
         User user = new User();
         user.setType(UserType.ROAMY);
         user.setAccountType(AccountType.Phone);
@@ -50,13 +69,20 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void testFindByPhoneNumber() throws Exception {
-        User user = getUser("100", "a@a.com", "fname1", "lname1", "pass1");
-        userRepository.save(user);
+    public void testFindByUserId() {
+        User user = userRepository.findOne(id);
+        LOGGER.info("Found user {}", user);
+
+        Assert.assertNotNull("There should be a user with id: " + id, user);
+        Assert.assertEquals("User with id " + id + " should have first name " + FNAME, FNAME, user.getFirstName());
     }
 
     @Test
-    public void testFindByEmail1() throws Exception {
+    public void testFindByPhoneNumber(){
+        User user = userRepository.findByPhoneNumber(PHONE_NUMBER);
+        LOGGER.info("Found user {}", user);
 
+        Assert.assertNotNull("There should be a user with phone number: " + PHONE_NUMBER, user);
+        Assert.assertEquals("User with phone number " + PHONE_NUMBER + " should have first name " + FNAME, FNAME, user.getFirstName());
     }
 }

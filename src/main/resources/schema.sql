@@ -10,14 +10,16 @@ drop table trip_review if exists;
 drop table favorite_trip if exists;
 drop table trip_instance if exists;
 drop table trip_instance_city if exists;
+drop table trip_instance_option if exists;
 drop table vendor if exists;
 drop table vendor_account if exists;
 drop table reservation if exists;
 drop table reservation_trip_instance if exists;
 drop table reservation_trip_option if exists;
+drop table reservation_payment if exists;
 drop table payment if exists;
 drop table sms_notification if exists;
-drop table alert_notification if exists;
+drop table alert if exists;
 drop table email_template if exists;
 drop table email_notification if exists;
 

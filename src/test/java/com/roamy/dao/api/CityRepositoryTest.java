@@ -3,17 +3,19 @@ package com.roamy.dao.api;
 import com.roamy.TestApplication;
 import com.roamy.domain.City;
 import com.roamy.domain.Status;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,64 +24,75 @@ import java.util.List;
 @ActiveProfiles("unit-test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TestApplication.class)
-@IntegrationTest
 public class CityRepositoryTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(CityRepositoryTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CityRepositoryTest.class);
 
-    private static final Long CITY_ID_MUMBAI = 1L;
-    private static final String CITY_NAME_MUMBAI = "Mumbai";
-    private static final Long CITY_ID_PUNE = 2L;
+    private static final String TEST_NAME = "Test City";
+    private static final String TEST_CODE = "TEST_CITY";
+
+    private Long id;
 
     @Autowired
     CityRepository cityRepository;
 
+    @Before
+    public void setUp() {
+        City city = new City();
+        city.setName(TEST_NAME);
+        city.setCode(TEST_CODE);
+        city.setDescription("Test Description");
+        city.setStatus(Status.Active);
+        city.setCreatedBy("test");
+        city.setCreatedOn(new Date());
+        city.setLastModifiedBy("test");
+        city.setLastModifiedOn(new Date());
+
+        city = cityRepository.save(city);
+
+        id = city.getId();
+        LOGGER.info("City saved with id: " + id);
+    }
+
+    @After
+    public void tearDown() {
+        cityRepository.deleteAll();
+    }
+
     @Test
     public void findCityByIdTest() {
-        City city = cityRepository.findOne(CITY_ID_MUMBAI);
-        logger.info("findOne by id {}: {}", CITY_ID_MUMBAI, city);
+        City city = cityRepository.findOne(id);
+        LOGGER.info("findOne by id {}: {}", id, city);
 
-        //Assert.assertNotNull("There should be a city with id: " + CITY_ID_MUMBAI, city);
-        //Assert.assertEquals("City name should be " + CITY_NAME_MUMBAI, CITY_NAME_MUMBAI, city.getName());
+        Assert.assertNotNull("There should be a city with id: " + id, city);
+        Assert.assertEquals("City name should be " + TEST_NAME, TEST_NAME, city.getName());
     }
 
     @Test
     public void findAllCityTest() {
         Iterable<City> cities = cityRepository.findAll();
-        logger.info("findAll: {}", cities);
+        LOGGER.info("findAll: {}", cities);
 
         Assert.assertNotNull("There should be at least one city", cities);
     }
 
     @Test
     public void testFindByNameIgnoreCase() throws Exception {
-        String cityName = CITY_NAME_MUMBAI.toLowerCase();
-        List<City> cities = cityRepository.findByNameIgnoreCase(cityName);
-        logger.info("findByNameIgnoreCase by {}: {}", cityName, cities);
+        String cityName = TEST_NAME.toLowerCase();
+        List<City> categories = cityRepository.findByNameIgnoreCase(cityName);
+        LOGGER.info("findByNameIgnoreCase by {}: {}", cityName, categories);
 
-        Assert.assertNotNull("There should be at least one city with name: " + cityName, cities);
-        for (City city : cities) {
+        Assert.assertNotNull("There should be at least one city with name: " + cityName, categories);
+        for (City city : categories) {
             Assert.assertTrue("City with name different from " + cityName + " found", city.getName().toLowerCase().equals(cityName.toLowerCase()));
         }
     }
 
     @Test
-    public void testFindByNameIgnoreCaseLike() throws Exception {
-        String cityName = CITY_NAME_MUMBAI.toLowerCase().substring(0, 3);
-        List<City> cities = cityRepository.findByNameIgnoreCaseLike("%" + cityName + "%");
-        logger.info("findByNameIgnoreCaseLike '%{}%': {}", cityName, cities);
-
-        Assert.assertNotNull("There should be at least one city with name like " + cityName, cities);
-        for (City city : cities) {
-            Assert.assertTrue("City with name not like " + cityName + " found", city.getName().toLowerCase().contains(cityName.toLowerCase()));
-        }
-    }
-
-    @Test
     public void testFindByStatus() throws Exception {
-        List<City> cities = cityRepository.findByStatus(Status.Inactive);
-        logger.info("findByStatus Inactive: {}", cities);
+        List<City> categories = cityRepository.findByStatus(Status.Active);
+        LOGGER.info("findByStatus Inactive: {}", categories);
 
-        Assert.assertNotNull("There should be at least one Inactive city", cities);
+        Assert.assertNotNull("There should be at least one active city", categories);
     }
 }

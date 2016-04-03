@@ -14,14 +14,16 @@ drop table if exists trip_review;
 drop table if exists favorite_trip;
 drop table if exists trip_instance;
 drop table if exists trip_instance_city;
+drop table id exists trip_instance_option;
 drop table if exists vendor;
 drop table if exists vendor_account;
 drop table if exists reservation;
 drop table if exists reservation_trip_instance;
 drop table if exists reservation_trip_option;
+drop table if exists reservation_payment;
 drop table if exists payment;
 drop table if exists sms_notification;
-drop table if exists alert_notification;
+drop table if exists alert;
 drop table if exists email_template;
 drop table if exists email_notification;
 
