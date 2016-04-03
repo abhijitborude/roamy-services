@@ -26,7 +26,7 @@ public class EmailNotification extends AbstractEntity {
     private String params;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "EMAIL_TEMPLATE_ID")
     private EmailTemplate emailTemplate;
 
