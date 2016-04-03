@@ -1,5 +1,5 @@
 spring:
-  profiles.active: unit-test
+  profiles.active: local
 
 ---
 
@@ -22,8 +22,24 @@ razorpay:
 spring:
   profiles: unit-test
   jpa:
-    generate-ddl: true
+    generate-ddl: false
     hibernate.ddl-auto:
+  datasource:
+    initialize: true
+    data: none
+  h2.console.enabled: true
+
+logging.level.org.hibernate.SQL: DEBUG
+
+---
+
+spring:
+  profiles: local
+  jpa:
+    generate-ddl: false
+    hibernate.ddl-auto:
+  datasource:
+    initialize: true
   h2.console.enabled: true
 
 logging.level.org.hibernate.SQL: DEBUG
