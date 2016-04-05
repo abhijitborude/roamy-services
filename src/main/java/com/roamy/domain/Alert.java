@@ -18,7 +18,7 @@ import java.util.Date;
 @DiscriminatorColumn(name = "TYPE")
 public abstract class Alert extends AbstractEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "USER_ID")
     @JsonIgnore
     protected User user;
