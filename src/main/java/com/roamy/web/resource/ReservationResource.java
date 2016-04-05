@@ -331,7 +331,7 @@ public class ReservationResource {
     }
 
     @RequestMapping(value = "/{id}/sharebysms/", method = RequestMethod.POST)
-    //@PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
     @ApiOperation(value = "share reservation with friends via sms",
                     notes = "Sends an sms to the friend provided in the request body.")
     public RestResponse shareReservationBySms(@ApiParam(name = "reservationId", value = "ID of the reservation being shared", required = true)
