@@ -3,10 +3,7 @@ package com.roamy.web.resource;
 import com.roamy.config.ConfigProperties;
 import com.roamy.dao.api.*;
 import com.roamy.domain.*;
-import com.roamy.dto.FriendInfo;
-import com.roamy.dto.ReservationDto;
-import com.roamy.dto.ReservationPaymentDto;
-import com.roamy.dto.RestResponse;
+import com.roamy.dto.*;
 import com.roamy.integration.paymentGateway.dto.PaymentDto;
 import com.roamy.integration.paymentGateway.service.api.PaymentGatewayService;
 import com.roamy.service.notification.api.EmailNotificationService;
@@ -340,14 +337,14 @@ public class ReservationResource {
     public RestResponse shareReservationBySms(@ApiParam(name = "reservationId", value = "ID of the reservation being shared", required = true)
                                                   @PathVariable Long id,
                                               @ApiParam(name = "friends", value = "List of friend details. Each friend should have a name and phone number.", required = true)
-                                                  @RequestBody List<FriendInfo> friends) {
+                                                  @RequestBody ShareRservationRequest shareRequest) {
 
-        LOGGER.info("sharing reservation ({}) details with {}", id, friends);
+        LOGGER.info("sharing reservation ({}) details with {}", id, shareRequest);
 
         RestResponse response = null;
         try {
             Reservation reservation = reservationRepository.findOne(id);
-            friends.forEach(friendInfo ->
+            shareRequest.getFriends().forEach(friendInfo ->
                 smsNotificationService.sendTripReservationShareSms(reservation, friendInfo.getName(), friendInfo.getPhoneNumber())
             );
         } catch (Throwable t) {
