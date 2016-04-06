@@ -36,17 +36,18 @@ public class SmsNotificationServiceImpl implements SmsNotificationService {
     private SmsNotificationRepository smsNotificationRepository;
 
     @Override
-    public void sendVerificationSms(String phoneNumber, String verificationCode) {
+    public SmsNotification sendVerificationSms(String phoneNumber, String verificationCode) {
         LOGGER.info("Sending verification code {} to phoneNumber: {}", verificationCode, phoneNumber);
 
         String message = "Your ROAMY verification code is " + verificationCode;
-        sendSmsNotification(phoneNumber, message);
+        SmsNotification notification = sendSmsNotification(phoneNumber, message);
 
         LOGGER.info("Verification code sent to phoneNumber: {}", phoneNumber);
+        return notification;
     }
 
     @Override
-    public void sendTripReservationShareSms(Reservation reservation, String userName, String phoneNumber) {
+    public SmsNotification sendTripReservationShareSms(Reservation reservation, String userName, String phoneNumber) {
 
         LOGGER.info("Sending trip details of reservation ({}) to {} at {}", reservation.getId(), userName, phoneNumber);
 
@@ -73,12 +74,13 @@ public class SmsNotificationServiceImpl implements SmsNotificationService {
         template.append(" Start ROAMYing! Download ROAMY at $roamyLink");
 
         String message = templateTranslator.translate(template.toString(), params);
-        sendSmsNotification(phoneNumber, message);
+        SmsNotification notification = sendSmsNotification(phoneNumber, message);
 
         LOGGER.info("Trip details sent to {} at {}", userName, phoneNumber);
+        return notification;
     }
 
-    private void sendSmsNotification(String phoneNumber, String message) {
+    private SmsNotification sendSmsNotification(String phoneNumber, String message) {
         // create smsNotification object with pending status
         SmsNotification notification = new SmsNotification(phoneNumber, message, Status.Pending);
         RoamyUtils.addAuditPropertiesForCreateEntity(notification, "test");
@@ -94,6 +96,6 @@ public class SmsNotificationServiceImpl implements SmsNotificationService {
             notification.setErrorDescription(smsResult.getErrorDescription());
         }
 
-        smsNotificationRepository.save(notification);
+        return smsNotificationRepository.save(notification);
     }
 }

@@ -344,12 +344,21 @@ public class ReservationResource {
         RestResponse response = null;
         try {
             Reservation reservation = reservationRepository.findOne(id);
-            shareRequest.getFriends().forEach(friendInfo ->
-                smsNotificationService.sendTripReservationShareSms(reservation, friendInfo.getName(), friendInfo.getPhoneNumber())
+            shareRequest.getFriends().forEach(friendInfo -> {
+                    SmsNotification notification = smsNotificationService.sendTripReservationShareSms(reservation,
+                                    friendInfo.getName(), friendInfo.getPhoneNumber());
+                    if (Status.Success.equals(notification.getStatus())) {
+                        friendInfo.setSuccess(true);
+                    } else {
+                        friendInfo.setSuccess(false);
+                        friendInfo.setErrorMessage(notification.getErrorCode() + " - " + notification.getErrorDescription());
+                    }
+                }
             );
+            response = new RestResponse(shareRequest, HttpStatus.OK_200);
         } catch (Throwable t) {
             LOGGER.error("error in shareReservationBySms: ", t);
-            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
+            response = new RestResponse(shareRequest, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
         }
 
         return response;

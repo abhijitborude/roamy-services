@@ -10,6 +10,7 @@ import com.roamy.integration.imagelib.dto.ImageLibraryIdentifier;
 import com.roamy.integration.imagelib.service.api.ImageLibraryService;
 import com.roamy.service.notification.api.SmsNotificationService;
 import com.roamy.util.RestUtils;
+import com.roamy.util.RoamyException;
 import com.roamy.util.RoamyUtils;
 import com.roamy.util.RoamyValidationException;
 import com.wordnik.swagger.annotations.Api;
@@ -132,9 +133,12 @@ public class UserResource extends IdentityResource<User, Long> {
             user.setUserToken(token);
 
             // send sms with verification code
-            smsNotificationService.sendVerificationSms(user.getPhoneNumber(), user.getVerificationCode());
-
-            response = new RestResponse(user, HttpStatus.OK_200);
+            SmsNotification notification = smsNotificationService.sendVerificationSms(user.getPhoneNumber(), user.getVerificationCode());
+            if (Status.Success.equals(notification.getStatus())) {
+                response = new RestResponse(user, HttpStatus.OK_200);
+            } else {
+                throw new RoamyException("Error while sending SMS to the user. Please check the phone number.");
+            }
 
         } catch (Throwable t) {
             LOGGER.error("error in createUser: ", t);
@@ -326,7 +330,10 @@ public class UserResource extends IdentityResource<User, Long> {
                 String verificationCode = RoamyUtils.generateVerificationCode();
 
                 // 2. send new verification code
-                smsNotificationService.sendVerificationSms(user.getPhoneNumber(), verificationCode);
+                SmsNotification notification = smsNotificationService.sendVerificationSms(user.getPhoneNumber(), verificationCode);
+                if (!Status.Success.equals(notification.getStatus())) {
+                    throw new RoamyException("Error while sending SMS to the user. Please check the phone number.");
+                }
 
                 // 3. update user object with new verification code and status
                 user.setVerificationCode(verificationCode);
