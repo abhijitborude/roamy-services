@@ -77,10 +77,10 @@ insert into trip
     null, --number_of_days
     2004, --default_price_per_adult
     15.00, --tac
-    null, -- itinerary
+    'Artificial Rock Climbing <br/> Tyre Wall <br/> Balancing Log <br/> Gate Vault <br/> Zig Zag Log <br/>  Net & Log Ladder <br/> Tyre Swing <br/> Fire Cracker Bridge <br/> Monkey Tail <br/> Broken Bridge <br/> Swinging Beam <br/> Zummer Station <br/> Giant Ladder <br/> Cargo Net <br/> Cable Ladder <br/> Santi Pit <br/> Burma Bridge <br/> Swinging Bridge <br/> Vertical Net Crossing <br/> Wooden Obstacles', -- itinerary
     null, --inclusions
     null, --exclusions
-    null, --meeting_points
+    'From Mumbai: <br/> Follow Mumbai-Pune Expressway and take Khandala Exit. <br/> Drive 4 km on old Mumbai-Pune Highway <br/>  <br/> From Pune: <br/> Follow Pune-Mumbai Expressway and take Lonavala Exit. Drive 5.4 km on old Mumbai-Pune Highway.', --meeting_points
     null,   --things_to_carry
     'Active', --status
     'test', --created_by
