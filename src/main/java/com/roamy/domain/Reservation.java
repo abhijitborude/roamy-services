@@ -3,6 +3,8 @@ package com.roamy.domain;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.roamy.config.CustomDateSerializer;
 import com.roamy.util.DbConstants;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -22,6 +24,7 @@ public abstract class Reservation extends AbstractEntity {
     public abstract String getType();
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     @JoinTable(name = "RESERVATION_TRIP_INSTANCE",
             joinColumns = {@JoinColumn(name = "RESERVATION_ID")},
             inverseJoinColumns = {@JoinColumn(name = "TRIP_INSTANCE_ID")})
