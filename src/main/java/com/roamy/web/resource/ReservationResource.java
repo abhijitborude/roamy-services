@@ -215,6 +215,8 @@ public class ReservationResource {
                     romoneyPaymentAmount = user.getWalletBalance();
                 }
 
+                LOGGER.info("Deducting Romoney({}) from user with WalletBalance({})", romoneyPaymentAmount, user.getWalletBalance());
+
                 // create a partial payment using romoney
                 ReservationPayment payment = new ReservationPayment();
                 payment.setAmount(romoneyPaymentAmount);
@@ -235,9 +237,6 @@ public class ReservationResource {
             userRepository.save(user);
             LOGGER.info("save complete");
 
-            // send email
-            emailNotificationService.sendTripReservationEmail(reservation);
-
             response = new RestResponse(reservation, HttpStatus.OK_200);
 
         } catch (Throwable t) {
@@ -248,12 +247,63 @@ public class ReservationResource {
         return response;
     }
 
+    @RequestMapping(value = "/{id}/cancel", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
+    @ApiOperation(value = "Create a payment", notes = "Creates payment for a Reservation represented by given " +
+            "Reservation ID. Actual result is contained in the data field of the response.")
+    public RestResponse cancelReservation(@ApiParam(name = "reservationId", value = "Reservation ID", required = true)
+                                            @PathVariable Long id) {
+        LOGGER.info("Cancelling reservation with id ({})", id);
+
+        RestResponse response = null;
+
+        try {
+            Reservation reservation = reservationRepository.findOne(id);
+            LOGGER.info("Found {}", reservation);
+
+            if (Status.Pending.equals(reservation.getStatus())) {
+                User user = reservation.getUser();
+
+                // return romoney if used
+                reservation.getPayments().forEach(payment -> {
+                            // if user has used romoney i.e. if there is a payment of type Romoney for this reservation
+                            // then return it to the user's wallet
+                            if (PaymentType.Romoney.equals(payment.getType())) {
+                                LOGGER.info("Returning Romoney({}) to the user with WalletBalance({})", payment.getAmount(), user.getWalletBalance());
+                                if (user.getWalletBalance() == null) {
+                                    user.setWalletBalance(payment.getAmount());
+                                } else {
+                                    user.setWalletBalance(user.getWalletBalance() + payment.getAmount());
+                                }
+                                user.setLastModifiedBy("test");
+                                user.setLastModifiedOn(new Date());
+                                userRepository.save(user);
+                            }
+                        }
+                );
+
+                reservation.setStatus(Status.Cancelled);
+                reservation.setLastModifiedBy("test");
+                reservation.setLastModifiedOn(new Date());
+                reservation = reservationRepository.save(reservation);
+            }
+
+            response = new RestResponse(reservation, HttpStatus.OK_200);
+        } catch (Throwable t) {
+            LOGGER.error("error in cancelReservation: ", t);
+            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
+        }
+
+        LOGGER.info("Cancelled reservation with id ({})", id);
+
+        return response;
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
     @ApiOperation(value = "Get reservation By id", notes = "Fetches reservation details for a given ID. " +
                             "Actual result is contained in the data field of the response.")
-    public RestResponse getReservation(@ApiParam(value = "Reservation ID", required = true)
-                                           @PathVariable Long id) {
+    public RestResponse getReservation(@ApiParam(value = "Reservation ID", required = true) @PathVariable Long id) {
         LOGGER.info("Loading reservation with id ({})", id);
 
         RestResponse response = null;
@@ -319,7 +369,10 @@ public class ReservationResource {
             }
 
             reservation.getPayments().add(payment);
-            reservationRepository.save(reservation);
+            reservation = reservationRepository.save(reservation);
+
+            // send email
+            emailNotificationService.sendTripReservationEmail(reservation);
 
             response = new RestResponse(reservation, HttpStatus.OK_200);
         } catch (Throwable t) {
