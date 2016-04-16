@@ -46,6 +46,9 @@ public abstract class Trip extends CitableEntity {
             inverseJoinColumns = {@JoinColumn(name = "CATEGORY_ID")})
     protected List<Category> categories;
 
+    @Column(name = "COVER_PICTURE", length = DbConstants.LONG_TEXT)
+    private String coverPicture;
+
     @ElementCollection
     @CollectionTable(
             name="TRIP_IMAGE",
@@ -71,6 +74,14 @@ public abstract class Trip extends CitableEntity {
 
     public void setThrillMeter(int thrillMeter) {
         this.thrillMeter = thrillMeter;
+    }
+
+    public Double getPricePerAdult() {
+        return pricePerAdult;
+    }
+
+    public void setPricePerAdult(Double pricePerAdult) {
+        this.pricePerAdult = pricePerAdult;
     }
 
     public Double getTac() {
@@ -103,6 +114,14 @@ public abstract class Trip extends CitableEntity {
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
+    }
+
+    public String getCoverPicture() {
+        return coverPicture;
+    }
+
+    public void setCoverPicture(String coverPicture) {
+        this.coverPicture = coverPicture;
     }
 
     public List<TripImage> getImages() {

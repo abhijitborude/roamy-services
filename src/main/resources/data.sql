@@ -33,6 +33,7 @@ insert into trip
     number_of_days,
     price_per_adult,
     tac,
+    cover_picture,
     itinerary,
     inclusions,
     exclusions,
@@ -55,6 +56,7 @@ insert into trip
     4, --number_of_days
     7500, --default_price_per_adult
     15.00, --tac
+    'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg',
     'Day 1: <br/> 07:00 Hrs: Breakfast en-route @ Hotel Alankar, HatKhamba <br/> 11:30 Hrs: Check in Hotel @ Malvan <br/> 12:00 Hrs: Lunch in Hotel (Veg Thali / Chicken Thali / Fish Thali - Soundale Fish + Prawns Curry -Unlimited) <br/> 14:00 Hrs: TSUNAMI Island <br/> 17:00 Hrs: Tarkarli / Devbaug Beach - FUN Time <br/> 19:00 Hrs: Snacks - Kanda Bhajji & Tea <br/> 19:30 Hrs: Free time for Malvan Market / Beach / Rock Garden etc. (Optional) <br/> 21:00 Hrs: Dinner (Veg Thali / Chicken Thali / Fish Thali - Paplet / Surmai Fish as available -Limited)', -- itinerary
     'Dadar to Dadar transportation fare for private vehicle (Non-A/c), Surface Supply ScubaDiving, Snorkeling Charges, Dolphin Safari, Boating charges, Permissions and entry fees, Guide Charges, Food (Veg & Non Veg Thali as mentioned wherever limited and unlimited)', --inclusions
     '', --exclusions
@@ -77,6 +79,7 @@ insert into trip
     null, --number_of_days
     2004, --default_price_per_adult
     15.00, --tac
+    'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg',
     'Artificial Rock Climbing <br/> Tyre Wall <br/> Balancing Log <br/> Gate Vault <br/> Zig Zag Log <br/>  Net & Log Ladder <br/> Tyre Swing <br/> Fire Cracker Bridge <br/> Monkey Tail <br/> Broken Bridge <br/> Swinging Beam <br/> Zummer Station <br/> Giant Ladder <br/> Cargo Net <br/> Cable Ladder <br/> Santi Pit <br/> Burma Bridge <br/> Swinging Bridge <br/> Vertical Net Crossing <br/> Wooden Obstacles', -- itinerary
     null, --inclusions
     null, --exclusions

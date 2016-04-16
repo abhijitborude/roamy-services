@@ -99,6 +99,7 @@ create table trip (
     number_of_days integer,
     price_per_adult double,
     tac double,
+    cover_picture varchar(1024),
     itinerary varchar(1024),
     inclusions varchar(1024),
     exclusions varchar(1024),
