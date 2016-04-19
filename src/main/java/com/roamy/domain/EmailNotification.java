@@ -22,7 +22,7 @@ public class EmailNotification extends AbstractEntity {
     @Column(name = "SUBJECT_PARAMS", length = DbConstants.LONG_TEXT)
     private String subjectParams;
 
-    @Column(name = "PARAMS", length = DbConstants.ULTRA_LONG_TEXT)
+    @Column(name = "PARAMS", length = DbConstants.VERY_LONG_TEXT)
     private String params;
 
     @NotNull

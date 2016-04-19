@@ -31,6 +31,13 @@ public class ReservationTripOption extends AbstractEntity {
     @JoinColumn(name = "TRIP_INSTANCE_OPTION_ID")
     protected TripInstanceOption tripInstanceOption;
 
+    public int getNumberOfRomies() {
+        if (isAgeBasedPricing()) {
+            return adultCount + seniorCount + childCount;
+        }
+        return count;
+    }
+
     public int getCount() {
         return count;
     }

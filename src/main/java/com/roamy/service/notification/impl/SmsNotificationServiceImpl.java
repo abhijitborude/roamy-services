@@ -7,14 +7,12 @@ import com.roamy.integration.sms.service.api.SmsService;
 import com.roamy.service.notification.api.SmsNotificationService;
 import com.roamy.service.notification.dto.TripNotificationDto;
 import com.roamy.util.RoamyUtils;
-import com.roamy.util.RoamyValidationException;
 import com.roamy.util.TemplateTranslator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 

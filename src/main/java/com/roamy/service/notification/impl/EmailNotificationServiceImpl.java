@@ -7,6 +7,7 @@ import com.roamy.integration.sendgrid.dto.SendGridEmailDto;
 import com.roamy.integration.sendgrid.service.api.SendGridService;
 import com.roamy.service.notification.api.EmailNotificationService;
 import com.roamy.service.notification.dto.TripNotificationDto;
+import com.roamy.service.notification.dto.TripOptionNotificationDto;
 import com.roamy.util.RestUtils;
 import com.roamy.util.RoamyUtils;
 import com.roamy.util.TemplateTranslator;
@@ -15,7 +16,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,6 +50,47 @@ public class EmailNotificationServiceImpl implements EmailNotificationService {
         dto.setReservationId(reservation.getId());
         dto.setName(tripInstance.getName());
         dto.setDate(RoamyUtils.getEmailFormattedDate(reservation.getStartDate()));
+        dto.setCoverPicture(tripInstance.getTrip().getCoverPicture());
+        dto.setUser(reservation.getUser().getFirstName());
+        dto.setTotalCost(RoamyUtils.getEmailFormattedCurrency(reservation.getAmount()));
+
+        List<TripOptionNotificationDto> options = new ArrayList<>();
+        for (ReservationTripOption reservationOption : reservation.getTripOptions()) {
+            TripOptionNotificationDto option = new TripOptionNotificationDto();
+            option.setType(reservationOption.getTripInstanceOption().getName());
+            option.setAgeBasedPricing(reservationOption.isAgeBasedPricing());
+
+            if (reservationOption.isAgeBasedPricing()) {
+                option.setAdultPrice(RoamyUtils.getEmailFormattedCurrency(reservationOption.getTripInstanceOption().getAdultPrice()));
+                option.setAdultCount(String.valueOf(reservationOption.getAdultCount()));
+                double totalAdultCost = reservationOption.getTripInstanceOption().getAdultPrice() * reservationOption.getAdultCount();
+                option.setAdultTotalCost(RoamyUtils.getEmailFormattedCurrency(totalAdultCost));
+
+                option.setSeniorPrice(RoamyUtils.getEmailFormattedCurrency(reservationOption.getTripInstanceOption().getSeniorPrice()));
+                option.setSeniorCount(String.valueOf(reservationOption.getSeniorCount()));
+                double totalSeniorCost = reservationOption.getTripInstanceOption().getSeniorPrice() * reservationOption.getSeniorCount();
+                option.setSeniorTotalCost(RoamyUtils.getEmailFormattedCurrency(totalSeniorCost));
+
+                option.setChildPrice(RoamyUtils.getEmailFormattedCurrency(reservationOption.getTripInstanceOption().getChildPrice()));
+                option.setChildCount(String.valueOf(reservationOption.getChildCount()));
+                double totalChildCost = reservationOption.getTripInstanceOption().getChildPrice() * reservationOption.getChildCount();
+                option.setTotalCost(RoamyUtils.getEmailFormattedCurrency(totalChildCost));
+            } else {
+                option.setPrice(RoamyUtils.getEmailFormattedCurrency(reservationOption.getTripInstanceOption().getPrice()));
+                option.setCount(String.valueOf(reservationOption.getCount()));
+                double totalCost = reservationOption.getTripInstanceOption().getPrice() * reservationOption.getCount();
+                option.setTotalCost(RoamyUtils.getEmailFormattedCurrency(totalCost));
+            }
+
+            options.add(option);
+        }
+
+        dto.setOptions(options);
+
+        if (tripInstance instanceof PackageTripInstance) {
+            dto.setMeetingPoints(((PackageTripInstance) tripInstance).getMeetingPoints());
+            dto.setThingsToCarry(((PackageTripInstance) tripInstance).getThingsToCarry());
+        }
 
         Map<String, Object> params = new HashMap<>();
         params.put("trip", dto);

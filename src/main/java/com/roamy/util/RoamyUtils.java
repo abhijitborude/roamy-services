@@ -77,6 +77,10 @@ public class RoamyUtils {
         return formatter.format(date);
     }
 
+    public static String getEmailFormattedCurrency(double amount) {
+        return String.valueOf(amount);
+    }
+
     public static void addAuditPropertiesForCreateEntity(AbstractEntity entity, String user) {
         Date date = new Date();
         entity.setCreatedBy(user);

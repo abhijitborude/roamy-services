@@ -35,10 +35,6 @@ public abstract class Reservation extends AbstractEntity {
     protected User user;
 
     @NotNull
-    @Column(name = "NUMBER_OF_ROAMIES")
-    protected int numberOfRoamies;
-
-    @NotNull
     @Column(name = "START_DATE")
     @JsonSerialize(using = CustomDateSerializer.class)
     protected Date startDate;
@@ -63,6 +59,14 @@ public abstract class Reservation extends AbstractEntity {
     @JoinColumn(name = "RESERVATION_ID")
     protected List<ReservationTripOption> tripOptions;
 
+    public int getNumberOfRoamies() {
+        int numberOfRomies = 0;
+        for (ReservationTripOption option : tripOptions) {
+            numberOfRomies += option.getNumberOfRomies();
+        }
+        return numberOfRomies;
+    }
+
     public List<TripInstance> getTripInstances() {
         return tripInstances;
     }
@@ -77,14 +81,6 @@ public abstract class Reservation extends AbstractEntity {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public int getNumberOfRoamies() {
-        return numberOfRoamies;
-    }
-
-    public void setNumberOfRoamies(int numberOfRoamies) {
-        this.numberOfRoamies = numberOfRoamies;
     }
 
     public Date getStartDate() {
@@ -148,7 +144,6 @@ public abstract class Reservation extends AbstractEntity {
         return "Reservation{" +
                 "tripInstances=" + tripInstances +
                 ", user=" + user +
-                ", numberOfRoamies=" + numberOfRoamies +
                 ", amount=" + amount +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
