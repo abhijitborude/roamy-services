@@ -72,6 +72,8 @@ public class TripRepositoryTest {
     @After
     public void tearDown() {
         tripRepository.deleteAll();
+        cityRepository.deleteAll();
+        categoryRepository.deleteAll();
     }
 
     @Test
