@@ -2,8 +2,11 @@ package com.roamy.web.resource;
 
 import com.roamy.dao.api.CitableRepository;
 import com.roamy.dao.api.CityRepository;
-import com.roamy.dao.api.TripInstanceRepository;
-import com.roamy.domain.*;
+import com.roamy.dao.api.TripRepository;
+import com.roamy.domain.Category;
+import com.roamy.domain.City;
+import com.roamy.domain.Status;
+import com.roamy.domain.Trip;
 import com.roamy.dto.CityDto;
 import com.roamy.dto.RestResponse;
 import com.roamy.util.RestUtils;
@@ -21,9 +24,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Abhijit on 11/15/2015.
@@ -39,7 +40,7 @@ public class CityResource extends CitableResource<City, Long> {
     private CityRepository cityRepository;
 
     @Autowired
-    private TripInstanceRepository tripInstanceRepository;
+    private TripRepository tripRepository;
 
     @Override
     protected CitableRepository<City, Long> getCitableRepository() {
@@ -67,15 +68,17 @@ public class CityResource extends CitableResource<City, Long> {
         try {
             // TODO: add validations
 
-            // 1. find all active trip instances for the city
-            List<TripInstance> instances = tripInstanceRepository.findByTargetCitiesCodeAndStatus(code, Status.Active);
+            // 1. find all active trips with active instances in next 60 days for the city
+            List<Trip> trips = tripRepository.findDistinctByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetween(Status.Active,
+                    Arrays.asList(new String[]{code}),
+                    Status.Active,
+                    new Date(),
+                    RoamyUtils.plusDays(new Date(), 60));
 
             // 2. find all categories of the trip instances
             Set<Category> categories = new HashSet<>();
-
-            if (instances != null) {
-                instances.forEach(instance -> {
-                    Trip trip = instance.getTrip();
+            if (trips != null) {
+                trips.forEach(trip -> {
                     if (!CollectionUtils.isEmpty(trip.getCategories())) {
                         categories.addAll(trip.getCategories());
                     }
