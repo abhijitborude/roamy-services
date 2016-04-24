@@ -1,8 +1,6 @@
 package com.roamy.util;
 
-import com.roamy.domain.Category;
-import com.roamy.domain.City;
-import com.roamy.domain.Status;
+import com.roamy.domain.*;
 
 import java.util.Date;
 
@@ -35,5 +33,42 @@ public class DomainObjectUtil {
         category.setCreatedBy("test");
         category.setLastModifiedBy("test");
         return category;
+    }
+
+    public static User getUser(String phoneNumber, String email, String fname, String lname) {
+        User user = new User();
+        user.setType(UserType.ROAMY);
+        user.setAccountType(AccountType.Phone);
+        user.setPhoneNumber(phoneNumber);
+        user.setEmail(email);
+        user.setFirstName(fname);
+        user.setLastName(lname);
+        user.setStatus(Status.Active);
+        user.setCreatedBy("test");
+        user.setCreatedOn(new Date());
+        user.setLastModifiedBy("test");
+        user.setLastModifiedOn(new Date());
+        return user;
+    }
+
+    public static void setPropertiesForTrip(Trip trip, String code, int thrillMeter, Double pricePerAdult, Status status) {
+        trip.setCode(code);
+        trip.setName(code);
+        trip.setDescription(code);
+        trip.setThrillMeter(thrillMeter);
+        trip.setPricePerAdult(pricePerAdult);
+        trip.setStatus(status);
+        trip.setCreatedBy("test");
+        trip.setLastModifiedBy("test");
+    }
+
+    public static void setPropertiesForTripInstance(TripInstance tripInstance, String name, int thrillMeter, Double pricePerAdult, Status status) {
+        tripInstance.setName(name);
+        tripInstance.setDescription(name);
+        tripInstance.setThrillMeter(thrillMeter);
+        tripInstance.setPricePerAdult(pricePerAdult);
+        tripInstance.setStatus(status);
+        tripInstance.setCreatedBy("test");
+        tripInstance.setLastModifiedBy("test");
     }
 }

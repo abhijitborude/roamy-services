@@ -5,6 +5,7 @@ import com.roamy.domain.AccountType;
 import com.roamy.domain.Status;
 import com.roamy.domain.User;
 import com.roamy.domain.UserType;
+import com.roamy.util.DomainObjectUtil;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -39,7 +40,7 @@ public class UserRepositoryTest {
 
     @Before
     public void setup() {
-        User user = getUser(PHONE_NUMBER, "a@a.com", FNAME, "lname");
+        User user = DomainObjectUtil.getUser(PHONE_NUMBER, "a@a.com", FNAME, "lname");
         user = userRepository.save(user);
 
         id = user.getId();
@@ -49,22 +50,6 @@ public class UserRepositoryTest {
     @After
     public void tearDown() {
         userRepository.deleteAll();
-    }
-
-    private User getUser(String phoneNumber, String email, String fname, String lname) {
-        User user = new User();
-        user.setType(UserType.ROAMY);
-        user.setAccountType(AccountType.Phone);
-        user.setPhoneNumber(phoneNumber);
-        user.setEmail(email);
-        user.setFirstName(fname);
-        user.setLastName(lname);
-        user.setStatus(Status.Active);
-        user.setCreatedBy("test");
-        user.setCreatedOn(new Date());
-        user.setLastModifiedBy("test");
-        user.setLastModifiedOn(new Date());
-        return user;
     }
 
     @Test

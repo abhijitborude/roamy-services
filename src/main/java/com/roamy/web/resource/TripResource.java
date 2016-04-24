@@ -86,7 +86,7 @@ public class TripResource extends CitableResource<Trip, Long> {
 
             List<TripInstance> tripInstances = null;
             if (sDate == null) {
-                tripInstances = tripInstanceRepository.findByTripCodeAndStatus(code, Status.Active);
+                tripInstances = tripInstanceRepository.findTop60ByTripCodeAndStatus(code, Status.Active);
                 LOGGER.info("active Trip Instances by code({}): {}", code, tripInstances);
             } else {
                 tripInstances = tripInstanceRepository.findByTripCodeAndDateAndStatus(code, date, Status.Active);

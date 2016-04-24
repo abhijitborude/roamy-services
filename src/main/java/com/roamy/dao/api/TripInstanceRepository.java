@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface TripInstanceRepository extends JpaRepository<TripInstance, Long> {
 
-    List<TripInstance> findByTripCodeAndStatus(String code, Status status);
+    List<TripInstance> findTop60ByTripCodeAndStatus(String code, Status status);
 
     List<TripInstance> findByTripCodeAndDateAndStatus(String code, Date date, Status status);
 }
