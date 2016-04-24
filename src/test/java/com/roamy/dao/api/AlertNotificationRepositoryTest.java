@@ -2,7 +2,6 @@ package com.roamy.dao.api;
 
 import com.roamy.TestApplication;
 import com.roamy.domain.*;
-import com.roamy.util.RoamyUtils;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Assert;
@@ -18,8 +17,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Date;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Abhijit on 4/3/2016.
