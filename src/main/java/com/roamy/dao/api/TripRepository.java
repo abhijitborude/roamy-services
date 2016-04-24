@@ -14,25 +14,25 @@ import java.util.List;
 public interface TripRepository extends CitableRepository<Trip, Long> {
 
     // filter by status, start and end dates
-    List<Trip> findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetween(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findDistinctByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetween(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findDistinctByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findDistinctByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterAsc(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findDistinctByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterAsc(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterDesc(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findDistinctByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterDesc(Status status, List<String> cityCodes, Status instancesStatus, Date startDate, Date endDate);
 
     // filter by status, start and end dates, category code
-    List<Trip> findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetween(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findDistinctByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetween(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findDistinctByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findDistinctByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterAsc(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findDistinctByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterAsc(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
 
-    List<Trip> findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterDesc(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
+    List<Trip> findDistinctByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterDesc(Status status, List<String> cityCodes, List<String> categoryCodes, Status instancesStatus, Date startDate, Date endDate);
 
 }

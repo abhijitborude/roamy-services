@@ -166,38 +166,38 @@ public class TripResource extends CitableResource<Trip, Long> {
             if (CollectionUtils.isEmpty(categoryCodes)) {
                 if (SORT_BY_PRICE.equalsIgnoreCase(sortBy)) {
                     if (SORT_TYPE_DESC.equals(sortType)) {
-                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status.Active, cityCodes, Status.Active, sDate, eDate);
+                        trips = tripRepository.findDistinctByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status.Active, cityCodes, Status.Active, sDate, eDate);
                     } else {
-                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status.Active, cityCodes, Status.Active, sDate, eDate);
+                        trips = tripRepository.findDistinctByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status.Active, cityCodes, Status.Active, sDate, eDate);
                     }
 
                 } else if (SORT_BY_DIFFICULTY.equalsIgnoreCase(sortBy)) {
                     if (SORT_TYPE_DESC.equals(sortType)) {
-                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterDesc(Status.Active, cityCodes, Status.Active, sDate, eDate);
+                        trips = tripRepository.findDistinctByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterDesc(Status.Active, cityCodes, Status.Active, sDate, eDate);
                     } else {
-                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterAsc(Status.Active, cityCodes, Status.Active, sDate, eDate);
+                        trips = tripRepository.findDistinctByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterAsc(Status.Active, cityCodes, Status.Active, sDate, eDate);
                     }
 
                 } else {
-                    trips = tripRepository.findByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetween(Status.Active, cityCodes, Status.Active, sDate, eDate);
+                    trips = tripRepository.findDistinctByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetween(Status.Active, cityCodes, Status.Active, sDate, eDate);
                 }
             } else {
                 if (SORT_BY_PRICE.equalsIgnoreCase(sortBy)) {
                     if (SORT_TYPE_DESC.equals(sortType)) {
-                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
+                        trips = tripRepository.findDistinctByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultDesc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
                     } else {
-                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
+                        trips = tripRepository.findDistinctByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByPricePerAdultAsc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
                     }
 
                 } else if (SORT_BY_DIFFICULTY.equalsIgnoreCase(sortBy)) {
                     if (SORT_TYPE_DESC.equals(sortType)) {
-                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterDesc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
+                        trips = tripRepository.findDistinctByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterDesc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
                     } else {
-                        trips = tripRepository.findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterAsc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
+                        trips = tripRepository.findDistinctByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetweenOrderByThrillMeterAsc(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
                     }
 
                 } else {
-                    trips = tripRepository.findByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetween(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
+                    trips = tripRepository.findDistinctByStatusAndTargetCitiesCodeInAndCategoriesCodeInAndInstancesStatusAndInstancesDateBetween(Status.Active, cityCodes, categoryCodes, Status.Active, sDate, eDate);
                 }
             }
 
