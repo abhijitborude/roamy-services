@@ -281,7 +281,6 @@ create table reservation (
     type varchar(64) not null,
     user_id bigint,
     email varchar(256) not null,
-    number_of_roamies integer not null,
     amount double not null,
     start_date timestamp not null,
     end_date timestamp,
