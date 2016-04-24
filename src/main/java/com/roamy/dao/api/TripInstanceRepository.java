@@ -16,7 +16,5 @@ public interface TripInstanceRepository extends JpaRepository<TripInstance, Long
 
     List<TripInstance> findByTripCodeAndStatus(String code, Status status);
 
-    List<TripInstance> findByTargetCitiesCodeAndStatus(String cityCode, Status status);
-
     List<TripInstance> findByTripCodeAndDateAndStatus(String code, Date date, Status status);
 }

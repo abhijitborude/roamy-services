@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.roamy.config.CustomDateSerializer;
 import com.roamy.util.DbConstants;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -51,12 +49,12 @@ public abstract class TripInstance extends AbstractEntity {
     @JoinColumn(name = "TRIP_INSTANCE_ID")
     private List<TripInstanceOption> options;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "TRIP_INSTANCE_CITY",
-            joinColumns = {@JoinColumn(name = "TRIP_INSTANCE_ID")},
-            inverseJoinColumns = {@JoinColumn(name = "CITY_ID")})
-    @Fetch(FetchMode.SUBSELECT)
-    protected List<City> targetCities;
+//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JoinTable(name = "TRIP_INSTANCE_CITY",
+//            joinColumns = {@JoinColumn(name = "TRIP_INSTANCE_ID")},
+//            inverseJoinColumns = {@JoinColumn(name = "CITY_ID")})
+//    @Fetch(FetchMode.SUBSELECT)
+//    protected List<City> targetCities;
 
     @Column(name = "TRAVELLER_CAPACITY")
     protected Integer travellerCapacity;
@@ -138,13 +136,13 @@ public abstract class TripInstance extends AbstractEntity {
         this.options = options;
     }
 
-    public List<City> getTargetCities() {
-        return targetCities;
-    }
-
-    public void setTargetCities(List<City> targetCities) {
-        this.targetCities = targetCities;
-    }
+//    public List<City> getTargetCities() {
+//        return targetCities;
+//    }
+//
+//    public void setTargetCities(List<City> targetCities) {
+//        this.targetCities = targetCities;
+//    }
 
     public Integer getTravellerCapacity() {
         return travellerCapacity;

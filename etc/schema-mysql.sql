@@ -13,7 +13,6 @@ drop table if exists trip_option;
 drop table if exists trip_review;
 drop table if exists favorite_trip;
 drop table if exists trip_instance;
-drop table if exists trip_instance_city;
 drop table id exists trip_instance_option;
 drop table if exists vendor;
 drop table if exists vendor_account;
@@ -200,14 +199,6 @@ create table trip_instance (
 );
 
 alter table trip_instance add constraint FK_trip_instance_trip_id foreign key (trip_id) references trip (id);
-
-create table trip_instance_city (
-    trip_instance_id bigint not null,
-    city_id bigint not null
-);
-
-alter table trip_instance_city add constraint FK_trip_instance_city_city_id foreign key (city_id) references city (id);
-alter table trip_instance_city add constraint FK_trip_instance_city_trip_id foreign key (trip_instance_id) references trip_instance (id);
 
 create table trip_instance_option (
     id bigint not null auto_increment primary key,

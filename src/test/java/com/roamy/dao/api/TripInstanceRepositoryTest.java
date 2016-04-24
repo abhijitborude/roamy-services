@@ -30,11 +30,6 @@ public class TripInstanceRepositoryTest {
     }
 
     @Test
-    public void testFindByTargetCitiesCodeAndStatus() throws Exception {
-        tripInstanceRepository.findByTargetCitiesCodeAndStatus("MUMBAI", Status.Active);
-    }
-
-    @Test
     public void testFindByTripCodeAndDateAndStatus() throws Exception {
         tripInstanceRepository.findByTripCodeAndDateAndStatus("", new Date(), Status.Active);
     }
