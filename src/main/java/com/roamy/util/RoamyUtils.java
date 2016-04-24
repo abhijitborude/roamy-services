@@ -88,4 +88,16 @@ public class RoamyUtils {
         entity.setLastModifiedBy(user);
         entity.setLastModifiedOn(date);
     }
+
+    public static Date plusDays(Date date, int days) {
+        DateTime dateTime = new DateTime(date);
+        dateTime = dateTime.plusDays(days);
+        return dateTime.toDate();
+    }
+
+    public static Date minusDays(Date date, int days) {
+        DateTime dateTime = new DateTime(date);
+        dateTime = dateTime.minusDays(days);
+        return dateTime.toDate();
+    }
 }
