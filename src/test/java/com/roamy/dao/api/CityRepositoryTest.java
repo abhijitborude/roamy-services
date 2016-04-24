@@ -3,6 +3,7 @@ package com.roamy.dao.api;
 import com.roamy.TestApplication;
 import com.roamy.domain.City;
 import com.roamy.domain.Status;
+import com.roamy.util.DomainObjectUtil;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,7 +16,6 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,18 +38,7 @@ public class CityRepositoryTest {
 
     @Before
     public void setUp() {
-        City city = new City();
-        city.setName(TEST_NAME);
-        city.setCode(TEST_CODE);
-        city.setDescription("Test Description");
-        city.setStatus(Status.Active);
-        city.setCreatedBy("test");
-        city.setCreatedOn(new Date());
-        city.setLastModifiedBy("test");
-        city.setLastModifiedOn(new Date());
-
-        city = cityRepository.save(city);
-
+        City city = cityRepository.save(DomainObjectUtil.createCity(TEST_CODE, TEST_NAME));
         id = city.getId();
         LOGGER.info("City saved with id: " + id);
     }

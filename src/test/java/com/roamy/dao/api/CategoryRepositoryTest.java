@@ -3,6 +3,7 @@ package com.roamy.dao.api;
 import com.roamy.TestApplication;
 import com.roamy.domain.Category;
 import com.roamy.domain.Status;
+import com.roamy.util.DomainObjectUtil;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,7 +16,6 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,20 +38,7 @@ public class CategoryRepositoryTest {
 
     @Before
     public void setUp() {
-        Category category = new Category();
-        category.setName(TEST_NAME);
-        category.setCode(TEST_CODE);
-        category.setDescription("Test Description");
-        category.setImageCaption("Test Caption");
-        category.setImageUrl("http://test");
-        category.setStatus(Status.Active);
-        category.setCreatedBy("test");
-        category.setCreatedOn(new Date());
-        category.setLastModifiedBy("test");
-        category.setLastModifiedOn(new Date());
-
-        category = categoryRepository.save(category);
-
+        Category category = categoryRepository.save(DomainObjectUtil.createCategory(TEST_CODE, TEST_NAME));
         id = category.getId();
         LOGGER.info("Category saved with id: " + id);
     }
