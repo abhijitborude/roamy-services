@@ -296,7 +296,6 @@
                     <p style="Margin-top: 0;Margin-bottom: 2;"><strong><span style="color:#44a8c7">Booking Details:</span></strong></p>
                     #foreach( $option in $trip.options )
                     <div style="Margin-top: 2px;Margin-bottom: 0;">
-                        #if( !$trip.ageBasedPricing )
                         <table>
                             <tr>
                                 <td style="text-align: left;width: 340px;">
@@ -306,35 +305,6 @@
                                 <td style="text-align: right;width: 60px;">$option.totalCost</td>
                             </tr>
                         </table>
-                        #end
-
-                        #if( $trip.ageBasedPricing )
-                        <table>
-                            <tr>
-                                <td style="text-align: left;width: 340px;"><strong>$option.type</strong></td>
-                                <td style="text-align: right;width: 60px;"></td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: left;width: 340px;padding-left: 15px;">
-                                    Adult <span style="font-size: 12px;">(INR $option.adultPrice x $option.adultCount)</span>
-                                </td>
-                                <td style="text-align: right;width: 60px;">$option.adultTotalCost</td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: left;width: 340px;padding-left: 15px;">
-                                    Child <span style="font-size: 12px;">(INR $option.childPrice x $option.childCount)</span>
-                                </td>
-                                <td style="text-align: right;width: 60px;">$option.childTotalCost</td>
-                            </tr>
-                            <tr>
-                                <td style="text-align: left;width: 340px;padding-left: 15px;">
-                                    Senior <span style="font-size: 12px;">(INR $option.seniorPrice x $option.seniorCount)</span>
-                                </td>
-                                <td style="text-align: right;width: 60px;">$option.seniorTotalCost</td>
-                            </tr>
-                        </table>
-                        #end
-
                     </div>
                     #end
                     <div style="Margin-top: 2px;Margin-bottom: 0;border-top: 2px solid #bfc1c4;">

@@ -62,7 +62,7 @@ public abstract class Reservation extends AbstractEntity {
     public int getNumberOfRoamies() {
         int numberOfRomies = 0;
         for (ReservationTripOption option : tripOptions) {
-            numberOfRomies += option.getNumberOfRomies();
+            numberOfRomies += option.getCount();
         }
         return numberOfRomies;
     }

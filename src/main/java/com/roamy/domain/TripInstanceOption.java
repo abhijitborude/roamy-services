@@ -21,24 +21,14 @@ public class TripInstanceOption extends AbstractEntity {
     @Column(name = "DESCRIPTION", length = DbConstants.MEDIUM_TEXT)
     protected String description;
 
+    @Column(name = "OPTION_GROUP", length = DbConstants.SHORT_TEXT)
+    protected String group;
+
     @Column(name = "PRICE")
     protected Double price;
 
     @Column(name = "CAPACITY")
     protected Double capacity;
-
-    @NotNull
-    @Column(name = "AGE_BASED_PRICING")
-    protected boolean ageBasedPricing;
-
-    @Column(name = "ADULT_PRICE")
-    protected Double adultPrice;
-
-    @Column(name = "SENIOR_PRICE")
-    protected Double seniorPrice;
-
-    @Column(name = "CHILD_PRICE")
-    protected Double childPrice;
 
     public String getName() {
         return name;
@@ -54,6 +44,14 @@ public class TripInstanceOption extends AbstractEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 
     public Double getPrice() {
@@ -72,49 +70,14 @@ public class TripInstanceOption extends AbstractEntity {
         this.capacity = capacity;
     }
 
-    public boolean isAgeBasedPricing() {
-        return ageBasedPricing;
-    }
-
-    public void setAgeBasedPricing(boolean ageBasedPricing) {
-        this.ageBasedPricing = ageBasedPricing;
-    }
-
-    public Double getAdultPrice() {
-        return adultPrice;
-    }
-
-    public void setAdultPrice(Double adultPrice) {
-        this.adultPrice = adultPrice;
-    }
-
-    public Double getSeniorPrice() {
-        return seniorPrice;
-    }
-
-    public void setSeniorPrice(Double seniorPrice) {
-        this.seniorPrice = seniorPrice;
-    }
-
-    public Double getChildPrice() {
-        return childPrice;
-    }
-
-    public void setChildPrice(Double childPrice) {
-        this.childPrice = childPrice;
-    }
-
     @Override
     public String toString() {
         return "TripInstanceOption{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", group='" + group + '\'' +
                 ", price=" + price +
                 ", capacity=" + capacity +
-                ", ageBasedPricing=" + ageBasedPricing +
-                ", adultPrice=" + adultPrice +
-                ", seniorPrice=" + seniorPrice +
-                ", childPrice=" + childPrice +
                 '}';
     }
 }

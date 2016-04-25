@@ -113,14 +113,14 @@ insert into trip_image
 (2,         'Nice Image',           'http://res.cloudinary.com/abhijitab/image/upload/v1449029733/sample.jpg');
 
 insert into trip_option
-(id,    trip_id,    name,                               description,    price,  capacity,   age_based_pricing,      adult_price,    senior_price,   child_price,    status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
-(1,     1,          'Adult',                            '',             7500,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
-(2,     1,          'Children (10 years or below)',     '',             5000,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp);
+(id,    trip_id,    name,                               description,    option_group,   price,  capacity,   status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
+(1,     1,          'Adult',                            '',             null,           7500,   25,         'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(2,     1,          'Children (10 years or below)',     '',             null,           5000,   25,         'Active',   'test',             current_timestamp,  'test',             current_timestamp);
 
 insert into trip_option
-(id,    trip_id,    name,                               description,    price,  capacity,   age_based_pricing,      adult_price,    senior_price,   child_price,    status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
-(3,     2,          'Day Pass',                         '',             2004,   null,       true,                   2004,           1431,           1431,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
-(4,     2,          'Jumbo Pass',                       '',             5000,   null,       true,                   5724,           3500,           3500,           'Active',   'test',             current_timestamp,  'test',             current_timestamp);
+(id,    trip_id,    name,                               description,    option_group,  price,  capacity,   status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
+(3,     2,          'Day Pass',                         '',             null,           2004,   null,       'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(4,     2,          'Jumbo Pass',                       '',             null,           5000,   null,       'Active',   'test',             current_timestamp,  'test',             current_timestamp);
 
 insert into favorite_trip
 (id,    user_id,   trip_id,     status,     created_by, created_on,         last_modified_by,   last_modified_on) values
@@ -259,18 +259,18 @@ insert into trip_instance
 );
 
 insert into trip_instance_option
-(id,    trip_instance_id,    name,                              description,    price,  capacity,   age_based_pricing,      adult_price,    senior_price,   child_price,    status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
-(1,     1,                  'Adult',                            '',             7500,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
-(2,     1,                  'Children (10 years or below)',     '',             5000,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
-(3,     2,                  'Adult',                            '',             7500,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
-(4,     2,                  'Children (10 years or below)',     '',             5000,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp);
+(id,    trip_instance_id,    name,                              description,    price,  capacity,   option_group,   status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
+(1,     1,                  'Adult',                            '',             7500,   25,         null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(2,     1,                  'Children (10 years or below)',     '',             5000,   25,         null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(3,     2,                  'Adult',                            '',             7500,   25,         null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(4,     2,                  'Children (10 years or below)',     '',             5000,   25,         null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp);
 
 insert into trip_instance_option
-(id,    trip_instance_id,    name,                              description,    price,  capacity,   age_based_pricing,      adult_price,    senior_price,   child_price,    status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
-(5,     3,                  'Day Pass',                         '',             2004,   null,       true,                   2004,           1431,           1431,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
-(6,     3,                  'Jumbo Pass',                       '',             5000,   null,       true,                   5724,           3500,           3500,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
-(7,     4,                  'Day Pass',                         '',             2004,   null,       true,                   2004,           1431,           1431,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
-(8,     4,                  'Jumbo Pass',                       '',             5000,   null,       true,                   5724,           3500,           3500,           'Active',   'test',             current_timestamp,  'test',             current_timestamp);
+(id,    trip_instance_id,    name,                              description,    price,  capacity,   option_group,   status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
+(5,     3,                  'Day Pass',                         '',             2004,   null,       null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(6,     3,                  'Jumbo Pass',                       '',             5000,   null,       null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(7,     4,                  'Day Pass',                         '',             2004,   null,       null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
+(8,     4,                  'Jumbo Pass',                       '',             5000,   null,       null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp);
 
 
 insert into trip_review
