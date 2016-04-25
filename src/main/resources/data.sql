@@ -258,17 +258,6 @@ insert into trip_instance
     current_timestamp --last_modified_on
 );
 
-insert into trip_instance_city
-(trip_instance_id,   city_id ) values
-(1,         1),
-(1,         2),
-(2,         1),
-(2,         2),
-(3,         1),
-(3,         2),
-(4,         1),
-(4,         2);
-
 insert into trip_instance_option
 (id,    trip_instance_id,    name,                              description,    price,  capacity,   age_based_pricing,      adult_price,    senior_price,   child_price,    status,     created_by,         created_on,         last_modified_by,   last_modified_on) values
 (1,     1,                  'Adult',                            '',             7500,   25,         false,                  null,           null,           null,           'Active',   'test',             current_timestamp,  'test',             current_timestamp),
@@ -296,9 +285,9 @@ insert into alert
 (3,     'INFO',     1,          'Your trip is arriving',    'You trip is scheduled for tomorrow',                                                                           null,              1,              dateadd('DAY', 10, current_timestamp),      'Active',   'test',         current_timestamp,  'test',             current_timestamp);
 
 insert into reservation
-(id,    type,           user_id,    email,              number_of_roamies,      amount,     start_date,         end_date,       phone_number,   status,     created_by,     created_on,         last_modified_by,   last_modified_on) values
-(1,     'PACKAGE',      1,          'abc@abc.com',      4,                      30000,      current_timestamp,  null,           '12345',        'Active',   'test',         current_timestamp,  'test',             current_timestamp),
-(2,     'PACKAGE',      1,          'abc@abc.com',      2,                      20000,      current_timestamp,  null,           '12345',        'Active',   'test',         current_timestamp,  'test',             current_timestamp);
+(id,    type,           user_id,    email,              amount,     start_date,         end_date,       phone_number,   status,     created_by,     created_on,         last_modified_by,   last_modified_on) values
+(1,     'PACKAGE',      1,          'abc@abc.com',      30000,      current_timestamp,  null,           '12345',        'Active',   'test',         current_timestamp,  'test',             current_timestamp),
+(2,     'PACKAGE',      1,          'abc@abc.com',      20000,      current_timestamp,  null,           '12345',        'Active',   'test',         current_timestamp,  'test',             current_timestamp);
 
 insert into reservation_trip_instance
 (reservation_id,    trip_instance_id) values

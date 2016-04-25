@@ -28,7 +28,7 @@ public class RazorpayGatewayServiceImplTest {
     @Test
     public void testGetPaymentDetails() throws Exception {
         try {
-            PaymentDto paymentDto = razorpayGatewayService.getPaymentDetails("pay_4nPf8p0K6OXPWy");
+            PaymentDto paymentDto = razorpayGatewayService.getPaymentDetails("pay_5OEpliRJDpr16n");
         } catch (Exception e) {
 
         }
@@ -37,7 +37,7 @@ public class RazorpayGatewayServiceImplTest {
     @Test
     public void testCapturePayment() throws Exception {
         try {
-            PaymentDto paymentDto = razorpayGatewayService.capturePayment("pay_4nPf8p0K6OXPWy", 7500d);
+            PaymentDto paymentDto = razorpayGatewayService.capturePayment("pay_5OEpliRJDpr16n", 7500d);
         } catch (Exception e) {
 
         }

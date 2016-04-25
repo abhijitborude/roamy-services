@@ -1,11 +1,6 @@
 spring:
   profiles.active: local
 
----
-
-spring:
-  profiles: default
-
 multipart:
   maxFileSize: 5000KB
   maxRequestSize: 5000KB
