@@ -32,7 +32,7 @@ public class RoamyUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("user with phone number " + username + " not found");
         }
-        LOGGER.info("founds {}", user);
+        LOGGER.info("found {}", user);
 
         return new org.springframework.security.core.userdetails.User(
                     username,

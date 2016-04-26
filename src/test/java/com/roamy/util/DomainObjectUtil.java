@@ -37,7 +37,7 @@ public class DomainObjectUtil {
 
     public static User getUser(String phoneNumber, String email, String fname, String lname) {
         User user = new User();
-        user.setType(UserType.ROAMY);
+        user.setType(UserType.ROLE_ROAMY);
         user.setAccountType(AccountType.Phone);
         user.setPhoneNumber(phoneNumber);
         user.setEmail(email);

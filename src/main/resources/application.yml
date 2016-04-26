@@ -6,7 +6,7 @@ multipart:
   maxRequestSize: 5000KB
 
 security:
-  user.password: pass
+  user.password: colts
 
 razorpay:
   key-id: rzp_test_aoq1vFZS49sAlN

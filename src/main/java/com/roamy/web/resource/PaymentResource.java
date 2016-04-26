@@ -34,7 +34,7 @@ public class PaymentResource {
     private PaymentGatewayService paymentGatewayService;
 
     @RequestMapping(value = "/{transactionId}", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ROAMY','ROLE_ADMIN')")
     @ApiOperation(value = "Get payment details for transactionId", notes = "Fetches payment details from " +
                     "Payment Gateway using the transaction id that is persisted with the reservation. " +
                     "Actual result is contained in the data field of the response.")

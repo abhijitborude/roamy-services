@@ -36,7 +36,7 @@ public class SmsNotificationResource {
     private SmsNotificationRepository smsNotificationRepository;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ApiOperation(value = "Find SMS notifications", notes = "Finds SMS notifications by phone number and status. " +
             "Pagination is enabled and can be controlled using two parameters- page and size." +
             "By default first page is displayed with 100 elements (page=0, size=100). " +

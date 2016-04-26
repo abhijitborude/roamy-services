@@ -92,7 +92,7 @@ public class UserResource extends IdentityResource<User, Long> {
             if (user == null) {
                 user = new User();
 
-                UserType type = userDto.getType() == null ? UserType.ROAMY : userDto.getType();
+                UserType type = userDto.getType() == null ? UserType.ROLE_ROAMY : userDto.getType();
                 user.setType(type);
 
                 AccountType accountType = userDto.getAccountType() == null ? AccountType.Phone : userDto.getAccountType();
@@ -186,7 +186,7 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/{id}/", method = RequestMethod.PUT)
-    @PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ROAMY','ROLE_ADMIN')")
     @ApiOperation(value = "Update user entity", notes = "Updates user entity with a given user ID." +
                         "Actual result is contained in the data field of the response.")
     public RestResponse updateUser(@ApiParam(value = "User ID", required = true) @PathVariable Long id,
@@ -238,7 +238,7 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/{id}/profileImage", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ROAMY','ROLE_ADMIN')")
     @ApiOperation(value = "Update user profile image", notes = "Updates profile image of the user with a given user ID." +
             " Returns URL of the image uploaded. Actual result is contained in the data field of the response.")
     public RestResponse uploadImage(@ApiParam(value = "User ID", required = true)
@@ -298,7 +298,7 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/{id}/action", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ROAMY','ROLE_ADMIN')")
     @ApiOperation(value = "Take action on user entity", notes = "Takes action on the user with a given user ID." +
                 " Which action to perform is provided as a POST payload in the form of userAction. Currently, two" +
                 " actions are supported- activate user by matching verificationCode provided or reset the user. In" +
@@ -386,7 +386,7 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/{id}/walletBalance", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ROAMY','ROLE_ADMIN')")
     @ApiOperation(value = "Get user's wallet balance", notes = "Fetches current wallet balance of the user." +
                         " Actual result is contained in the data field of the response.")
     public RestResponse getWalletBalance(@ApiParam(value = "User ID", required = true) @PathVariable Long id) {
@@ -415,7 +415,7 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/{id}/notifications", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ROAMY','ROLE_ADMIN')")
     @ApiOperation(value = "Get user notifications", notes = "Fetches notifications for the user." +
             " Actual result is contained in the data field of the response.")
     public RestResponse getNotifications(@ApiParam(value = "User ID", required = true) @PathVariable Long id) {
@@ -445,7 +445,7 @@ public class UserResource extends IdentityResource<User, Long> {
 
 
     @RequestMapping(value = "/{id}/favoriteTrips", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ROAMY','ROLE_ADMIN')")
     @ApiOperation(value = "Get user's favorite trips", notes = "Fetches trips marked as favorite by the user." +
             " Actual result is contained in the data field of the response.")
     public RestResponse getFavoriteTrips(@ApiParam(value = "User ID", required = true) @PathVariable Long id) {
@@ -479,7 +479,7 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/{id}/favoriteTripCodes", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ROAMY','ROLE_ADMIN')")
     @ApiOperation(value = "Get user's favorite trip code", notes = "Fetches codes of trips marked as favorite by the user." +
             " Actual result is contained in the data field of the response.")
     public RestResponse getFavoriteTripCodes(@ApiParam(value = "User ID", required = true) @PathVariable Long id) {
@@ -513,7 +513,7 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/{id}/favoriteTrips", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ROAMY','ROLE_ADMIN')")
     @ApiOperation(value = "Manage user's favorite trips", notes = "Add/remove trip as a favorite trip for a user." +
                         " Does not return any data. Http status reflects success/failure")
     public RestResponse manageFavoriteTrip(@ApiParam(value = "User ID", required = true)
@@ -585,7 +585,7 @@ public class UserResource extends IdentityResource<User, Long> {
     }
 
     @RequestMapping(value = "/{id}/reservations", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROAMY') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ROAMY','ROLE_ADMIN')")
     @ApiOperation(value = "Get reservations for user", notes = "Fetches reservations made by the user. Active flag " +
             " can be used to control if only active, inactive or both reservations are returned. When inactive " +
             " reservations are included only top 50 are returned. Actual result is contained in the data field of the response.")

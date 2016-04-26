@@ -54,7 +54,7 @@ public class AlertNotificationRepositoryTest {
 
     private User createUser(String phoneNumber, String email) {
         User user = new User();
-        user.setType(UserType.ROAMY);
+        user.setType(UserType.ROLE_ROAMY);
         user.setAccountType(AccountType.Phone);
         user.setPhoneNumber(phoneNumber);
         user.setEmail(email);
