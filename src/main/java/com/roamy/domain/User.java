@@ -269,6 +269,7 @@ public class User extends AbstractEntity {
                 ", accountType='" + accountType + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
+                ", token='" + token + '\'' +
                 '}';
     }
 }
