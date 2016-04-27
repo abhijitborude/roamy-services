@@ -5,12 +5,13 @@ import com.roamy.util.DbConstants;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * Created by Abhijit on 12/1/2015.
  */
 @Embeddable
-public class TripImage {
+public class TripImage implements Serializable {
 
     @Column(name = "CAPTION", length = DbConstants.MEDIUM_TEXT)
     private String caption;

@@ -20,6 +20,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -93,7 +94,7 @@ public class TripResource extends CitableResource<Trip, Long> {
                 LOGGER.info("active Trip Instances by code({}) and date ({} - {}): {}", code, sDate, date, tripInstances);
             }
 
-            response = new RestResponse(tripInstances, HttpStatus.OK_200, null, null);
+            response = new RestResponse(tripInstances, HttpStatus.OK_200);
 
         } catch (Throwable t) {
             LOGGER.error("error in finding activeinstances: ", t);
@@ -108,6 +109,7 @@ public class TripResource extends CitableResource<Trip, Long> {
                         "start and end date for a city and category. List could be sorted in ascending or descending " +
                         "order using the fields sortBy and sortType. " +
                         "Actual result is contained in the data field of the response.")
+    @Cacheable("tripListing")
     public RestResponse getTripListing(
                                 @ApiParam(value = "City Code", required = false)
                                     @RequestParam(value = "cityCode", required = false) String cityCode,

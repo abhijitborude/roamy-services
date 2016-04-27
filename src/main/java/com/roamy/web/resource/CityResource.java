@@ -1,6 +1,5 @@
 package com.roamy.web.resource;
 
-import com.roamy.dao.api.CitableRepository;
 import com.roamy.dao.api.CityRepository;
 import com.roamy.dao.api.TripRepository;
 import com.roamy.domain.Category;
@@ -19,12 +18,13 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.cache.annotation.CacheResult;
 import java.util.*;
 
 /**
@@ -33,7 +33,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/cities")
 @Api("city")
-public class CityResource extends CitableResource<City, Long> {
+public class CityResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CitableResource.class);
 
@@ -43,56 +43,55 @@ public class CityResource extends CitableResource<City, Long> {
     @Autowired
     private TripRepository tripRepository;
 
-    @Override
-    protected CitableRepository<City, Long> getCitableRepository() {
-        return cityRepository;
-    }
-
-    @Override
-    protected void enrichForGet(City entity) {
-
-    }
-
-    @Override
     protected void addLinks(City entity) {
         entity.get_links().put("categories", "/" + entity.getCode() + "/categories");
-
     }
 
-    @RequestMapping(value = "/{code}/categories", method = RequestMethod.GET)
-    @ApiOperation(value = "Get categories for the city", notes = "Fetches the categories that have trips scheduled for the city. " +
-                            "Actual result is contained in the data field of the response.")
-    @CacheResult(cacheName="categoriesForCity")
-    public RestResponse getCategoriesForCity(@ApiParam(value = "City Code", required = true) @PathVariable String code) {
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @ApiOperation(value = "Get all cities", notes =  "Actual result is contained in the data field of the response.")
+    @Cacheable("allCities")
+    public RestResponse findAllCities() {
+
+        RestResponse response = null;
+        try {
+            // load entities
+            List<City> cities = cityRepository.findAll();
+            LOGGER.info("Number of cities found: {}", cities == null ? 0 : cities.size());
+
+            // add hypermedia
+            if (cities != null) {
+                cities.forEach(e -> addLinks(e));
+            }
+
+            // construct return result
+            response = new RestResponse(cities, HttpStatus.OK_200);
+
+        } catch (Throwable t) {
+            LOGGER.error("error in findAllCities: ", t);
+            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
+        }
+
+        return response;
+    }
+
+    @RequestMapping(value = "/{code}", method = RequestMethod.GET)
+    @ApiOperation(value = "Get city by code", notes = "Actual result is contained in the data field of the response")
+    public RestResponse findCityByCode(@ApiParam(value = "Code", required = true) @PathVariable String code) {
 
         RestResponse response = null;
 
         try {
-            // TODO: add validations
+            City city = cityRepository.findByCode(code);
+            LOGGER.info("finding city by code({}): {}", code, city);
 
-            // 1. find all active trips with active instances in next 60 days for the city
-            List<Trip> trips = tripRepository.findDistinctByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetween(Status.Active,
-                    Arrays.asList(new String[]{code}),
-                    Status.Active,
-                    new Date(),
-                    RoamyUtils.plusDays(new Date(), 60));
-
-            // 2. find all categories of the trip instances
-            Set<Category> categories = new HashSet<>();
-            if (trips != null) {
-                trips.forEach(trip -> {
-                    if (!CollectionUtils.isEmpty(trip.getCategories())) {
-                        categories.addAll(trip.getCategories());
-                    }
-                });
-            }
-            LOGGER.info("categories for code({}): {}", code, categories);
+            // Add hypermedia
+            addLinks(city);
 
             // return response
-            response = new RestResponse(categories, HttpStatus.OK_200, null, null);
+            response = new RestResponse(city, HttpStatus.OK_200);
 
         } catch (Throwable t) {
-            LOGGER.error("error in getCategoriesForCity: ", t);
+            LOGGER.error("error in findCityByCode: ", t);
             response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
         }
 
@@ -103,6 +102,7 @@ public class CityResource extends CitableResource<City, Long> {
     @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "Create a City", notes = "Creates a City and returns the newly created entity. " +
             "Actual result is contained in the data field of the response.")
+    @CacheEvict(value = "allCities", allEntries = true)
     public RestResponse createCity(@ApiParam(value = "City to be created in the JSON format sent as payload of the POST operation.",
                                             required = true)
                                   @RequestBody CityDto cityDto) {
@@ -135,6 +135,46 @@ public class CityResource extends CitableResource<City, Long> {
 
         } catch (Throwable t) {
             LOGGER.error("error in createCity: ", t);
+            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
+        }
+
+        return response;
+    }
+
+    @RequestMapping(value = "/{code}/categories", method = RequestMethod.GET)
+    @ApiOperation(value = "Get categories for the city", notes = "Fetches the categories that have trips scheduled for the city. " +
+            "Actual result is contained in the data field of the response.")
+    @Cacheable("categoriesForCity")
+    public RestResponse getCategoriesForCity(@ApiParam(value = "City Code", required = true) @PathVariable String code) {
+
+        RestResponse response = null;
+
+        try {
+            // TODO: add validations
+
+            // 1. find all active trips with active instances in next 60 days for the city
+            List<Trip> trips = tripRepository.findDistinctByStatusAndTargetCitiesCodeInAndInstancesStatusAndInstancesDateBetween(Status.Active,
+                    Arrays.asList(new String[]{code}),
+                    Status.Active,
+                    new Date(),
+                    RoamyUtils.plusDays(new Date(), 60));
+
+            // 2. find all categories of the trip instances
+            Set<Category> categories = new HashSet<>();
+            if (trips != null) {
+                trips.forEach(trip -> {
+                    if (!CollectionUtils.isEmpty(trip.getCategories())) {
+                        categories.addAll(trip.getCategories());
+                    }
+                });
+            }
+            LOGGER.info("categories for code({}): {}", code, categories);
+
+            // return response
+            response = new RestResponse(categories, HttpStatus.OK_200, null, null);
+
+        } catch (Throwable t) {
+            LOGGER.error("error in getCategoriesForCity: ", t);
             response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
         }
 

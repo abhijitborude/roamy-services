@@ -49,7 +49,7 @@ public abstract class Trip extends CitableEntity {
     @Column(name = "COVER_PICTURE", length = DbConstants.LONG_TEXT)
     private String coverPicture;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name="TRIP_IMAGE",
             joinColumns=@JoinColumn(name="TRIP_ID")
