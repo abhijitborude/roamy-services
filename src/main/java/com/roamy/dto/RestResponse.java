@@ -3,12 +3,13 @@ package com.roamy.dto;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.roamy.config.CustomDateSerializer;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Created by Abhijit on 11/12/2015.
  */
-public class RestResponse {
+public class RestResponse implements Serializable {
 
     private Object data;
     private int status;

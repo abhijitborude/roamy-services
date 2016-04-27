@@ -24,6 +24,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.cache.annotation.CacheResult;
 import java.util.*;
 
 /**
@@ -61,6 +62,7 @@ public class CityResource extends CitableResource<City, Long> {
     @RequestMapping(value = "/{code}/categories", method = RequestMethod.GET)
     @ApiOperation(value = "Get categories for the city", notes = "Fetches the categories that have trips scheduled for the city. " +
                             "Actual result is contained in the data field of the response.")
+    @CacheResult(cacheName="categoriesForCity")
     public RestResponse getCategoriesForCity(@ApiParam(value = "City Code", required = true) @PathVariable String code) {
 
         RestResponse response = null;
