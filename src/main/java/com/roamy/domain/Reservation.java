@@ -134,7 +134,8 @@ public abstract class Reservation extends AbstractEntity {
     @Override
     public String toString() {
         return "Reservation{" +
-                "tripInstances=" + tripInstances +
+                "id=" + id +
+                ", tripInstances=" + tripInstances +
                 ", user=" + user +
                 ", amount=" + amount +
                 ", phoneNumber='" + phoneNumber + '\'' +

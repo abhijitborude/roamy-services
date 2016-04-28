@@ -37,7 +37,8 @@ public class StayReservation extends Reservation {
     @Override
     public String toString() {
         return "StayReservation{" +
-                "tripInstances=" + tripInstances +
+                "id=" + id +
+                ", tripInstances=" + tripInstances +
                 ", user=" + user +
                 ", amount=" + amount +
                 ", phoneNumber='" + phoneNumber + '\'' +

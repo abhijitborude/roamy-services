@@ -18,7 +18,8 @@ public class TicketReservation extends Reservation {
     @Override
     public String toString() {
         return "TicketReservation{" +
-                "tripInstances=" + tripInstances +
+                "id=" + id +
+                ", tripInstances=" + tripInstances +
                 ", user=" + user +
                 ", amount=" + amount +
                 ", phoneNumber='" + phoneNumber + '\'' +
