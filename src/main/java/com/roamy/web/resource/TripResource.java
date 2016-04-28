@@ -109,7 +109,7 @@ public class TripResource extends CitableResource<Trip, Long> {
                         "start and end date for a city and category. List could be sorted in ascending or descending " +
                         "order using the fields sortBy and sortType. " +
                         "Actual result is contained in the data field of the response.")
-    @Cacheable("tripListing")
+    //@Cacheable("tripListing")
     public RestResponse getTripListing(
                                 @ApiParam(value = "City Code", required = false)
                                     @RequestParam(value = "cityCode", required = false) String cityCode,
