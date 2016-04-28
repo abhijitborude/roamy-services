@@ -155,9 +155,9 @@ public class ReservationResource {
             reservation.setAmount(totalAmount);
             reservation.setStartDate(tripInstance.getDate());
             reservation.setPhoneNumber(reservationDto.getPhoneNumber());
-            reservation.setTripOptions(reservationTripOptions);
             reservation.setStatus(Status.Pending);
-            RoamyUtils.addAuditPropertiesForCreateEntity(reservation, "test");
+            reservation.setCreatedBy("test");
+            reservation.setLastModifiedBy("test");
 
             // if email for reservation is not provided then fetch it from user
             if (StringUtils.hasText(reservationDto.getEmail())) {
@@ -169,9 +169,12 @@ public class ReservationResource {
             LOGGER.info("saving {}", reservation);
             reservation = reservationRepository.save(reservation);
 
+
             List<TripInstance> instances = new ArrayList<>();
             instances.add(tripInstance);
             reservation.setTripInstances(instances);
+
+            reservation.setTripOptions(reservationTripOptions);
 
             // apply romoney
             if (reservationDto.isUseRomoney() && user.getWalletBalance() != null) {
