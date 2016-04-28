@@ -86,27 +86,27 @@ public class ReservationRepositoryTest extends TripBaseTest {
         LOGGER.info("found {}", reservation);
     }
 
-    @Test
-    public void testFindTop50UserIdOrderByStartDateDesc() throws Exception {
-        List<Reservation> reservations = reservationRepository.findTop50ByUserIdOrderByStartDateDesc(1L);
-        LOGGER.info("found {}", reservations);
-    }
-
-    @Test
-    public void testFindTop50ByUserIdAndStartDateLessThanOrderByStartDateDesc() throws Exception {
-        List<Reservation> reservations = reservationRepository.findTop50ByUserIdAndStartDateLessThanOrderByStartDateDesc(1L, new Date());
-        LOGGER.info("found {}", reservations);
-    }
-
-    @Test
-    public void testFindByUserIdAndStatusNotAndStartDateGreaterThanEqualOrderByStartDateAsc() throws Exception {
-        List<Reservation> reservations = reservationRepository.findByUserIdAndStatusNotAndStartDateGreaterThanEqualOrderByStartDateAsc(1L, Status.Active, new Date());
-        LOGGER.info("found {}", reservations);
-    }
-
-    @Test
-    public void testFindByUserIdAndStatusAndStartDateGreaterThanEqualOrderByStartDateAsc() throws Exception {
-        List<Reservation> reservations = reservationRepository.findByUserIdAndStatusAndStartDateGreaterThanEqualOrderByStartDateAsc(1L, Status.Active, new Date());
-        LOGGER.info("found {}", reservations);
-    }
+//    @Test
+//    public void testFindTop50UserIdOrderByStartDateDesc() throws Exception {
+//        List<Reservation> reservations = reservationRepository.findTop50ByUserIdOrderByStartDateDesc(1L);
+//        LOGGER.info("found {}", reservations);
+//    }
+//
+//    @Test
+//    public void testFindTop50ByUserIdAndStartDateLessThanOrderByStartDateDesc() throws Exception {
+//        List<Reservation> reservations = reservationRepository.findTop50ByUserIdAndStartDateLessThanOrderByStartDateDesc(1L, new Date());
+//        LOGGER.info("found {}", reservations);
+//    }
+//
+//    @Test
+//    public void testFindByUserIdAndStatusNotAndStartDateGreaterThanEqualOrderByStartDateAsc() throws Exception {
+//        List<Reservation> reservations = reservationRepository.findByUserIdAndStatusNotAndStartDateGreaterThanEqualOrderByStartDateAsc(1L, Status.Active, new Date());
+//        LOGGER.info("found {}", reservations);
+//    }
+//
+//    @Test
+//    public void testFindByUserIdAndStatusAndStartDateGreaterThanEqualOrderByStartDateAsc() throws Exception {
+//        List<Reservation> reservations = reservationRepository.findByUserIdAndStatusAndStartDateGreaterThanEqualOrderByStartDateAsc(1L, Status.Active, new Date());
+//        LOGGER.info("found {}", reservations);
+//    }
 }
