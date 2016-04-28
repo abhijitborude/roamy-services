@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 @Table(name = "RESERVATION_TRIP_OPTION")
 public class ReservationTripOption extends AbstractEntity {
 
-    @NotNull
     @Column(name = "COUNT")
     protected int count;
 
