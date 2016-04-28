@@ -20,7 +20,6 @@ public class TicketReservation extends Reservation {
         return "TicketReservation{" +
                 "tripInstances=" + tripInstances +
                 ", user=" + user +
-                ", numberOfRoamies=" + getNumberOfRoamies() +
                 ", amount=" + amount +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +

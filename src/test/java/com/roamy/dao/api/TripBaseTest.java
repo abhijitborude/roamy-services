@@ -3,12 +3,11 @@ package com.roamy.dao.api;
 import com.roamy.domain.*;
 import com.roamy.util.DomainObjectUtil;
 import org.joda.time.DateTime;
-import org.junit.After;
-import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +31,8 @@ public abstract class TripBaseTest {
     @Autowired
     protected CategoryRepository categoryRepository;
 
+    protected DateTime today = DateTime.now().withTime(0, 0, 0, 0);
+
     protected PackageTrip createPackageTrip(String code, int thrillMeter, Double pricePerAdult, Status status,
                                           List<Category> categories, List<City> targetCities) {
         PackageTrip trip = new PackageTrip();
@@ -51,14 +52,17 @@ public abstract class TripBaseTest {
         tripInstance.setNumberOfDays(5);
         tripInstance.setDate(date);
         tripInstance.setTrip(trip);
+
+        List<TripInstanceOption> options = new ArrayList<>();
+        options.add(DomainObjectUtil.createTripInstanceOption("option1", 1000.0));
+        options.add(DomainObjectUtil.createTripInstanceOption("option2", 1500.0));
+        tripInstance.setOptions(options);
+
         tripInstance = tripInstanceRepository.save(tripInstance);
         return tripInstance;
     }
 
-    @Before
     public void setUp() {
-
-        DateTime today = DateTime.now().withTime(0, 0, 0, 0);
 
         // create cities
         City mumbai = cityRepository.save(DomainObjectUtil.createCity("MUMBAI", "Mumbai"));
@@ -88,7 +92,6 @@ public abstract class TripBaseTest {
         PackageTripInstance tripInstance4 = createPackageTripInstance(trip4, today.plusDays(1).toDate(), Status.Inactive);
     }
 
-    @After
     public void tearDown() {
         tripInstanceRepository.deleteAll();
         tripRepository.deleteAll();

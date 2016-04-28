@@ -39,7 +39,6 @@ public class StayReservation extends Reservation {
         return "StayReservation{" +
                 "tripInstances=" + tripInstances +
                 ", user=" + user +
-                ", numberOfRoamies=" + getNumberOfRoamies() +
                 ", amount=" + amount +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +

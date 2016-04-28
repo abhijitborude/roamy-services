@@ -1,8 +1,8 @@
 package com.roamy.dao.api;
 
 import com.roamy.TestApplication;
-import com.roamy.domain.*;
-import com.roamy.util.DomainObjectUtil;
+import com.roamy.domain.Status;
+import com.roamy.domain.Trip;
 import com.roamy.util.RoamyUtils;
 import org.junit.After;
 import org.junit.Assert;
@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -29,6 +28,16 @@ import java.util.List;
 public class TripRepositoryTest extends TripBaseTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TripRepositoryTest.class);
+
+    @Before
+    public void setUp() {
+        super.setUp();
+    }
+
+    @After
+    public void tearDown() {
+        super.tearDown();
+    }
 
     private void assertTripResult(List<Trip> trips, int expectedResults) {
         LOGGER.info("Number of trips in the result: {}", trips == null ? 0 : trips.size());

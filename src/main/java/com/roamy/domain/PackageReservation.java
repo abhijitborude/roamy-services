@@ -20,7 +20,6 @@ public class PackageReservation extends Reservation {
         return "PackageReservation{" +
                 "tripInstances=" + tripInstances +
                 ", user=" + user +
-                ", numberOfRoamies=" + getNumberOfRoamies() +
                 ", amount=" + amount +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +

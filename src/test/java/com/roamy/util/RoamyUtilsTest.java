@@ -27,4 +27,54 @@ public class RoamyUtilsTest {
         SmsError[] smsErrorArray1 = RoamyUtils.convertXmlToSmsErrorList(null);
         System.out.println(smsErrorArray1);
     }
+
+    @Test
+    public void testGenerateVerificationCode() throws Exception {
+
+    }
+
+    @Test
+    public void testGenerateReferralCode() throws Exception {
+
+    }
+
+    @Test
+    public void testGenerateToken() throws Exception {
+
+    }
+
+    @Test
+    public void testGetVerificationCodeExpiryDate() throws Exception {
+
+    }
+
+    @Test
+    public void testGenerateRandomNumericString() throws Exception {
+
+    }
+
+    @Test
+    public void testGenerateRandomAlphanumericString() throws Exception {
+
+    }
+
+    @Test
+    public void testGetEmailFormattedDate() throws Exception {
+
+    }
+
+    @Test
+    public void testGetEmailFormattedCurrency() throws Exception {
+
+    }
+
+    @Test
+    public void testPlusDays() throws Exception {
+
+    }
+
+    @Test
+    public void testMinusDays() throws Exception {
+
+    }
 }

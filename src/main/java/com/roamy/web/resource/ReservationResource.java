@@ -12,6 +12,7 @@ import com.roamy.integration.paymentGateway.service.api.PaymentGatewayService;
 import com.roamy.service.notification.api.EmailNotificationService;
 import com.roamy.service.notification.api.SmsNotificationService;
 import com.roamy.util.RestUtils;
+import com.roamy.util.RoamyUtils;
 import com.roamy.util.RoamyValidationException;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -166,12 +167,9 @@ public class ReservationResource {
             }
 
             reservation.setPhoneNumber(reservationDto.getPhoneNumber());
-            reservation.setStatus(Status.Pending);
-            reservation.setCreatedBy("test");
-            reservation.setLastModifiedBy("test");
-
             reservation.setTripOptions(reservationTripOptions);
-
+            reservation.setStatus(Status.Pending);
+            RoamyUtils.addAuditPropertiesForCreateEntity(reservation, "test");
 
             // apply romoney
             if (reservationDto.isUseRomoney() && user.getWalletBalance() != null) {

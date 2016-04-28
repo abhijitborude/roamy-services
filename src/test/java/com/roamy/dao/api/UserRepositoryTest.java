@@ -1,10 +1,7 @@
 package com.roamy.dao.api;
 
 import com.roamy.TestApplication;
-import com.roamy.domain.AccountType;
-import com.roamy.domain.Status;
 import com.roamy.domain.User;
-import com.roamy.domain.UserType;
 import com.roamy.util.DomainObjectUtil;
 import org.junit.After;
 import org.junit.Assert;
@@ -17,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.Date;
 
 /**
  * Created by Abhijit on 10/14/2015.

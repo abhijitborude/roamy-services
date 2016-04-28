@@ -59,14 +59,6 @@ public abstract class Reservation extends AbstractEntity {
     @JoinColumn(name = "RESERVATION_ID")
     protected List<ReservationTripOption> tripOptions;
 
-    public int getNumberOfRoamies() {
-        int numberOfRomies = 0;
-        for (ReservationTripOption option : tripOptions) {
-            numberOfRomies += option.getCount();
-        }
-        return numberOfRomies;
-    }
-
     public List<TripInstance> getTripInstances() {
         return tripInstances;
     }

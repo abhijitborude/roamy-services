@@ -15,10 +15,8 @@ public class DomainObjectUtil {
         city.setName(name);
         city.setDescription("Test Description");
         city.setStatus(Status.Active);
-        city.setCreatedBy("test");
-        city.setCreatedOn(new Date());
-        city.setLastModifiedBy("test");
-        city.setLastModifiedOn(new Date());
+
+        RoamyUtils.addAuditPropertiesForCreateEntity(city, "test");
         return city;
     }
 
@@ -30,8 +28,8 @@ public class DomainObjectUtil {
         category.setImageCaption("Test Caption");
         category.setImageUrl("http://test");
         category.setStatus(Status.Active);
-        category.setCreatedBy("test");
-        category.setLastModifiedBy("test");
+
+        RoamyUtils.addAuditPropertiesForCreateEntity(category, "test");
         return category;
     }
 
@@ -44,10 +42,8 @@ public class DomainObjectUtil {
         user.setFirstName(fname);
         user.setLastName(lname);
         user.setStatus(Status.Active);
-        user.setCreatedBy("test");
-        user.setCreatedOn(new Date());
-        user.setLastModifiedBy("test");
-        user.setLastModifiedOn(new Date());
+
+        RoamyUtils.addAuditPropertiesForCreateEntity(user, "test");
         return user;
     }
 
@@ -58,8 +54,8 @@ public class DomainObjectUtil {
         trip.setThrillMeter(thrillMeter);
         trip.setPricePerAdult(pricePerAdult);
         trip.setStatus(status);
-        trip.setCreatedBy("test");
-        trip.setLastModifiedBy("test");
+
+        RoamyUtils.addAuditPropertiesForCreateEntity(trip, "test");
     }
 
     public static void setPropertiesForTripInstance(TripInstance tripInstance, String name, int thrillMeter, Double pricePerAdult, Status status) {
@@ -68,7 +64,35 @@ public class DomainObjectUtil {
         tripInstance.setThrillMeter(thrillMeter);
         tripInstance.setPricePerAdult(pricePerAdult);
         tripInstance.setStatus(status);
-        tripInstance.setCreatedBy("test");
-        tripInstance.setLastModifiedBy("test");
+
+        RoamyUtils.addAuditPropertiesForCreateEntity(tripInstance, "test");
+    }
+
+    public static TripInstanceOption createTripInstanceOption(String name, Double amount) {
+        TripInstanceOption option = new TripInstanceOption();
+        option.setName(name);
+        option.setPrice(amount);
+        option.setStatus(Status.Active);
+        RoamyUtils.addAuditPropertiesForCreateEntity(option, "test");
+        return option;
+    }
+
+    public static void addPropertiesToReservation(Reservation reservation, Double amount, Date startDate, String email, String phoneNumber, Status status) {
+        reservation.setAmount(amount);
+        reservation.setStartDate(startDate);
+        reservation.setEmail(email);
+        reservation.setPhoneNumber(email);
+        reservation.setStatus(status);
+
+        RoamyUtils.addAuditPropertiesForCreateEntity(reservation, "test");
+    }
+
+    public static ReservationPayment createReservationPayment(Double amount, PaymentType type) {
+        ReservationPayment payment = new ReservationPayment();
+        payment.setAmount(amount);
+        payment.setType(type);
+
+        RoamyUtils.addAuditPropertiesForCreateEntity(payment, "test");
+        return payment;
     }
 }

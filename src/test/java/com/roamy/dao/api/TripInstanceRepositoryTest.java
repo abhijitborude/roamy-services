@@ -1,10 +1,12 @@
 package com.roamy.dao.api;
 
 import com.roamy.TestApplication;
-import com.roamy.domain.*;
-import com.roamy.util.RoamyUtils;
+import com.roamy.domain.Status;
+import com.roamy.domain.TripInstance;
 import org.joda.time.DateTime;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -14,7 +16,6 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +28,16 @@ import java.util.List;
 public class TripInstanceRepositoryTest extends TripBaseTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TripInstanceRepositoryTest.class);
+
+    @Before
+    public void setUp() {
+        super.setUp();
+    }
+
+    @After
+    public void tearDown() {
+        super.tearDown();
+    }
 
     private void assertTripInstanceResult(List<TripInstance> tripInstances, int expectedResults) {
         LOGGER.info("Number of tripInstances in the result: {}", tripInstances == null ? 0 : tripInstances.size());
