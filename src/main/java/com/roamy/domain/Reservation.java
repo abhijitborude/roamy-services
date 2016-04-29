@@ -5,6 +5,7 @@ import com.roamy.config.CustomDateSerializer;
 import com.roamy.util.DbConstants;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.OptimisticLock;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -57,6 +58,7 @@ public abstract class Reservation extends AbstractEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "RESERVATION_ID")
+    @OptimisticLock(excluded = true)
     protected List<ReservationTripOption> tripOptions;
 
     public List<TripInstance> getTripInstances() {
