@@ -173,7 +173,6 @@ public class ReservationResource {
             List<TripInstance> instances = new ArrayList<>();
             instances.add(tripInstance);
             reservation.setTripInstances(instances);
-
             reservation.setTripOptions(reservationTripOptions);
 
             // apply romoney
