@@ -166,10 +166,6 @@ public class ReservationResource {
                 reservation.setEmail(user.getEmail());
             }
 
-            LOGGER.info("saving {}", reservation);
-            reservation = reservationRepository.save(reservation);
-
-
             List<TripInstance> instances = new ArrayList<>();
             instances.add(tripInstance);
             reservation.setTripInstances(instances);

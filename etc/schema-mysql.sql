@@ -295,6 +295,7 @@ create table reservation_trip_option (
 
 alter table reservation_trip_option add constraint FK_res_trip_option_trip_instance_option_id foreign key (trip_instance_option_id) references trip_instance_option (id);
 alter table reservation_trip_option add constraint FK_res_trip_option_reservation_id foreign key (reservation_id) references reservation (id);
+create index idx_reservation_trip_option_reservation_id on reservation_trip_option(reservation_id);
 
 create table reservation_payment (
     id bigint not null auto_increment primary key,
