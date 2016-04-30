@@ -136,7 +136,10 @@ public class ReservationResource {
                     throw new RoamyValidationException("Invalid trip instance option id provided: " + optionDto.getTripInstanceOptionId());
                 }
 
-                reservationTripOptions.add(new ReservationTripOption(optionDto.getCount(), tripInstanceOption));
+                ReservationTripOption option = new ReservationTripOption();
+                option.setCount(optionDto.getCount());
+                option.setTripInstanceOption(tripInstanceOption);
+                reservationTripOptions.add(option);
             });
 
             if (CollectionUtils.isEmpty(reservationTripOptions)) {
@@ -146,6 +149,10 @@ public class ReservationResource {
             // now create a reservation using the data gathered so far
             Reservation reservation = new PackageReservation();
             reservation.setUser(user);
+
+            for (ReservationTripOption option: reservationTripOptions) {
+                reservation.addTripOption(option);
+            }
 
             // find total amount
             Double totalAmount = 0d;
