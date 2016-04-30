@@ -1,5 +1,7 @@
 package com.roamy.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -10,6 +12,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "RESERVATION_TRIP_OPTION")
 public class ReservationTripOption extends AbstractEntity {
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "RESERVATION_ID")
     protected Reservation reservation;
@@ -17,22 +20,10 @@ public class ReservationTripOption extends AbstractEntity {
     @Column(name = "COUNT")
     protected int count;
 
-    @ManyToOne
-    @JoinColumn(name = "RESERVATION_ID")
-    protected Reservation reservation;
-
     @NotNull
     @ManyToOne
     @JoinColumn(name = "TRIP_INSTANCE_OPTION_ID")
     protected TripInstanceOption tripInstanceOption;
-
-    public Reservation getReservation() {
-        return reservation;
-    }
-
-    public void setReservation(Reservation reservation) {
-        this.reservation = reservation;
-    }
 
     public Reservation getReservation() {
         return reservation;

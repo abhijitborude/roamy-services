@@ -150,10 +150,6 @@ public class ReservationResource {
             Reservation reservation = new PackageReservation();
             reservation.setUser(user);
 
-            for (ReservationTripOption option: reservationTripOptions) {
-                reservation.addTripOption(option);
-            }
-
             // find total amount
             Double totalAmount = 0d;
             for (ReservationTripOption option : reservationTripOptions) {

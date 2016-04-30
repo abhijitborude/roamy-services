@@ -52,11 +52,10 @@ public abstract class Reservation extends AbstractEntity {
     @Column(name = "EMAIL", length = DbConstants.MEDIUM_TEXT)
     protected String email;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "RESERVATION_ID")
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     protected List<ReservationPayment> payments;
 
-    @OneToMany(mappedBy = "reservation", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     protected List<ReservationTripOption> tripOptions;
 
     public List<TripInstance> getTripInstances() {
@@ -121,6 +120,7 @@ public abstract class Reservation extends AbstractEntity {
         }
 
         this.payments.add(payment);
+        payment.setReservation(this);
     }
 
     public List<ReservationTripOption> getTripOptions() {

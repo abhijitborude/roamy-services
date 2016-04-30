@@ -1,5 +1,6 @@
 package com.roamy.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.roamy.util.DbConstants;
 
 import javax.persistence.*;
@@ -12,6 +13,11 @@ import javax.validation.constraints.NotNull;
 @Table(name = "RESERVATION_PAYMENT")
 public class ReservationPayment extends AbstractEntity {
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "RESERVATION_ID")
+    protected Reservation reservation;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "TYPE", length = DbConstants.SHORT_TEXT)
     private PaymentType type;
@@ -22,6 +28,14 @@ public class ReservationPayment extends AbstractEntity {
 
     @Column(name = "TRANSACTION_ID", length = DbConstants.SHORT_TEXT)
     private String transactionId;
+
+    public Reservation getReservation() {
+        return reservation;
+    }
+
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
+    }
 
     public PaymentType getType() {
         return type;
