@@ -29,6 +29,7 @@ public abstract class Reservation extends AbstractEntity {
     @JoinTable(name = "RESERVATION_TRIP_INSTANCE",
             joinColumns = {@JoinColumn(name = "RESERVATION_ID")},
             inverseJoinColumns = {@JoinColumn(name = "TRIP_INSTANCE_ID")})
+    @OptimisticLock(excluded = true)
     protected List<TripInstance> tripInstances;
 
     @ManyToOne(fetch = FetchType.EAGER)
