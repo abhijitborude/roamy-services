@@ -10,6 +10,10 @@ import javax.validation.constraints.NotNull;
 @Table(name = "RESERVATION_TRIP_OPTION")
 public class ReservationTripOption extends AbstractEntity {
 
+    @ManyToOne
+    @JoinColumn(name = "RESERVATION_ID")
+    protected Reservation reservation;
+
     @Column(name = "COUNT")
     protected int count;
 
@@ -24,6 +28,14 @@ public class ReservationTripOption extends AbstractEntity {
     public ReservationTripOption(int count, TripInstanceOption tripInstanceOption) {
         this.count = count;
         this.tripInstanceOption = tripInstanceOption;
+    }
+
+    public Reservation getReservation() {
+        return reservation;
+    }
+
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
     }
 
     public int getCount() {

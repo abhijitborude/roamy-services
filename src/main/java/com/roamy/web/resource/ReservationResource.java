@@ -169,7 +169,10 @@ public class ReservationResource {
             List<TripInstance> instances = new ArrayList<>();
             instances.add(tripInstance);
             reservation.setTripInstances(instances);
-            reservation.setTripOptions(reservationTripOptions);
+
+            for (ReservationTripOption option: reservationTripOptions) {
+                reservation.addTripOption(option);
+            }
 
             // apply romoney
             if (reservationDto.isUseRomoney() && user.getWalletBalance() != null) {

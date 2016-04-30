@@ -56,9 +56,7 @@ public abstract class Reservation extends AbstractEntity {
     @JoinColumn(name = "RESERVATION_ID")
     protected List<ReservationPayment> payments;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "RESERVATION_ID")
-    @OptimisticLock(excluded = true)
+    @OneToMany(mappedBy = "reservation", fetch = FetchType.EAGER)
     protected List<ReservationTripOption> tripOptions;
 
     public List<TripInstance> getTripInstances() {
@@ -131,6 +129,15 @@ public abstract class Reservation extends AbstractEntity {
 
     public void setTripOptions(List<ReservationTripOption> tripOptions) {
         this.tripOptions = tripOptions;
+    }
+
+    public void addTripOption(ReservationTripOption tripOption) {
+        if (this.tripOptions == null) {
+            this.tripOptions = new ArrayList<>();
+        }
+
+        this.tripOptions.add(tripOption);
+        tripOption.setReservation(this);
     }
 
     @Override
