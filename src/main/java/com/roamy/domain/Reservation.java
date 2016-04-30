@@ -5,7 +5,6 @@ import com.roamy.config.CustomDateSerializer;
 import com.roamy.util.DbConstants;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.OptimisticLock;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
