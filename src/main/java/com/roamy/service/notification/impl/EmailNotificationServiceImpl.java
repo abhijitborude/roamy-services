@@ -4,7 +4,6 @@ import com.roamy.config.ConfigProperties;
 import com.roamy.dao.api.EmailNotificationRepository;
 import com.roamy.dao.api.EmailTemplateRepository;
 import com.roamy.domain.*;
-import com.roamy.integration.paymentGateway.dto.PaymentDto;
 import com.roamy.integration.sendgrid.dto.SendGridEmailDto;
 import com.roamy.integration.sendgrid.service.api.SendGridService;
 import com.roamy.service.notification.api.EmailNotificationService;

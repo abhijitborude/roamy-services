@@ -15,6 +15,8 @@ public class ReservationDto {
 
     private boolean useRomoney = false;
 
+    private Double romoneyAmount;
+
     private String phoneNumber;
 
     private String email;
@@ -51,6 +53,14 @@ public class ReservationDto {
         this.useRomoney = useRomoney;
     }
 
+    public Double getRomoneyAmount() {
+        return romoneyAmount;
+    }
+
+    public void setRomoneyAmount(Double romoneyAmount) {
+        this.romoneyAmount = romoneyAmount;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -74,6 +84,7 @@ public class ReservationDto {
                 ", tripInstanceId=" + tripInstanceId +
                 ", reservationTripOptions=" + reservationTripOptions +
                 ", useRomoney=" + useRomoney +
+                ", romoneyAmount=" + romoneyAmount +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 '}';

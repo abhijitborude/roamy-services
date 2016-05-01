@@ -9,10 +9,10 @@ import com.roamy.dto.RestResponse;
 import com.roamy.dto.ShareRservationRequest;
 import com.roamy.integration.paymentGateway.dto.PaymentDto;
 import com.roamy.integration.paymentGateway.service.api.PaymentGatewayService;
+import com.roamy.service.discount.api.RomoneyService;
 import com.roamy.service.notification.api.EmailNotificationService;
 import com.roamy.service.notification.api.SmsNotificationService;
 import com.roamy.util.RestUtils;
-import com.roamy.util.RoamyUtils;
 import com.roamy.util.RoamyValidationException;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -68,6 +68,9 @@ public class ReservationResource {
 
     @Autowired
     private EmailNotificationService emailNotificationService;
+
+    @Autowired
+    private RomoneyService romoneyService;
 
     @Autowired
     private SmsNotificationService smsNotificationService;
@@ -181,16 +184,7 @@ public class ReservationResource {
 
             // apply romoney
             if (reservationDto.isUseRomoney() && user.getWalletBalance() != null) {
-
-                Double romoneyPaymentAmount = 0d;
-
-                // find amount that can be paid using romoney
-                if (user.getWalletBalance() > configProperties.getMaxAllowedRomoney()) {
-                    romoneyPaymentAmount = configProperties.getMaxAllowedRomoney();
-                } else {
-                    romoneyPaymentAmount = user.getWalletBalance();
-                }
-
+                Double romoneyPaymentAmount = reservationDto.getRomoneyAmount();
                 LOGGER.info("Deducting Romoney({}) from user with WalletBalance({})", romoneyPaymentAmount, user.getWalletBalance());
 
                 // create a partial payment using romoney

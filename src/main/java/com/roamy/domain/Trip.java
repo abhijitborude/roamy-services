@@ -2,8 +2,11 @@ package com.roamy.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.roamy.util.DbConstants;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,20 +33,27 @@ public abstract class Trip extends CitableEntity {
     @Column(name = "TAC")
     protected Double tac;
 
+    @NotNull
+    @Column(name = "ROMONEY_PERCENTAGE")
+    protected int romoneyPercentage;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "TRIP_ID")
+    @Fetch(FetchMode.SUBSELECT)
     private List<TripOption> options;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "TRIP_CITY",
             joinColumns = {@JoinColumn(name = "TRIP_ID")},
             inverseJoinColumns = {@JoinColumn(name = "CITY_ID")})
+    @Fetch(FetchMode.SUBSELECT)
     protected List<City> targetCities;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "TRIP_CATEGORY",
             joinColumns = {@JoinColumn(name = "TRIP_ID")},
             inverseJoinColumns = {@JoinColumn(name = "CATEGORY_ID")})
+    @Fetch(FetchMode.SUBSELECT)
     protected List<Category> categories;
 
     @Column(name = "COVER_PICTURE", length = DbConstants.LONG_TEXT)
@@ -57,10 +67,12 @@ public abstract class Trip extends CitableEntity {
             name="TRIP_IMAGE",
             joinColumns=@JoinColumn(name="TRIP_ID")
     )
+    @Fetch(FetchMode.SUBSELECT)
     protected List<TripImage> images;
 
     @JsonIgnore
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SUBSELECT)
     protected List<TripInstance> instances = new ArrayList<>();
 
     public String getAdditionalDescription() {
@@ -93,6 +105,14 @@ public abstract class Trip extends CitableEntity {
 
     public void setTac(Double tac) {
         this.tac = tac;
+    }
+
+    public int getRomoneyPercentage() {
+        return romoneyPercentage;
+    }
+
+    public void setRomoneyPercentage(int romoneyPercentage) {
+        this.romoneyPercentage = romoneyPercentage;
     }
 
     public List<TripOption> getOptions() {

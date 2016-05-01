@@ -9,6 +9,8 @@ import com.roamy.domain.Trip;
 import com.roamy.domain.TripInstance;
 import com.roamy.domain.TripReview;
 import com.roamy.dto.RestResponse;
+import com.roamy.service.discount.api.RomoneyService;
+import com.roamy.service.discount.dto.RomoneyDto;
 import com.roamy.util.RestUtils;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -20,7 +22,6 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +51,9 @@ public class TripResource extends CitableResource<Trip, Long> {
 
     @Autowired
     private TripReviewRepository tripReviewRepository;
+
+    @Autowired
+    private RomoneyService romoneyService;
 
     @Override
     protected CitableRepository<Trip, Long> getCitableRepository() {
@@ -234,6 +238,31 @@ public class TripResource extends CitableResource<Trip, Long> {
 
         } catch (Throwable t) {
             LOGGER.error("error while finding reviews: ", t);
+            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
+        }
+
+        return response;
+    }
+
+    @RequestMapping(value = "/{code}/romoneytoapply", method = RequestMethod.GET)
+    @ApiOperation(value = "Calculates the romoney of a user that can be used for the trip and given booking amount", notes = "Each trip allows different percentage of romoney amount " +
+            "to be used during booking. This API calculates the romoney amount that a user can apply towards the total booking amount based on the wallet balance of the user. " +
+            "Actual result is contained in the data field of the response.")
+    public RestResponse getRomoneyToApply(@ApiParam(value = "Trip Code", required = true)
+                                               @PathVariable("code") String code,
+                                          @ApiParam(value = "User Id", required = true)
+                                               @RequestParam(value = "userId", required = true) Long userId,
+                                          @ApiParam(value = "bookingAmount", required = true)
+                                               @RequestParam(value = "bookingAmount", required = true) Double bookingAmount) {
+
+        RestResponse response = null;
+
+        try {
+            RomoneyDto romoneyDto = romoneyService.getRomoneyToApply(userId, code, bookingAmount);
+            response = new RestResponse(romoneyDto, HttpStatus.OK_200);
+
+        } catch (Throwable t) {
+            LOGGER.error("error in finding getRomoneyToApply: ", t);
             response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
         }
 

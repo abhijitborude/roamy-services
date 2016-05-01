@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.roamy.config.CustomDateSerializer;
 import com.roamy.util.DbConstants;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -47,6 +49,7 @@ public abstract class TripInstance extends AbstractEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "TRIP_INSTANCE_ID")
+    @Fetch(FetchMode.SUBSELECT)
     private List<TripInstanceOption> options;
 
 //    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
