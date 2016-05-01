@@ -127,23 +127,25 @@ public class ReservationResource {
                     throw new RoamyValidationException("Invalid count provided: " + optionDto.getCount());
                 }
 
-                if (optionDto.getTripInstanceOptionId() == null || optionDto.getTripInstanceOptionId() < 0) {
-                    throw new RoamyValidationException("Invalid trip instance option id provided: " + optionDto.getTripInstanceOptionId());
-                }
+                if (optionDto.getCount() > 0) {
+                    if (optionDto.getTripInstanceOptionId() == null || optionDto.getTripInstanceOptionId() <= 0) {
+                        throw new RoamyValidationException("Invalid trip instance option id provided: " + optionDto.getTripInstanceOptionId());
+                    }
 
-                TripInstanceOption tripInstanceOption = tripInstanceOptionRepository.findOne(optionDto.getTripInstanceOptionId());
-                if (tripInstanceOption == null) {
-                    throw new RoamyValidationException("Invalid trip instance option id provided: " + optionDto.getTripInstanceOptionId());
-                }
+                    TripInstanceOption tripInstanceOption = tripInstanceOptionRepository.findOne(optionDto.getTripInstanceOptionId());
+                    if (tripInstanceOption == null) {
+                        throw new RoamyValidationException("Invalid trip instance option id provided: " + optionDto.getTripInstanceOptionId());
+                    }
 
-                ReservationTripOption option = new ReservationTripOption();
-                option.setCount(optionDto.getCount());
-                option.setTripInstanceOption(tripInstanceOption);
-                reservationTripOptions.add(option);
+                    ReservationTripOption option = new ReservationTripOption();
+                    option.setCount(optionDto.getCount());
+                    option.setTripInstanceOption(tripInstanceOption);
+                    reservationTripOptions.add(option);
+                }
             });
 
             if (CollectionUtils.isEmpty(reservationTripOptions)) {
-                throw new RoamyValidationException("Invalid counts provided. Please select at least one trip option.");
+                throw new RoamyValidationException("Invalid counts/tripInstanceOptionIds provided. Please select at least one trip option.");
             }
 
             // now create a reservation using the data gathered so far

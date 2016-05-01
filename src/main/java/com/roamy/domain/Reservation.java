@@ -54,10 +54,20 @@ public abstract class Reservation extends AbstractEntity {
     protected String email;
 
     @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     protected List<ReservationPayment> payments;
 
     @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     protected List<ReservationTripOption> tripOptions;
+
+    public int getNumberOfRomies() {
+        int numberOfRomies = 0;
+        for (ReservationTripOption option : tripOptions) {
+            numberOfRomies += option.getCount();
+        }
+        return numberOfRomies;
+    }
 
     public List<TripInstance> getTripInstances() {
         return tripInstances;
