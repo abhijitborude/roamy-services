@@ -80,7 +80,7 @@ public class EmailNotificationServiceImpl implements EmailNotificationService {
                 option.setType(payment.getType().toString());
                 option.setPrice("");
                 option.setCount("");
-                option.setTotalCost(RoamyUtils.getEmailFormattedCurrency(payment.getAmount()));
+                option.setTotalCost("-" + RoamyUtils.getEmailFormattedCurrency(payment.getAmount()));
 
                 options.add(option);
         });

@@ -312,7 +312,11 @@
                             <tr>
                                 <td style="text-align: left;width: 540px;">
                                     <strong>$option.type</strong>
-                                    <span style="font-size: 12px;">(INR $option.price x $option.count)</span>
+                                    <span style="font-size: 12px;">
+                                        #if( $option.count != "")
+                                            (INR $option.price x $option.count)
+                                        #end
+                                    </span>
                                 </td>
                                 <td style="text-align: right;width: 60px;">$option.totalCost</td>
                             </tr>
