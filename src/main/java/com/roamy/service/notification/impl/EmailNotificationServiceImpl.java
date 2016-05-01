@@ -1,8 +1,10 @@
 package com.roamy.service.notification.impl;
 
+import com.roamy.config.ConfigProperties;
 import com.roamy.dao.api.EmailNotificationRepository;
 import com.roamy.dao.api.EmailTemplateRepository;
 import com.roamy.domain.*;
+import com.roamy.integration.paymentGateway.dto.PaymentDto;
 import com.roamy.integration.sendgrid.dto.SendGridEmailDto;
 import com.roamy.integration.sendgrid.service.api.SendGridService;
 import com.roamy.service.notification.api.EmailNotificationService;
@@ -41,6 +43,9 @@ public class EmailNotificationServiceImpl implements EmailNotificationService {
     @Autowired
     private TemplateTranslator templateTranslator;
 
+    @Autowired
+    private ConfigProperties configProperties;
+
     @Override
     public void sendTripReservationEmail(Reservation reservation) {
         // prepare params
@@ -50,12 +55,14 @@ public class EmailNotificationServiceImpl implements EmailNotificationService {
         dto.setReservationId(reservation.getId());
         dto.setName(tripInstance.getName());
         dto.setDate(RoamyUtils.getEmailFormattedDate(reservation.getStartDate()));
-        dto.setCoverPicture(tripInstance.getTrip().getCoverPicture());
+        dto.setCoverPicture(tripInstance.getTrip().getCoverPicture() != null ?
+                            tripInstance.getTrip().getCoverPicture() :
+                            "http://res.cloudinary.com/abhijitab/image/upload/v1462058721/default_email_cover_ox4pz0.jpg");
         dto.setUser(reservation.getUser().getFirstName());
         dto.setTotalCost(RoamyUtils.getEmailFormattedCurrency(reservation.getAmount()));
 
         List<TripOptionNotificationDto> options = new ArrayList<>();
-        for (ReservationTripOption reservationOption : reservation.getTripOptions()) {
+        reservation.getTripOptions().stream().forEach(reservationOption -> {
             TripOptionNotificationDto option = new TripOptionNotificationDto();
             option.setType(reservationOption.getTripInstanceOption().getName());
             option.setPrice(RoamyUtils.getEmailFormattedCurrency(reservationOption.getTripInstanceOption().getPrice()));
@@ -64,13 +71,28 @@ public class EmailNotificationServiceImpl implements EmailNotificationService {
             option.setTotalCost(RoamyUtils.getEmailFormattedCurrency(totalCost));
 
             options.add(option);
-        }
+        });
+
+        reservation.getPayments().stream()
+            .filter(payment -> PaymentType.Romoney.equals(payment.getType()) || PaymentType.Discount.equals(payment.getType()))
+            .forEach(payment -> {
+                TripOptionNotificationDto option = new TripOptionNotificationDto();
+                option.setType(payment.getType().toString());
+                option.setPrice("");
+                option.setCount("");
+                option.setTotalCost(RoamyUtils.getEmailFormattedCurrency(payment.getAmount()));
+
+                options.add(option);
+        });
 
         dto.setOptions(options);
 
         if (tripInstance instanceof PackageTripInstance) {
             dto.setMeetingPoints(((PackageTripInstance) tripInstance).getMeetingPoints());
             dto.setThingsToCarry(((PackageTripInstance) tripInstance).getThingsToCarry());
+        } else {
+            dto.setMeetingPoints("");
+            dto.setThingsToCarry("");
         }
 
         Map<String, Object> params = new HashMap<>();

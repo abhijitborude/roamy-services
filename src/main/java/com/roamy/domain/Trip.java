@@ -49,6 +49,9 @@ public abstract class Trip extends CitableEntity {
     @Column(name = "COVER_PICTURE", length = DbConstants.LONG_TEXT)
     private String coverPicture;
 
+    @Column(name = "EMAIL_COVER_PICTURE", length = DbConstants.LONG_TEXT)
+    private String emailCoverPicture;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name="TRIP_IMAGE",
@@ -56,8 +59,8 @@ public abstract class Trip extends CitableEntity {
     )
     protected List<TripImage> images;
 
-    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     protected List<TripInstance> instances = new ArrayList<>();
 
     public String getAdditionalDescription() {
@@ -122,6 +125,14 @@ public abstract class Trip extends CitableEntity {
 
     public void setCoverPicture(String coverPicture) {
         this.coverPicture = coverPicture;
+    }
+
+    public String getEmailCoverPicture() {
+        return emailCoverPicture;
+    }
+
+    public void setEmailCoverPicture(String emailCoverPicture) {
+        this.emailCoverPicture = emailCoverPicture;
     }
 
     public List<TripImage> getImages() {

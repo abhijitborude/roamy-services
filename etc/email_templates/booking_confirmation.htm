@@ -224,7 +224,7 @@
     <div style="font-size: 15px;line-height: 15px;mso-line-height-rule: exactly;">&nbsp;</div>
 
     <table class="layout layout--no-gutter"
-           style="border-collapse: collapse;table-layout: fixed;Margin-left: auto;Margin-right: auto;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #307fb0;background-position: 0px 0px;background-image: url(https://i1.createsend1.com/ei/i/46/DE9/8F5/081726/csfinal/fiji-hero.jpg);background-repeat: repeat;"
+           style="border-collapse: collapse;table-layout: fixed;Margin-left: auto;Margin-right: auto;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #307fb0;background-position: 0px 0px;background-image: url(#$trip.coverPicture);background-repeat: repeat;"
            align="center">
         <tbody>
         <tr>
@@ -236,10 +236,10 @@
                 <div style="Margin-left: 20px;Margin-right: 20px;">
                     <h1 class="size-40"
                         style="Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #44a8c7;font-size: 40px;line-height: 47px;font-family: Cabin,Avenir,sans-serif;text-align: center;">
-                        <strong><span style="color:#ffffff">$trip.name</span></strong></h1>
+                        <strong><span style="color:#ffffff">&nbsp;</span></strong></h1>
                     <p class="size-20"
                        style="Margin-top: 20px;Margin-bottom: 20px;font-size: 20px;line-height: 28px;text-align: center;">
-                        <span style="color:#ffffff">BOOKING #$trip.reservationId</span></p>
+                        <span style="color:#ffffff">&nbsp;</span></p>
                 </div>
 
                 <div style="line-height:48px;">&nbsp;</div>
@@ -257,10 +257,22 @@
             <td class="column"
                 style="padding: 0;vertical-align: top;line-height: 21px;font-family: Open Sans,sans-serif;width: 600px;">
 
-                <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;">
-                    <h2 class="size-24"
-                        style="Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #44a8c7;font-size: 24px;line-height: 32px;text-align: center;">
-                        <strong>Hello $trip.user, your booking is confirmed!</strong></h2>
+                <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 0px;">
+                    <h2 class="size-18"
+                        style="Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #555555;font-size: 16px;line-height: 32px;text-align: center;">
+                        <strong>Booking #$trip.reservationId</strong></h2>
+                </div>
+
+            </td>
+        </tr>
+        <tr>
+            <td class="column"
+                style="padding: 0;vertical-align: top;line-height: 21px;font-family: Open Sans,sans-serif;width: 600px;">
+
+                <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 0px;Margin-bottom: 24px;">
+                    <h2 class="size-22"
+                        style="Margin-top: 0;Margin-bottom: 0;font-style: normal;font-weight: normal;color: #44a8c7;font-size: 22px;line-height: 32px;text-align: center;">
+                        <strong>Hello $trip.user, your booking for $trip.name is confirmed!</strong></h2>
                 </div>
 
             </td>
@@ -273,7 +285,7 @@
            align="center" emb-background-style>
         <tbody>
         <tr>
-            <td class="column"
+            <!--td class="column"
                 style="padding: 0;text-align: left;vertical-align: top;color: #60666d;font-size: 14px;line-height: 21px;font-family: Open Sans,sans-serif;width: 200px;">
 
                 <div class="image" style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;Margin-bottom: 24px;"
@@ -282,9 +294,9 @@
                          width="160" height="160"/>
                 </div>
 
-            </td>
+            </td-->
             <td class="column"
-                style="padding: 0;text-align: left;vertical-align: top;color: #60666d;font-size: 14px;line-height: 21px;font-family: Open Sans,sans-serif;width: 400px;">
+                style="padding: 0;text-align: left;vertical-align: top;color: #60666d;font-size: 14px;line-height: 21px;font-family: Open Sans,sans-serif;width: 600px;">
 
                 <div style="Margin-left: 20px;Margin-right: 20px;Margin-top: 24px;">
                     <p style="Margin-top: 0;Margin-bottom: 0;"><strong><span
@@ -298,7 +310,7 @@
                     <div style="Margin-top: 2px;Margin-bottom: 0;">
                         <table>
                             <tr>
-                                <td style="text-align: left;width: 340px;">
+                                <td style="text-align: left;width: 540px;">
                                     <strong>$option.type</strong>
                                     <span style="font-size: 12px;">(INR $option.price x $option.count)</span>
                                 </td>
@@ -310,7 +322,7 @@
                     <div style="Margin-top: 2px;Margin-bottom: 0;border-top: 2px solid #bfc1c4;">
                         <table>
                             <tr>
-                                <td style="text-align: left;width: 340px;"><strong>Total Cost</strong> </td>
+                                <td style="text-align: left;width: 540px;"><strong>Total Cost</strong> </td>
                                 <td style="text-align: right;width: 60px;">$trip.totalCost</td>
                             </tr>
                         </table>
