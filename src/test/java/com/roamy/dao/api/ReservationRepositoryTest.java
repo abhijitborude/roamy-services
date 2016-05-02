@@ -38,19 +38,21 @@ public class ReservationRepositoryTest extends TripBaseTest {
     @Autowired
     private UserRepository userRepository;
 
+    private User saveduser;
+
     @Before
     public void setUp() {
         super.setUp();
 
         User user = DomainObjectUtil.createUser("12345", "a@a.com", "fname", "lname");
-        user = userRepository.save(user);
+        saveduser = userRepository.save(user);
 
         List<TripInstance> tripInstances = tripInstanceRepository.findByTripCodeAndDateAndStatus("TRIP1", today.plusDays(1).toDate(), Status.Active);
         PackageTripInstance tripInstance = (PackageTripInstance) tripInstances.get(0);
 
         Reservation reservation = new PackageReservation();
         DomainObjectUtil.addPropertiesToReservation(reservation, 1000.0, tripInstance.getDate(), "abc@abc.com", "12345", Status.Pending);
-        reservation.setUser(user);
+        reservation.setUser(saveduser);
         reservation.setTripInstances(tripInstances);
 
         List<ReservationTripOption> reservationTripOptions = new ArrayList<>();
@@ -75,7 +77,7 @@ public class ReservationRepositoryTest extends TripBaseTest {
         reservationTripOptionRepository.deleteAll();
         reservationRepository.deleteAll();
         super.tearDown();
-        userRepository.deleteAll();
+        userRepository.delete(saveduser.getId());
     }
 
     @Test
