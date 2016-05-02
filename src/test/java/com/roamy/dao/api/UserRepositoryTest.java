@@ -44,7 +44,7 @@ public class UserRepositoryTest {
 
     @After
     public void tearDown() {
-        userRepository.deleteAll();
+        userRepository.delete(savedUser.getId());
     }
 
     @Test
