@@ -191,21 +191,19 @@ public class ReservationResource {
                 ReservationPayment payment = new ReservationPayment();
                 payment.setAmount(romoneyPaymentAmount);
                 payment.setType(PaymentType.Romoney);
+                payment.setStatus(Status.Success);
                 payment.setCreatedBy("test");
                 payment.setLastModifiedBy("test");
 
                 reservation.addPayment(payment);
-
-                // reduce user's wallet balance
-                user.setWalletBalance(user.getWalletBalance() - romoneyPaymentAmount);
             }
 
             LOGGER.info("saving {}", reservation);
             reservation = reservationRepository.save(reservation);
-
-            LOGGER.info("saving {}", user);
-            userRepository.save(user);
             LOGGER.info("save complete");
+
+            // reduce user's wallet balance
+            romoneyService.debitRomoney(user.getId(), reservationDto.getRomoneyAmount(), "Reservation #" + reservation.getId());
 
             response = new RestResponse(reservation, HttpStatus.OK_200);
 
@@ -235,21 +233,17 @@ public class ReservationResource {
                 User user = reservation.getUser();
 
                 // return romoney if used
+                final Reservation finalReservation = reservation;
                 reservation.getPayments().forEach(payment -> {
-                            // if user has used romoney i.e. if there is a payment of type Romoney for this reservation
-                            // then return it to the user's wallet
-                            if (PaymentType.Romoney.equals(payment.getType())) {
-                                LOGGER.info("Returning Romoney({}) to the user with WalletBalance({})", payment.getAmount(), user.getWalletBalance());
-                                if (user.getWalletBalance() == null) {
-                                    user.setWalletBalance(payment.getAmount());
-                                } else {
-                                    user.setWalletBalance(user.getWalletBalance() + payment.getAmount());
-                                }
-                                user.setLastModifiedBy("test");
-                                user.setLastModifiedOn(new Date());
-                                userRepository.save(user);
-                            }
+                        // if user has used romoney i.e. if there is a payment of type Romoney with status Success
+                        // for this reservation then return it to the user's wallet
+                        if (PaymentType.Romoney.equals(payment.getType()) && Status.Success.equals(payment.getStatus())) {
+                            LOGGER.info("Returning Romoney({}) to the user with WalletBalance({})", payment.getAmount(), user.getWalletBalance());
+
+                            romoneyService.creditRomoney(user.getId(), payment.getAmount(), "Cancelled Reservation #" + finalReservation.getId());
+                            payment.setStatus(Status.Cancelled);
                         }
+                    }
                 );
 
                 reservation.setStatus(Status.Cancelled);

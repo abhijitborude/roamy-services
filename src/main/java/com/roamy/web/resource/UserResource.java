@@ -1,5 +1,6 @@
 package com.roamy.web.resource;
 
+import com.roamy.config.ConfigProperties;
 import com.roamy.dao.api.*;
 import com.roamy.domain.*;
 import com.roamy.dto.FavoriteTripAction;
@@ -8,6 +9,7 @@ import com.roamy.dto.UserActionDto;
 import com.roamy.dto.UserDto;
 import com.roamy.integration.imagelib.dto.ImageLibraryIdentifier;
 import com.roamy.integration.imagelib.service.api.ImageLibraryService;
+import com.roamy.service.discount.api.RomoneyService;
 import com.roamy.service.notification.api.SmsNotificationService;
 import com.roamy.util.RestUtils;
 import com.roamy.util.RoamyException;
@@ -43,6 +45,9 @@ public class UserResource extends IdentityResource<User, Long> {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserResource.class);
 
     @Autowired
+    private ConfigProperties configProperties;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -65,6 +70,9 @@ public class UserResource extends IdentityResource<User, Long> {
 
     @Autowired
     private ReservationRepository reservationRepository;
+
+    @Autowired
+    private RomoneyService romoneyService;
 
     @Override
     protected JpaRepository<User, Long> getJpaRepository() {
@@ -364,6 +372,10 @@ public class UserResource extends IdentityResource<User, Long> {
                         LOGGER.error("Verification code does not match");
                         throw new RoamyValidationException("Activation code is wrong");
                     }
+
+                    // 3. award sign up bonus
+                    LOGGER.info("awarding sign up bonus of {}", configProperties.getSignUpBonus());
+                    romoneyService.creditRomoney(user.getId(), configProperties.getSignUpBonus(), "Signup bonus");
                 } else {
                     LOGGER.info("User is already verified");
                 }
@@ -633,6 +645,52 @@ public class UserResource extends IdentityResource<User, Long> {
 
         } catch (Throwable t) {
             LOGGER.error("error in getReservations: ", t);
+            response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
+        }
+
+        return response;
+    }
+
+    @RequestMapping(value = "/{id}/promotions/referral/{code}", method = RequestMethod.POST)
+    @PreAuthorize("hasAnyRole('ROLE_ROAMY','ROLE_ADMIN')")
+    @ApiOperation(value = "Applies referral promotion to the user's account", notes = "Awards referral bonus to the user " +
+            "that applies the referral code as well as the user who own's the referral code")
+    public RestResponse applyReferralCode(@ApiParam(value = "User ID", required = true) @PathVariable Long id,
+                                   @ApiParam(value = "Referral Code", required = true) @PathVariable String referralCode) {
+        LOGGER.info("Applying referralCode({}) to the userId({})", referralCode, id);
+
+        RestResponse response = null;
+
+        try {
+            // find the user
+            User user = userRepository.findOne(id);
+            if (user == null) {
+                LOGGER.error("No user found with id: {}", id);
+                throw new RoamyValidationException("No user found with id: " + id);
+            }
+            LOGGER.info("Found {}", user);
+
+            User referralUser = userRepository.findByReferralCode(referralCode);
+            if (referralUser == null) {
+                LOGGER.error("No user found with referralCode: {}", referralCode);
+                throw new RoamyValidationException("Invalid referralCode: " + referralCode);
+            }
+            LOGGER.info("Found referralUser {}", referralUser);
+
+            // award Romoney to the user who enters referral code first
+            romoneyService.creditRomoney(user.getId(), configProperties.getRefferralSignupBonus(),
+                    "Referral Signup bonus. User referred- " + referralUser.getPhoneNumber() + " with referralCode- " + referralCode + ".");
+
+            // then award Romoney to the user who's referral code was entered
+            romoneyService.creditRomoney(referralUser.getId(), configProperties.getRefferralBonus(),
+                    "Referral bonus. Referred by user- " + user.getPhoneNumber() + " with referralCode- " + referralCode + ".");
+
+            LOGGER.info("Referral successfully processed");
+
+            response = new RestResponse(null, HttpStatus.OK_200);
+
+        } catch (Throwable t) {
+            LOGGER.error("error in applyReferralCode: ", t);
             response = new RestResponse(null, HttpStatus.INTERNAL_SERVER_ERROR_500, RestUtils.getErrorMessages(t), null);
         }
 

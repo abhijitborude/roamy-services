@@ -43,7 +43,7 @@ public class ReservationRepositoryTest extends TripBaseTest {
     public void setUp() {
         super.setUp();
 
-        User user = DomainObjectUtil.getUser("12345", "a@a.com", "fname", "lname");
+        User user = DomainObjectUtil.createUser("12345", "a@a.com", "fname", "lname");
         user = userRepository.save(user);
 
         List<TripInstance> tripInstances = tripInstanceRepository.findByTripCodeAndDateAndStatus("TRIP1", today.plusDays(1).toDate(), Status.Active);

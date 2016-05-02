@@ -8,4 +8,8 @@ import com.roamy.service.discount.dto.RomoneyDto;
 public interface RomoneyService {
 
     RomoneyDto getRomoneyToApply(Long userId, String tripCode, Double bookingAmount);
+
+    void creditRomoney(Long userId, Double amount, String comment);
+
+    void debitRomoney(Long userId, Double amount, String comment);
 }

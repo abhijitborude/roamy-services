@@ -5,6 +5,7 @@ use ROAMY;
 drop table if exists city;
 drop table if exists category;
 drop table if exists user;
+drop table if exists wallet_transaction;
 drop table if exists trip;
 drop table if exists trip_category;
 drop table if exists trip_city;
@@ -64,7 +65,7 @@ create table user (
     email varchar(64) not null,
     fname varchar(64),
     lname varchar(64),
-    wallet_balance double,
+    wallet_balance double not null,
     profile_image_id varchar(256),
     profile_image_url varchar(1024),
     birth_date timestamp,
@@ -86,6 +87,21 @@ create table user (
 );
 
 alter table user add constraint UNQ_user_phone_number unique (phone_number);
+create index idx_user_referral_code on user(referral_code);
+
+create table wallet_transaction (
+    id bigint not null auto_increment primary key,
+    user_id bigint,
+    amount double not null,
+    comment varchar(256),
+    status varchar(64) not null,
+    created_by varchar(256) not null,
+    created_on timestamp not null,
+    last_modified_by varchar(256) not null,
+    last_modified_on timestamp not null
+);
+
+alter table wallet_transaction add constraint FK_wallet_transaction_user_id foreign key (user_id) references user (id);
 
 create table trip (
     id bigint not null auto_increment primary key,

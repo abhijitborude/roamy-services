@@ -28,18 +28,18 @@ public class UserRepositoryTest {
     public static final String PHONE_NUMBER = "100";
     public static final String FNAME = "fname";
 
-    private Long id;
+    private User savedUser;
 
     @Autowired
     private UserRepository userRepository;
 
     @Before
     public void setup() {
-        User user = DomainObjectUtil.getUser(PHONE_NUMBER, "a@a.com", FNAME, "lname");
+        User user = DomainObjectUtil.createUser(PHONE_NUMBER, "a@a.com", FNAME, "lname");
         user = userRepository.save(user);
 
-        id = user.getId();
-        LOGGER.info("User saved with id: " + id);
+        savedUser = user;
+        LOGGER.info("Saved {}" + user);
     }
 
     @After
@@ -49,11 +49,11 @@ public class UserRepositoryTest {
 
     @Test
     public void testFindByUserId() {
-        User user = userRepository.findOne(id);
+        User user = userRepository.findOne(savedUser.getId());
         LOGGER.info("Found user {}", user);
 
-        Assert.assertNotNull("There should be a user with id: " + id, user);
-        Assert.assertEquals("User with id " + id + " should have first name " + FNAME, FNAME, user.getFirstName());
+        Assert.assertNotNull("There should be a user with id: " + savedUser.getId(), user);
+        Assert.assertEquals("User with id " + savedUser.getId() + " should have first name " + FNAME, FNAME, user.getFirstName());
     }
 
     @Test
@@ -63,5 +63,14 @@ public class UserRepositoryTest {
 
         Assert.assertNotNull("There should be a user with phone number: " + PHONE_NUMBER, user);
         Assert.assertEquals("User with phone number " + PHONE_NUMBER + " should have first name " + FNAME, FNAME, user.getFirstName());
+    }
+
+    @Test
+    public void testFindByReferralCode() throws Exception {
+        User user = userRepository.findByReferralCode(savedUser.getReferralCode());
+        LOGGER.info("Found user {}", user);
+
+        Assert.assertNotNull("There should be a user with referralCode: " + savedUser.getReferralCode(), user);
+        Assert.assertEquals("User with referralCode " + savedUser.getReferralCode() + " should have first name " + FNAME, FNAME, user.getFirstName());
     }
 }

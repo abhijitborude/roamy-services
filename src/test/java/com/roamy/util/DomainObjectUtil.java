@@ -33,7 +33,7 @@ public class DomainObjectUtil {
         return category;
     }
 
-    public static User getUser(String phoneNumber, String email, String fname, String lname) {
+    public static User createUser(String phoneNumber, String email, String fname, String lname) {
         User user = new User();
         user.setType(UserType.ROLE_ROAMY);
         user.setAccountType(AccountType.Phone);
@@ -41,10 +41,21 @@ public class DomainObjectUtil {
         user.setEmail(email);
         user.setFirstName(fname);
         user.setLastName(lname);
+        user.setWalletBalance(1000.0);
         user.setStatus(Status.Active);
 
         RoamyUtils.addAuditPropertiesForCreateEntity(user, "test");
         return user;
+    }
+
+    public static WalletTransaction createWalletTransaction(User user, Double amount, String comment) {
+        WalletTransaction transaction = new WalletTransaction();
+        transaction.setUser(user);
+        transaction.setAmount(amount);
+        transaction.setComment(comment);
+
+        RoamyUtils.addAuditPropertiesForCreateEntity(transaction, "test");
+        return transaction;
     }
 
     public static void setPropertiesForTrip(Trip trip, String code, int thrillMeter, Double pricePerAdult, Status status) {
