@@ -25,7 +25,6 @@ import java.util.List;
 @ActiveProfiles("unit-test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TestApplication.class)
-@IntegrationTest
 public class ReservationRepositoryTest extends TripBaseTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservationRepositoryTest.class);
