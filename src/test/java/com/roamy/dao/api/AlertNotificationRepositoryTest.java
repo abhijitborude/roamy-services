@@ -2,6 +2,7 @@ package com.roamy.dao.api;
 
 import com.roamy.TestApplication;
 import com.roamy.domain.*;
+import com.roamy.util.DomainObjectUtil;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Assert;
@@ -52,20 +53,9 @@ public class AlertNotificationRepositoryTest {
         return alert;
     }
 
-    private User createUser(String phoneNumber, String email) {
-        User user = new User();
-        user.setType(UserType.ROLE_ROAMY);
-        user.setAccountType(AccountType.Phone);
-        user.setPhoneNumber(phoneNumber);
-        user.setEmail(email);
-        user.setCreatedBy("test");
-        user.setLastModifiedBy("test");
-        return user;
-    }
-
     @Before
     public void setUp() {
-        User user = createUser("12345", "abc@nyx.com");
+        User user = DomainObjectUtil.createUser("12345", "abc@nyx.com", "fname", "lname");
         user = userRepository.save(user);
         userId = user.getId();
 
