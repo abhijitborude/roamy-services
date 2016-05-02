@@ -113,7 +113,7 @@ create table trip (
     number_of_days integer,
     price_per_adult double,
     tac double,
-    romoney_percentage integer not null,
+    romoney_percentage integer,
     cover_picture varchar(1024),
     email_cover_picture varchar(1024),
     itinerary varchar(1024),
