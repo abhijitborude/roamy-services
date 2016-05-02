@@ -75,6 +75,7 @@ public class AlertNotificationRepositoryTest {
     @After
     public void tearDown() {
         alertNotificationRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
