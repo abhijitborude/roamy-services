@@ -651,7 +651,7 @@ public class UserResource extends IdentityResource<User, Long> {
         return response;
     }
 
-    @RequestMapping(value = "/{id}/promotions/referral/{code}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}/promotions/referral/{referralCode}", method = RequestMethod.POST)
     @PreAuthorize("hasAnyRole('ROLE_ROAMY','ROLE_ADMIN')")
     @ApiOperation(value = "Applies referral promotion to the user's account", notes = "Awards referral bonus to the user " +
             "that applies the referral code as well as the user who own's the referral code")
