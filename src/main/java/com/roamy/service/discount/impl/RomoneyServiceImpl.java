@@ -90,11 +90,15 @@ public class RomoneyServiceImpl implements RomoneyService {
 
     @Override
     public void debitRomoney(Long userId, Double amount, String comment) {
-        LOGGER.info("debiting Romoney amount({}) to userId({}) with comment({})", userId, amount, comment);
+        LOGGER.info("debiting Romoney amount({}) to userId({}) with comment({})", amount, userId, comment);
 
         User user = userRepository.findOne(userId);
         if (user == null) {
             throw new RoamyValidationException("User with id " + userId + " not found");
+        }
+
+        if (amount == null || amount == 0d) {
+            return;
         }
 
         Double walletBalance = user.getWalletBalance();
