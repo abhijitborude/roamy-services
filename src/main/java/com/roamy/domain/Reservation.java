@@ -45,6 +45,9 @@ public abstract class Reservation extends AbstractEntity {
     @Column(name = "AMOUNT")
     protected Double amount;
 
+    @Transient
+    protected Double amountToPay;
+
     @NotNull
     @Column(name = "PHONE_NUMBER", length = DbConstants.SHORT_TEXT)
     protected String phoneNumber;
@@ -99,6 +102,14 @@ public abstract class Reservation extends AbstractEntity {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public Double getAmountToPay() {
+        return amountToPay;
+    }
+
+    public void setAmountToPay(Double amountToPay) {
+        this.amountToPay = amountToPay;
     }
 
     public String getPhoneNumber() {
