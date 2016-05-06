@@ -45,7 +45,7 @@ public class RomoneyServiceImpl implements RomoneyService {
         }
 
         int romoneyPercentage = trip.getRomoneyPercentage();
-        Double maxRomoneyAmount = new Integer(romoneyPercentage).doubleValue() * bookingAmount / 100;
+        Double maxRomoneyAmount = Math.floor(new Integer(romoneyPercentage).doubleValue() * bookingAmount / 100);
 
         Double romoneyAmountToApply = 0d;
         if (user.getWalletBalance() != null) {
@@ -56,6 +56,8 @@ public class RomoneyServiceImpl implements RomoneyService {
                                 userId, user.getWalletBalance(), romoneyPercentage, maxRomoneyAmount, bookingAmount);
                 romoneyAmountToApply = user.getWalletBalance();
             }
+        } else {
+            LOGGER.info("User({}) does NOT have any walletBalance left ", userId);
         }
 
         RomoneyDto dto = new RomoneyDto(userId, tripCode, bookingAmount);
