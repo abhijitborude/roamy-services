@@ -25,6 +25,14 @@ public class ReservationTripOption extends AbstractEntity {
     @JoinColumn(name = "TRIP_INSTANCE_OPTION_ID")
     protected TripInstanceOption tripInstanceOption;
 
+    public ReservationTripOption() {
+    }
+
+    public ReservationTripOption(int count, TripInstanceOption tripInstanceOption) {
+        this.count = count;
+        this.tripInstanceOption = tripInstanceOption;
+    }
+
     public Reservation getReservation() {
         return reservation;
     }

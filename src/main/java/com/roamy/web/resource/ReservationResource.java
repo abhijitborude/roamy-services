@@ -108,6 +108,8 @@ public class ReservationResource {
             }
             else if (!StringUtils.hasText(reservationDto.getPhoneNumber())) {
                 throw new RoamyValidationException("Invalid phone number provided");
+            } else if (reservationDto.isUseRomoney() && reservationDto.getRomoneyAmount() == null) {
+                throw new RoamyValidationException("Romoney amount to use not provided");
             }
 
             // load and validate user provided
@@ -131,35 +133,27 @@ public class ReservationResource {
                 }
 
                 if (optionDto.getCount() > 0) {
-                    if (optionDto.getTripInstanceOptionId() == null || optionDto.getTripInstanceOptionId() <= 0) {
-                        throw new RoamyValidationException("Invalid trip instance option id provided: " + optionDto.getTripInstanceOptionId());
-                    }
-
                     TripInstanceOption tripInstanceOption = tripInstanceOptionRepository.findOne(optionDto.getTripInstanceOptionId());
                     if (tripInstanceOption == null) {
                         throw new RoamyValidationException("Invalid trip instance option id provided: " + optionDto.getTripInstanceOptionId());
                     }
-
-                    ReservationTripOption option = new ReservationTripOption();
-                    option.setCount(optionDto.getCount());
-                    option.setTripInstanceOption(tripInstanceOption);
-                    reservationTripOptions.add(option);
+                    reservationTripOptions.add(new ReservationTripOption(optionDto.getCount(), tripInstanceOption));
                 }
             });
 
             if (CollectionUtils.isEmpty(reservationTripOptions)) {
-                throw new RoamyValidationException("Invalid counts/tripInstanceOptionIds provided. Please select at least one trip option.");
+                throw new RoamyValidationException("Invalid counts provided. Please select at least one trip option.");
             }
-
-            // now create a reservation using the data gathered so far
-            Reservation reservation = new PackageReservation();
-            reservation.setUser(user);
 
             // find total amount
             Double totalAmount = 0d;
             for (ReservationTripOption option : reservationTripOptions) {
                 totalAmount += option.getCount() * option.getTripInstanceOption().getPrice();
             }
+
+            // now create a reservation using the data gathered so far
+            Reservation reservation = new PackageReservation();
+            reservation.setUser(user);
             reservation.setAmount(totalAmount);
             reservation.setStartDate(tripInstance.getDate());
             reservation.setPhoneNumber(reservationDto.getPhoneNumber());
@@ -182,14 +176,16 @@ public class ReservationResource {
                 reservation.addTripOption(option);
             }
 
+            reservationTripOptions.forEach(reservation::addTripOption);
+
             // apply romoney
             if (reservationDto.isUseRomoney() && user.getWalletBalance() != null) {
-                Double romoneyPaymentAmount = reservationDto.getRomoneyAmount();
-                LOGGER.info("Deducting Romoney({}) from user with WalletBalance({})", romoneyPaymentAmount, user.getWalletBalance());
+                LOGGER.info("Deducting Romoney({}) from user with WalletBalance({})",
+                        reservationDto.getRomoneyAmount(), user.getWalletBalance());
 
                 // create a partial payment using romoney
                 ReservationPayment payment = new ReservationPayment();
-                payment.setAmount(romoneyPaymentAmount);
+                payment.setAmount(reservationDto.getRomoneyAmount());
                 payment.setType(PaymentType.Romoney);
                 payment.setStatus(Status.Success);
                 payment.setCreatedBy("test");
@@ -204,6 +200,7 @@ public class ReservationResource {
 
             // reduce user's wallet balance
             romoneyService.debitRomoney(user.getId(), reservationDto.getRomoneyAmount(), "Reservation #" + reservation.getId());
+            reservation.setAmountToPay(totalAmount - reservationDto.getRomoneyAmount());
 
             response = new RestResponse(reservation, HttpStatus.OK_200);
 
