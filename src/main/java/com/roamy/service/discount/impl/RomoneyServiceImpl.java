@@ -34,10 +34,7 @@ public class RomoneyServiceImpl implements RomoneyService {
     @Override
     public RomoneyDto getRomoneyToApply(Long userId, String tripCode, Double bookingAmount) {
         LOGGER.info("calculating romoney that can be applied for userId({}), tripCode({}) and bookingAmount({})", userId, tripCode, bookingAmount);
-        User user = userRepository.findOne(userId);
-        if (user == null) {
-            throw new RoamyValidationException("User with id " + userId + " not found");
-        }
+        User user = getUser(userId);
 
         Trip trip = tripRepository.findByCode(tripCode);
         if (trip == null) {
@@ -72,32 +69,23 @@ public class RomoneyServiceImpl implements RomoneyService {
     public void creditRomoney(Long userId, Double amount, String comment) {
         LOGGER.info("crediting Romoney amount({}) to userId({}) with comment({})", userId, amount, comment);
 
-        User user = userRepository.findOne(userId);
-        if (user == null) {
-            throw new RoamyValidationException("User with id " + userId + " not found");
-        }
+        User user = getUser(userId);
 
         Double walletBalance = user.getWalletBalance();
         if (walletBalance == null) {
             walletBalance = 0d;
         }
 
-        WalletTransaction transaction = walletTransactionRepository.save(new WalletTransaction(user, amount, comment));
-        LOGGER.info("Saved {}", transaction);
-
         walletBalance += amount;
-        user.setWalletBalance(walletBalance);
-        LOGGER.info("Saved new walletBalance({}) for {}", walletBalance, user);
+
+        saveWalletBalanceAndTransaction(amount, comment, user, walletBalance);
     }
 
     @Override
     public void debitRomoney(Long userId, Double amount, String comment) {
         LOGGER.info("debiting Romoney amount({}) to userId({}) with comment({})", amount, userId, comment);
 
-        User user = userRepository.findOne(userId);
-        if (user == null) {
-            throw new RoamyValidationException("User with id " + userId + " not found");
-        }
+        User user = getUser(userId);
 
         if (amount == null || amount == 0d) {
             return;
@@ -108,11 +96,25 @@ public class RomoneyServiceImpl implements RomoneyService {
             throw new RoamyValidationException(user + " does not have enough walletBalance to debit Romoney(" + amount + ")");
         }
 
-        WalletTransaction transaction = walletTransactionRepository.save(new WalletTransaction(user, -1 * amount, comment));
+        walletBalance -= amount;
+
+        saveWalletBalanceAndTransaction(-1 * amount, comment, user, walletBalance);
+    }
+
+    private void saveWalletBalanceAndTransaction(Double amount, String comment, User user, Double walletBalance) {
+        WalletTransaction transaction = walletTransactionRepository.save(new WalletTransaction(user, amount, comment));
         LOGGER.info("Saved {}", transaction);
 
-        walletBalance -= amount;
         user.setWalletBalance(walletBalance);
+        userRepository.save(user);
         LOGGER.info("Saved new walletBalance({}) for {}", walletBalance, user);
+    }
+
+    private User getUser(Long userId) {
+        User user = userRepository.findOne(userId);
+        if (user == null) {
+            throw new RoamyValidationException("User with id " + userId + " not found");
+        }
+        return user;
     }
 }
