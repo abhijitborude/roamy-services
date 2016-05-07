@@ -179,13 +179,20 @@ public class ReservationResource {
             reservationTripOptions.forEach(reservation::addTripOption);
 
             // apply romoney
+            Double romoneyAmount = 0d;
             if (reservationDto.isUseRomoney() && user.getWalletBalance() != null) {
                 LOGGER.info("Deducting Romoney({}) from user with WalletBalance({})",
                         reservationDto.getRomoneyAmount(), user.getWalletBalance());
+                romoneyAmount = reservationDto.getRomoneyAmount();
+                if (user.getWalletBalance() < romoneyAmount) {
+                    // this should not happen since romoneyAmount should be fetched from API
+                    // and hence should not be less than WalletBalance
+                    romoneyAmount = user.getWalletBalance();
+                }
 
                 // create a partial payment using romoney
                 ReservationPayment payment = new ReservationPayment();
-                payment.setAmount(reservationDto.getRomoneyAmount());
+                payment.setAmount(romoneyAmount);
                 payment.setType(PaymentType.Romoney);
                 payment.setStatus(Status.Success);
                 payment.setCreatedBy("test");
@@ -200,7 +207,7 @@ public class ReservationResource {
 
             // reduce user's wallet balance
             romoneyService.debitRomoney(user.getId(), reservationDto.getRomoneyAmount(), "Reservation #" + reservation.getId());
-            reservation.setAmountToPay(totalAmount - reservationDto.getRomoneyAmount());
+            reservation.setAmountToPay(totalAmount - romoneyAmount);
 
             response = new RestResponse(reservation, HttpStatus.OK_200);
 
