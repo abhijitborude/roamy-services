@@ -18,13 +18,13 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.cache.annotation.CacheRemoveAll;
+import javax.cache.annotation.CacheResult;
 import java.util.*;
 
 /**
@@ -49,7 +49,7 @@ public class CityResource {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     @ApiOperation(value = "Get all cities", notes =  "Actual result is contained in the data field of the response.")
-    @Cacheable("allCities")
+    @CacheResult(cacheName = "allCities")
     public RestResponse findAllCities() {
 
         RestResponse response = null;
@@ -102,7 +102,7 @@ public class CityResource {
     @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "Create a City", notes = "Creates a City and returns the newly created entity. " +
             "Actual result is contained in the data field of the response.")
-    @CacheEvict(value = "allCities", allEntries = true)
+    @CacheRemoveAll(cacheName = "allCities")
     public RestResponse createCity(@ApiParam(value = "City to be created in the JSON format sent as payload of the POST operation.",
                                             required = true)
                                   @RequestBody CityDto cityDto) {
@@ -144,7 +144,7 @@ public class CityResource {
     @RequestMapping(value = "/{code}/categories", method = RequestMethod.GET)
     @ApiOperation(value = "Get categories for the city", notes = "Fetches the categories that have trips scheduled for the city. " +
             "Actual result is contained in the data field of the response.")
-    @Cacheable("categoriesForCity")
+    @CacheResult(cacheName = "categoriesForCity")
     public RestResponse getCategoriesForCity(@ApiParam(value = "City Code", required = true) @PathVariable String code) {
 
         RestResponse response = null;
