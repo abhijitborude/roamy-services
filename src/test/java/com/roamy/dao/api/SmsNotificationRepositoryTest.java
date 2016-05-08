@@ -12,8 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -23,6 +25,8 @@ import java.util.List;
  */
 @ActiveProfiles("unit-test")
 @RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
+@Rollback
 @SpringApplicationConfiguration(classes = TestApplication.class)
 public class SmsNotificationRepositoryTest {
 
@@ -57,7 +61,7 @@ public class SmsNotificationRepositoryTest {
 
     @After
     public void tearDown() {
-        smsNotificationRepository.deleteAll();
+        //smsNotificationRepository.deleteAll();
     }
 
     @Test

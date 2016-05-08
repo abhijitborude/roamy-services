@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -71,31 +70,38 @@ public abstract class TripBaseTest {
         Category thrill = categoryRepository.save(DomainObjectUtil.createCategory("THRILL", "thrill"));
         Category adventure = categoryRepository.save(DomainObjectUtil.createCategory("ADVENTURE", "adventure"));
 
-        PackageTrip trip1 = createPackageTrip("TRIP1", 3, 4000.0, Status.Active,
-                Arrays.asList(new Category[] {thrill}), Arrays.asList(new City[] {mumbai})
-        );
+        List<Category> categories1 = new ArrayList<>();
+        categories1.add(thrill);
+        List<City> cities1 = new ArrayList<>();
+        cities1.add(mumbai);
+        PackageTrip trip1 = createPackageTrip("TRIP1", 3, 4000.0, Status.Active, categories1, cities1);
         PackageTripInstance tripInstance1 = createPackageTripInstance(trip1, today.plusDays(1).toDate(), Status.Active);
         PackageTripInstance tripInstance11 = createPackageTripInstance(trip1, today.plusDays(2).toDate(), Status.Active);
 
-        PackageTrip trip2 = createPackageTrip("TRIP2", 5, 1000.0, Status.Active,
-                Arrays.asList(new Category[] {adventure}), Arrays.asList(new City[] {pune})
-        );
+        List<Category> categories2 = new ArrayList<>();
+        categories2.add(adventure);
+        List<City> cities2 = new ArrayList<>();
+        cities2.add(pune);
+        PackageTrip trip2 = createPackageTrip("TRIP2", 5, 1000.0, Status.Active, categories2, cities2);
         PackageTripInstance tripInstance2 = createPackageTripInstance(trip2, today.plusDays(3).toDate(), Status.Active);
 
-        PackageTrip trip3 = createPackageTrip("TRIP3", 1, 2000.0, Status.Active,
-                Arrays.asList(new Category[] {thrill, adventure}), Arrays.asList(new City[] {mumbai, pune})
-        );
+        List<Category> categories3 = new ArrayList<>();
+        categories3.add(thrill);
+        categories3.add(adventure);
+        List<City> cities3 = new ArrayList<>();
+        cities3.add(mumbai);
+        cities3.add(pune);
+        PackageTrip trip3 = createPackageTrip("TRIP3", 1, 2000.0, Status.Active, categories3, cities3);
         PackageTripInstance tripInstance3 = createPackageTripInstance(trip3, today.plusDays(5).toDate(), Status.Active);
 
-        PackageTrip trip4 = createPackageTrip("TRIP4", 4, 2000.0, Status.Inactive,
-                Arrays.asList(new Category[] {thrill, adventure}), Arrays.asList(new City[] {mumbai, pune}));
+        PackageTrip trip4 = createPackageTrip("TRIP4", 4, 2000.0, Status.Inactive, categories3, cities3);
         PackageTripInstance tripInstance4 = createPackageTripInstance(trip4, today.plusDays(1).toDate(), Status.Inactive);
     }
 
     public void tearDown() {
-        tripInstanceRepository.deleteAll();
-        tripRepository.deleteAll();
-        cityRepository.deleteAll();
-        categoryRepository.deleteAll();
+//        tripInstanceRepository.deleteAll();
+//        tripRepository.deleteAll();
+//        cityRepository.deleteAll();
+//        categoryRepository.deleteAll();
     }
 }

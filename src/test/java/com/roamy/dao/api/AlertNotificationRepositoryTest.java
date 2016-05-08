@@ -13,8 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -24,6 +26,8 @@ import java.util.List;
  */
 @ActiveProfiles("unit-test")
 @RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
+@Rollback
 @SpringApplicationConfiguration(classes = TestApplication.class)
 public class AlertNotificationRepositoryTest {
 
@@ -55,7 +59,7 @@ public class AlertNotificationRepositoryTest {
 
     @Before
     public void setUp() {
-        User user = DomainObjectUtil.createUser("12345", "abc@nyx.com", "fname", "lname");
+        User user = DomainObjectUtil.createUser("200", "abc@nyx.com", "fname", "lname");
         user = userRepository.save(user);
         userId = user.getId();
 
@@ -74,8 +78,8 @@ public class AlertNotificationRepositoryTest {
 
     @After
     public void tearDown() {
-        alertNotificationRepository.deleteAll();
-        userRepository.deleteAll();
+//        alertNotificationRepository.deleteAll();
+//        userRepository.delete(userId);
     }
 
     @Test

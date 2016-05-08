@@ -11,10 +11,11 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,8 @@ import java.util.List;
  */
 @ActiveProfiles("unit-test")
 @RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
+@Rollback
 @SpringApplicationConfiguration(classes = TestApplication.class)
 public class ReservationRepositoryTest extends TripBaseTest {
 
@@ -38,38 +41,40 @@ public class ReservationRepositoryTest extends TripBaseTest {
     @Autowired
     private UserRepository userRepository;
 
-    private User saveduser;
+    private Long userId;
 
     @Before
     public void setUp() {
-//        super.setUp();
-//
-//        User user = DomainObjectUtil.createUser("12345", "a@a.com", "fname", "lname");
-//        saveduser = userRepository.save(user);
-//
-//        List<TripInstance> tripInstances = tripInstanceRepository.findByTripCodeAndDateAndStatus("TRIP1", today.plusDays(1).toDate(), Status.Active);
-//        PackageTripInstance tripInstance = (PackageTripInstance) tripInstances.get(0);
-//
-//        Reservation reservation = new PackageReservation();
-//        DomainObjectUtil.addPropertiesToReservation(reservation, 1000.0, tripInstance.getDate(), "abc@abc.com", "12345", Status.Pending);
-//        reservation.setUser(saveduser);
-//        reservation.setTripInstances(tripInstances);
-//
-//        List<ReservationTripOption> reservationTripOptions = new ArrayList<>();
-//        tripInstance.getOptions().forEach(e -> {
-//            ReservationTripOption reservationTripOption = new ReservationTripOption();
-//            reservationTripOption.setTripInstanceOption(e);
-//            reservationTripOption.setCount(2);
-//            reservationTripOption.setStatus(Status.Active);
-//            RoamyUtils.addAuditPropertiesForCreateEntity(reservationTripOption, "test");
-//
-//            reservationTripOptions.add(reservationTripOption);
-//        });
-//        reservation.setTripOptions(reservationTripOptions);
-//
-//        reservation.addPayment(DomainObjectUtil.createReservationPayment(500.0, PaymentType.Romoney));
-//        reservation = reservationRepository.save(reservation);
-//        LOGGER.info("Saved {}", reservation);
+        super.setUp();
+
+        User user = DomainObjectUtil.createUser("300", "a@a.com", "fname", "lname");
+        user = userRepository.save(user);
+        userId = user.getId();
+        LOGGER.info("Saved {}", user);
+
+        List<TripInstance> tripInstances = tripInstanceRepository.findByTripCodeAndDateAndStatus("TRIP1", today.plusDays(1).toDate(), Status.Active);
+        PackageTripInstance tripInstance = (PackageTripInstance) tripInstances.get(0);
+
+        Reservation reservation = new PackageReservation();
+        DomainObjectUtil.addPropertiesToReservation(reservation, 1000.0, tripInstance.getDate(), "abc@abc.com", "12345", Status.Pending);
+        reservation.setUser(user);
+        reservation.setTripInstances(tripInstances);
+
+        List<ReservationTripOption> reservationTripOptions = new ArrayList<>();
+        tripInstance.getOptions().forEach(e -> {
+            ReservationTripOption reservationTripOption = new ReservationTripOption();
+            reservationTripOption.setTripInstanceOption(e);
+            reservationTripOption.setCount(2);
+            reservationTripOption.setStatus(Status.Active);
+            RoamyUtils.addAuditPropertiesForCreateEntity(reservationTripOption, "test");
+
+            reservationTripOptions.add(reservationTripOption);
+        });
+        reservation.setTripOptions(reservationTripOptions);
+
+        reservation.addPayment(DomainObjectUtil.createReservationPayment(500.0, PaymentType.Romoney));
+        reservation = reservationRepository.save(reservation);
+        LOGGER.info("Saved {}", reservation);
     }
 
     @After
@@ -77,13 +82,13 @@ public class ReservationRepositoryTest extends TripBaseTest {
 //        reservationTripOptionRepository.deleteAll();
 //        reservationRepository.deleteAll();
 //        super.tearDown();
-//        userRepository.delete(saveduser.getId());
+//        userRepository.delete(userId);
     }
 
     @Test
     public void testFindOne() {
-//        Reservation reservation = reservationRepository.findOne(1L);
-//        LOGGER.info("found {}", reservation);
+        Reservation reservation = reservationRepository.findOne(1L);
+        LOGGER.info("found {}", reservation);
     }
 
 //    @Test

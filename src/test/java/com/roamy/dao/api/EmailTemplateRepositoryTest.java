@@ -11,14 +11,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by Abhijit on 2/6/2016.
  */
 @ActiveProfiles("unit-test")
 @RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
+@Rollback
 @SpringApplicationConfiguration(classes = TestApplication.class)
 public class EmailTemplateRepositoryTest {
 
@@ -48,7 +52,7 @@ public class EmailTemplateRepositoryTest {
 
     @After
     public void tearDown() {
-        emailTemplateRepository.deleteAll();
+        //emailTemplateRepository.deleteAll();
     }
 
     @Test

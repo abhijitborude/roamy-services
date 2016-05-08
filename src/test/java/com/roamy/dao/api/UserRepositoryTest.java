@@ -12,14 +12,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by Abhijit on 10/14/2015.
  */
 @ActiveProfiles("unit-test")
 @RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
+@Rollback
 @SpringApplicationConfiguration(classes = TestApplication.class)
 public class UserRepositoryTest {
 
@@ -36,6 +40,7 @@ public class UserRepositoryTest {
     @Before
     public void setup() {
         User user = DomainObjectUtil.createUser(PHONE_NUMBER, "a@a.com", FNAME, "lname");
+        user.setReferralCode("referralCode");
         user = userRepository.save(user);
 
         savedUser = user;
@@ -44,7 +49,7 @@ public class UserRepositoryTest {
 
     @After
     public void tearDown() {
-        userRepository.delete(savedUser.getId());
+        //userRepository.delete(savedUser.getId());
     }
 
     @Test
